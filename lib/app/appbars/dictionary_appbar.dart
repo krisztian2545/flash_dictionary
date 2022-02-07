@@ -1,11 +1,23 @@
+import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:searchfield/searchfield.dart';
 
-class DictionaryAppBar extends StatelessWidget {
-  const DictionaryAppBar({Key? key, required this.height}) : super(key: key);
+class DictionaryAppBar extends StatefulWidget {
+  const DictionaryAppBar({Key? key, required this.height, required this.dictionaryBloc}) : super(key: key);
 
   final double height;
+  final DictionaryBloc dictionaryBloc;
+
+  @override
+  State<DictionaryAppBar> createState() => _DictionaryAppBarState();
+}
+
+class _DictionaryAppBarState extends State<DictionaryAppBar> {
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _textFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +25,7 @@ class DictionaryAppBar extends StatelessWidget {
       top: 0,
       left: 0,
       right: 0,
-      height: height,
+      height: widget.height,
       child: SafeArea(
         child: Container(
           child: Column(
@@ -21,16 +33,17 @@ class DictionaryAppBar extends StatelessWidget {
               Container(
                 // color: Colors.blue,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     TextButton(
                         onPressed: () {},
-                        child: Text("English", style: appBarTextStyle)),
-                    Spacer(),
-                    Text("<>", style: appBarTextStyle),
-                    Spacer(),
+                        child: Text("English", style: appBarButtonTextStyle)),
+                    // Spacer(),
+                    Text("<>", style: appBarButtonTextStyle),
+                    // Spacer(),
                     TextButton(
                         onPressed: () {},
-                        child: Text("Hungarian", style: appBarTextStyle)),
+                        child: Text("Hungarian", style: appBarButtonTextStyle)),
                   ],
                 ),
               ),
@@ -39,7 +52,20 @@ class DictionaryAppBar extends StatelessWidget {
                 padding: EdgeInsets.only(left: 8, right: 42),
                 child: Row(
                   children: <Widget>[
-                    Expanded(child: SearchField(suggestions: ['Coming soon'])),
+                    Expanded(
+                      child: Form(
+                        key: _formKey,
+                        // autovalidateMode: AutovalidateMode.,
+                        onChanged: () {
+                          print("form onChanged: ${_textFieldController.text}");
+                        },
+                        child: SearchField( // what if i extend the lib with onEditingComplete?
+                          controller: _textFieldController,
+                          suggestions: ['Coming soon', 'ilasuhed'],
+                          textInputAction: TextInputAction.send,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

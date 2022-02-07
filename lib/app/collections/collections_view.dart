@@ -1,8 +1,8 @@
 import 'package:flash_dictionary/colors.dart';
 import 'package:flutter/material.dart';
 
-class HistoryView extends StatelessWidget {
-  const HistoryView({Key? key, required this.appBarHeight}) : super(key: key);
+class CollectionsView extends StatelessWidget {
+  const CollectionsView({Key? key, required this.appBarHeight}) : super(key: key);
 
   final double appBarHeight;
 

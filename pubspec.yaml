@@ -35,6 +35,7 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   searchfield: ^0.5.6
+  provider: ^6.0.2
 
 dev_dependencies:
   flutter_test:
