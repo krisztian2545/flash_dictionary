@@ -2,7 +2,6 @@ import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:searchfield/searchfield.dart';
 
 class DictionaryAppBar extends StatefulWidget {
   const DictionaryAppBar({Key? key, required this.height, required this.dictionaryBloc}) : super(key: key);
@@ -53,18 +52,7 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: Form(
-                        key: _formKey,
-                        // autovalidateMode: AutovalidateMode.,
-                        onChanged: () {
-                          print("form onChanged: ${_textFieldController.text}");
-                        },
-                        child: SearchField( // what if i extend the lib with onEditingComplete?
-                          controller: _textFieldController,
-                          suggestions: ['Coming soon', 'ilasuhed'],
-                          textInputAction: TextInputAction.send,
-                        ),
-                      ),
+                      child: AutocompleteTextField(),
                     ),
                   ],
                 ),
@@ -73,6 +61,54 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class AutocompleteTextField extends StatelessWidget {
+  const AutocompleteTextField({Key? key}) : super(key: key);
+
+  static const List<String> _kOptions = <String>[
+    'aardvark',
+    'bobcat',
+    'chameleon',
+  ];
+
+  void updateWordInBloc(BuildContext context, String word) {
+    print(word);
+    Provider.of<DictionaryBloc>(context, listen: false).wordToTranslate = word;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Autocomplete<String>(
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text == '') {
+          return const Iterable<String>.empty();
+        }
+        return _kOptions.where((String option) {
+          return option.contains(textEditingValue.text.toLowerCase());
+        });
+      },
+      onSelected: (String selection) {
+        debugPrint('You just selected $selection');
+        updateWordInBloc(context, selection);
+      },
+      fieldViewBuilder: (context, textEditingController, focusNode, onEditingComplete) {
+        return TextField(
+          controller: textEditingController,
+          focusNode: focusNode,
+          onEditingComplete: () {
+            updateWordInBloc(context, textEditingController.text);
+            onEditingComplete();
+          },
+          onChanged: (value) {
+            if (value == "") {
+              updateWordInBloc(context, "");
+            }
+          },
+        );
+      },
     );
   }
 }
