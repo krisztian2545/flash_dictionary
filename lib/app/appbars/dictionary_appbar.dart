@@ -100,6 +100,7 @@ class AutocompleteTextField extends StatelessWidget {
           focusNode: focusNode,
           onEditingComplete: () {
             updateWordInBloc(context, textEditingController.text);
+            focusNode.unfocus();
             onEditingComplete();
           },
           onChanged: (value) {

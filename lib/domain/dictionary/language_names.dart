@@ -1,0 +1,3 @@
+enum LanguageNames {
+  eng, hun
+}
