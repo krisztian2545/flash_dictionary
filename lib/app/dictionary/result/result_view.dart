@@ -1,10 +1,13 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
+import 'package:flash_dictionary/app/dictionary/result/ResultViewFlexibleSpaceBar.dart';
 import 'package:flash_dictionary/app/dictionary/result/definition_item_view.dart';
 import 'package:flash_dictionary/app/dictionary/result/result_bloc.dart';
 import 'package:flash_dictionary/app/dictionary/result/translation_item_view.dart';
 import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
+import 'package:flash_dictionary/styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,8 +16,6 @@ class ResultView extends StatelessWidget {
 
   final double appBarHeight;
 
-
-
   Widget _buildDefinitions(List<DefinitionItem> definitions) {
     if (definitions.isEmpty) {
       return const NotFoundSliverText();
@@ -22,7 +23,7 @@ class ResultView extends StatelessWidget {
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
+        (BuildContext context, int index) {
           return DefinitionItemView(definitionItem: definitions[index]);
         },
         childCount: definitions.length,
@@ -74,12 +75,30 @@ class ResultView extends StatelessWidget {
                   return CustomScrollView(
                     slivers: <Widget>[
                       SliverAppBar(
-                        title: Text("Definition"),
+                        flexibleSpace: ResultViewFlexibleSpaceBar(
+                          title: "Definitions",
+                          arrowFaceDown: resultBloc.showDefinitions,
+                          onIconPressed: resultBloc.toggleShowDefinitions,
+                        ),
+                        // shape: resultViewSliverAppBarBorder,
+                        toolbarHeight: 32,
+                        foregroundColor: Colors.black,
+                        backgroundColor: whitishColor,
+                        actions: <Widget>[],
                       ),
                       if (resultBloc.showDefinitions && isDataLoaded)
                         _buildDefinitions(snapshot.data!['definitions']),
                       SliverAppBar(
-                        title: Text("Translation"),
+                        flexibleSpace: ResultViewFlexibleSpaceBar(
+                          title: "Translation",
+                          arrowFaceDown: resultBloc.showTranslations,
+                          onIconPressed: resultBloc.toggleShowTranslations,
+                        ),
+                        shape: resultViewSliverAppBarBorder,
+                        toolbarHeight: 32,
+                        foregroundColor: Colors.black,
+                        backgroundColor: whitishColor,
+                        actions: <Widget>[],
                       ),
                       if (resultBloc.showTranslations && isDataLoaded)
                         _buildTranslations(snapshot.data!['translations']),
@@ -102,10 +121,10 @@ class NotFoundSliverText extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList(
         delegate: SliverChildListDelegate(<Widget>[
-          Container(
-            padding: const EdgeInsets.only(top: 32, bottom: 32),
-            child: const Center(child: Text("Not found!")),
-          ),
-        ]));
+      Container(
+        padding: const EdgeInsets.only(top: 32, bottom: 32),
+        child: const Center(child: Text("Not found!")),
+      ),
+    ]));
   }
 }

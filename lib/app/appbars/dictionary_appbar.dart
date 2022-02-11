@@ -68,9 +68,7 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
 class AutocompleteTextField extends StatelessWidget {
   const AutocompleteTextField({Key? key}) : super(key: key);
 
-  static const List<String> _kOptions = <String>[
-    
-  ];
+  static const List<String> _kOptions = <String>[];
 
   void updateWordInBloc(BuildContext context, String word) {
     print(word);
