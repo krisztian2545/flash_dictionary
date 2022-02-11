@@ -2,18 +2,18 @@ import 'dart:convert';
 
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
-import 'package:flash_dictionary/service/api_service.dart';
+import 'package:flash_dictionary/service/translation_api_service.dart';
 import 'package:http/http.dart' as http;
 
-class LinkDictionaryApi implements ApiService {
+class LinkDictionaryApi implements TranslationApiService {
 
   static const Map<LanguageNames, String> languageStringName = {
     LanguageNames.eng: 'eng',
     LanguageNames.hun: 'hun',
   };
 
-  static List<TranslationItem> translationItemListFormJson(json) =>
-      (json['results'] as List)
+  static List<TranslationItem> translationItemListFormJson(parsedJson) =>
+      (parsedJson['results'] as List)
           .map((e) => TranslationItem(word: e['word']))
           .toList();
 

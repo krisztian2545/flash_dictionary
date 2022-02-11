@@ -69,9 +69,7 @@ class AutocompleteTextField extends StatelessWidget {
   const AutocompleteTextField({Key? key}) : super(key: key);
 
   static const List<String> _kOptions = <String>[
-    'aardvark',
-    'bobcat',
-    'chameleon',
+    
   ];
 
   void updateWordInBloc(BuildContext context, String word) {

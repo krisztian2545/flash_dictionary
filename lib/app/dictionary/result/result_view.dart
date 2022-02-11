@@ -1,7 +1,9 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
+import 'package:flash_dictionary/app/dictionary/result/definition_item_view.dart';
 import 'package:flash_dictionary/app/dictionary/result/result_bloc.dart';
 import 'package:flash_dictionary/app/dictionary/result/translation_item_view.dart';
 import 'package:flash_dictionary/colors.dart';
+import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,15 +13,26 @@ class ResultView extends StatelessWidget {
 
   final double appBarHeight;
 
+
+
+  Widget _buildDefinitions(List<DefinitionItem> definitions) {
+    if (definitions.isEmpty) {
+      return const NotFoundSliverText();
+    }
+
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+          return DefinitionItemView(definitionItem: definitions[index]);
+        },
+        childCount: definitions.length,
+      ),
+    );
+  }
+
   Widget _buildTranslations(List<TranslationItem> translations) {
     if (translations.isEmpty) {
-      return SliverList(
-          delegate: SliverChildListDelegate(<Widget>[
-        Container(
-          padding: const EdgeInsets.only(top: 32, bottom: 32),
-          child: const Center(child: Text("Not found!")),
-        ),
-      ]));
+      return const NotFoundSliverText();
     }
 
     return SliverList(
@@ -63,16 +76,8 @@ class ResultView extends StatelessWidget {
                       SliverAppBar(
                         title: Text("Definition"),
                       ),
-                      if (resultBloc.showDefinitions)
-                        SliverList(
-                          delegate: SliverChildListDelegate((!isDataLoaded)
-                              ? [Center(child: CircularProgressIndicator())]
-                              : <Widget>[
-                                  Container(
-                                    child: Text("asdfasdf"),
-                                  ),
-                                ]),
-                        ),
+                      if (resultBloc.showDefinitions && isDataLoaded)
+                        _buildDefinitions(snapshot.data!['definitions']),
                       SliverAppBar(
                         title: Text("Translation"),
                       ),
@@ -87,5 +92,20 @@ class ResultView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class NotFoundSliverText extends StatelessWidget {
+  const NotFoundSliverText({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+        delegate: SliverChildListDelegate(<Widget>[
+          Container(
+            padding: const EdgeInsets.only(top: 32, bottom: 32),
+            child: const Center(child: Text("Not found!")),
+          ),
+        ]));
   }
 }
