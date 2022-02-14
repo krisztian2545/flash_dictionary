@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class DictionaryPage extends StatelessWidget {
   const DictionaryPage({Key? key}) : super(key: key);
 
-  final double _appBarHeight = 130;
+  final double _appBarHeight = 140;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class DictionaryPage extends StatelessWidget {
             Widget? child) {
           return Stack(
             children: <Widget>[
-              DictionaryAppBar(height: _appBarHeight, dictionaryBloc: dictionaryBloc),
+              DictionaryAppBar(height: _appBarHeight),
               (dictionaryBloc.wordToTranslate == "")
                   ? HistoryView(appBarHeight: _appBarHeight)
                   : ResultView(appBarHeight: _appBarHeight),

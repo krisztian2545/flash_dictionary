@@ -27,7 +27,7 @@ class WordsApi implements DefinitionApiService {
 
   @override
   Future<List<DefinitionItem>> getDefinition(
-      String word, LanguageNames lang) async {
+      String word, LanguageName lang) async {
     http.Response res = await http.get(
         Uri.parse("https://wordsapiv1.p.rapidapi.com/words/$word"),
         headers: {

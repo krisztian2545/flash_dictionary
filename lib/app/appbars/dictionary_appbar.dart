@@ -1,22 +1,15 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
+import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class DictionaryAppBar extends StatefulWidget {
-  const DictionaryAppBar({Key? key, required this.height, required this.dictionaryBloc}) : super(key: key);
+class DictionaryAppBar extends StatelessWidget {
+  const DictionaryAppBar(
+      {Key? key, required this.height})
+      : super(key: key);
 
   final double height;
-  final DictionaryBloc dictionaryBloc;
-
-  @override
-  State<DictionaryAppBar> createState() => _DictionaryAppBarState();
-}
-
-class _DictionaryAppBarState extends State<DictionaryAppBar> {
-
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final _textFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +17,7 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
       top: 0,
       left: 0,
       right: 0,
-      height: widget.height,
+      height: height,
       child: SafeArea(
         child: Container(
           child: Column(
@@ -52,7 +45,7 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: AutocompleteTextField(),
+                      child: AutocompleteTextField(dictionaryBloc: Provider.of<DictionaryBloc>(context, listen: false)),
                     ),
                   ],
                 ),
@@ -66,13 +59,15 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
 }
 
 class AutocompleteTextField extends StatelessWidget {
-  const AutocompleteTextField({Key? key}) : super(key: key);
+  const AutocompleteTextField({Key? key, required this.dictionaryBloc})
+      : super(key: key);
 
   static const List<String> _kOptions = <String>[];
+  final DictionaryBloc dictionaryBloc;
 
   void updateWordInBloc(BuildContext context, String word) {
     print(word);
-    Provider.of<DictionaryBloc>(context, listen: false).wordToTranslate = word;
+    dictionaryBloc.wordToTranslate = word;
   }
 
   @override
@@ -90,19 +85,36 @@ class AutocompleteTextField extends StatelessWidget {
         debugPrint('You just selected $selection');
         updateWordInBloc(context, selection);
       },
-      fieldViewBuilder: (context, textEditingController, focusNode, onEditingComplete) {
+      fieldViewBuilder:
+          (context, textEditingController, focusNode, onEditingComplete) {
+        textEditingController.text = dictionaryBloc.wordToTranslate; // initial value
         return TextField(
           controller: textEditingController,
           focusNode: focusNode,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            suffixIcon: IconButton(
+              icon: Icon(Icons.clear),
+              onPressed: () {
+                textEditingController.clear();
+                updateWordInBloc(context, "");
+              },
+            ),
+          ),
           onEditingComplete: () {
             updateWordInBloc(context, textEditingController.text);
+            HiveHelper.saveWordInHistory(
+                dictionaryBloc.wordToTranslate,
+                dictionaryBloc.fromLanguage,
+                dictionaryBloc.toLanguage,
+                dictionaryBloc.translationApi);
             focusNode.unfocus();
             onEditingComplete();
           },
           onChanged: (value) {
-            if (value == "") {
-              updateWordInBloc(context, "");
-            }
+            // if (value == "") {
+            //   updateWordInBloc(context, "");
+            // }
           },
         );
       },

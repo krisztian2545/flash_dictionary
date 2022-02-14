@@ -7,7 +7,7 @@ enum DefinitionApi {
 }
 
 abstract class DefinitionApiService {
-  Future<List<DefinitionItem>> getDefinition(String word, LanguageNames lang);
+  Future<List<DefinitionItem>> getDefinition(String word, LanguageName lang);
 
   static DefinitionApiService getApi(DefinitionApi api) {
     switch (api) {

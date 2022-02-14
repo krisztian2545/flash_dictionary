@@ -6,9 +6,19 @@ enum TranslationApi {
   linkDictionary
 }
 
+extension TranslationApiExtension on TranslationApi {
+  String get value {
+    switch (this) {
+
+      case TranslationApi.linkDictionary:
+        return "linkD";
+    }
+  }
+}
+
 abstract class TranslationApiService {
 
-  Future<List<TranslationItem>> getTranslations(String word, LanguageNames from, LanguageNames to);
+  Future<List<TranslationItem>> getTranslations(String word, LanguageName from, LanguageName to);
 
   static TranslationApiService getApi(TranslationApi? api) {
     switch(api) {

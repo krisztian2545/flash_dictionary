@@ -1,10 +1,20 @@
+import 'package:flash_dictionary/app/dictionary/history/HistoryItemView.dart';
 import 'package:flash_dictionary/colors.dart';
+import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';
 
 class HistoryView extends StatelessWidget {
   const HistoryView({Key? key, required this.appBarHeight}) : super(key: key);
 
   final double appBarHeight;
+
+  List<Widget> _buildList() {
+    return HiveHelper.getWordHistory().map((e) {
+      var wordData = e.split(";");
+      var langData = wordData[1].split("-");
+      return HistoryItemView(word: wordData[0], fromLanguage: langData[0], toLanguage: langData[1], api: wordData[2]);
+    }).toList().reversed.toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,66 +32,7 @@ class HistoryView extends StatelessWidget {
         ),
         child: ListView(
           padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-          children: [
-            Text("aiuysgfjkgy"),
-            Divider(
-              thickness: 6,
-            ),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-            Text("aiuysgfjkgy"),
-            Divider(),
-          ],
+          children: _buildList(),
         ),
       ),
     );

@@ -1,12 +1,13 @@
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/service/definition_api_service.dart';
+import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
 import 'package:flutter/material.dart';
 
 class DictionaryBloc extends ChangeNotifier {
   DictionaryBloc(
-      {this.languageFrom = LanguageNames.eng,
-      this.languageTo = LanguageNames.hun,
+      {this.fromLanguage = LanguageName.eng,
+      this.toLanguage = LanguageName.hun,
       this.translationApi = TranslationApi.linkDictionary,
       this.definitionApi = DefinitionApi.wordsApi})
       : translationService = TranslationApiService.getApi(translationApi),
@@ -21,8 +22,8 @@ class DictionaryBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  LanguageNames languageFrom; // TODO: value notifieres for the buttons
-  LanguageNames languageTo;
+  LanguageName fromLanguage; // TODO: value notifieres for the buttons
+  LanguageName toLanguage;
   TranslationApi translationApi;
   DefinitionApi definitionApi;
 
@@ -31,9 +32,9 @@ class DictionaryBloc extends ChangeNotifier {
 
   Future<Map<String, dynamic>> fetchData() async {
     var definitions = await definitionApiService.getDefinition(
-        wordToTranslate, languageFrom);
+        wordToTranslate, fromLanguage);
     var translations = await translationService.getTranslations(
-        wordToTranslate, languageFrom, languageTo);
+        wordToTranslate, fromLanguage, toLanguage);
     return {
       'translations': translations,
       'definitions': definitions,
