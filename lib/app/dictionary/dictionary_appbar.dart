@@ -1,15 +1,29 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
+import 'package:flash_dictionary/app/widgets/language_dropdown_button.dart';
+import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class DictionaryAppBar extends StatelessWidget {
+class DictionaryAppBar extends StatefulWidget {
   const DictionaryAppBar(
-      {Key? key, required this.height})
+      {Key? key, required this.height, required this.dictionaryBloc})
       : super(key: key);
 
   final double height;
+  final DictionaryBloc dictionaryBloc;
+
+  @override
+  State<DictionaryAppBar> createState() => _DictionaryAppBarState();
+}
+
+class _DictionaryAppBarState extends State<DictionaryAppBar> {
+  final ValueNotifier<bool> _languageValueNotifier = ValueNotifier<bool>(false);
+
+  void triggerLanguageButtonRebuilds() {
+    _languageValueNotifier.value = !_languageValueNotifier.value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,26 +31,54 @@ class DictionaryAppBar extends StatelessWidget {
       top: 0,
       left: 0,
       right: 0,
-      height: height,
+      height: widget.height,
       child: SafeArea(
         child: Container(
           child: Column(
             children: <Widget>[
               Container(
                 // color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    TextButton(
-                        onPressed: () {},
-                        child: Text("English", style: appBarButtonTextStyle)),
-                    // Spacer(),
-                    Text("<>", style: appBarButtonTextStyle),
-                    // Spacer(),
-                    TextButton(
-                        onPressed: () {},
-                        child: Text("Hungarian", style: appBarButtonTextStyle)),
-                  ],
+                child: ValueListenableBuilder<bool>(
+                  valueListenable: _languageValueNotifier,
+                  builder: (context, value, child) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: <Widget>[
+                        // TextButton(
+                        //     onPressed: () {},
+                        //     child: Text("English", style: appBarButtonTextStyle)),
+                        LanguageDropdownButton(
+                          onChanged: (value) {
+                            if (widget.dictionaryBloc.toLanguage == value) {
+                              widget.dictionaryBloc.switchLanguages();
+                            } else {
+                              widget.dictionaryBloc.fromLanguage = value!;
+                            }
+                            triggerLanguageButtonRebuilds();
+                          },
+                          value: widget.dictionaryBloc.fromLanguage,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            widget.dictionaryBloc.switchLanguages();
+                            triggerLanguageButtonRebuilds();
+                          },
+                          child: Text("<>", style: appBarButtonTextStyle),
+                        ),
+                        LanguageDropdownButton(
+                          onChanged: (value) {
+                            if (widget.dictionaryBloc.fromLanguage == value) {
+                              widget.dictionaryBloc.switchLanguages();
+                            } else {
+                              widget.dictionaryBloc.toLanguage = value!;
+                            }
+                            triggerLanguageButtonRebuilds();
+                          },
+                          value: widget.dictionaryBloc.toLanguage,
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               Container(
@@ -45,7 +87,8 @@ class DictionaryAppBar extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: AutocompleteTextField(dictionaryBloc: Provider.of<DictionaryBloc>(context, listen: false)),
+                      child: AutocompleteTextField(
+                          dictionaryBloc: widget.dictionaryBloc),
                     ),
                   ],
                 ),
@@ -87,7 +130,8 @@ class AutocompleteTextField extends StatelessWidget {
       },
       fieldViewBuilder:
           (context, textEditingController, focusNode, onEditingComplete) {
-        textEditingController.text = dictionaryBloc.wordToTranslate; // initial value
+        textEditingController.text =
+            dictionaryBloc.wordToTranslate; // initial value
         return TextField(
           controller: textEditingController,
           focusNode: focusNode,

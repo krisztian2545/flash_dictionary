@@ -9,6 +9,10 @@ class HBoxName {
 class HiveHelper {
 
   static void saveWordInHistory(String word, LanguageName from, LanguageName to, TranslationApi api) {
+    if (word == "") {
+      return;
+    }
+
     var wordHistory = getWordHistory();
     var compressedData = "$word;${from.value}-${to.value};${api.value}";
 

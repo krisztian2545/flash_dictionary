@@ -33,7 +33,7 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
                   border: OutlineInputBorder(), labelText: "Collection name"),
             ),
             SizedBox(height: 16),
-            Text("Collection type:"),
+            Text("Collection type:", style: TextStyle(fontWeight: FontWeight.bold),),
             SizedBox(height: 8),
             ValueListenableBuilder<bool>(
               valueListenable: _isTranslationTypeSelected,

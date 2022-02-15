@@ -19,7 +19,7 @@ class DictionaryPage extends StatelessWidget {
             Widget? child) {
           return Stack(
             children: <Widget>[
-              DictionaryAppBar(height: _appBarHeight),
+              DictionaryAppBar(height: _appBarHeight, dictionaryBloc: dictionaryBloc),
               (dictionaryBloc.wordToTranslate == "")
                   ? HistoryView(appBarHeight: _appBarHeight)
                   : ResultView(appBarHeight: _appBarHeight),
