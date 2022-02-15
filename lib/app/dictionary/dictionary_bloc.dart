@@ -17,7 +17,7 @@ class DictionaryBloc extends ChangeNotifier {
 
   String get wordToTranslate => _wordToTranslate;
 
-  set wordToTranslate(String value) {
+  set wordToTranslate(String value) { // TODO make it a func and ask if to store
     _wordToTranslate = value;
     notifyListeners();
   }

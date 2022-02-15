@@ -1,4 +1,4 @@
-import 'package:flash_dictionary/app/appbars/dictionary_appbar.dart';
+import 'package:flash_dictionary/app/dictionary/dictionary_appbar.dart';
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/app/dictionary/history/history_view.dart';
 import 'package:flash_dictionary/app/dictionary/result/result_view.dart';
@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class DictionaryPage extends StatelessWidget {
   const DictionaryPage({Key? key}) : super(key: key);
 
-  final double _appBarHeight = 140;
+  final double _appBarHeight = 150;
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,7 @@
+import 'package:flash_dictionary/app/collections/collections_bloc.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CollectionsAppBar extends StatelessWidget {
   const CollectionsAppBar({Key? key, required this.height}) : super(key: key);
@@ -21,7 +23,9 @@ class CollectionsAppBar extends StatelessWidget {
               Text("Collections", style: appBarTextStyle),
               Spacer(flex: 5),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Provider.of<CollectionsBloc>(context, listen: false).createNewCollection(context);
+                },
                 style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
                 child: Text("New", style: appBarButtonTextStyle),
               ),

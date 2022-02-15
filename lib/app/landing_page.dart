@@ -3,7 +3,7 @@ import 'package:flash_dictionary/app/dictionary/dictionary_page.dart';
 import 'package:flash_dictionary/colors.dart';
 import 'package:flutter/material.dart';
 
-import 'appbars/dictionary_appbar.dart';
+import 'dictionary/dictionary_appbar.dart';
 import 'dictionary/history/history_view.dart';
 
 class LandingPage extends StatelessWidget {
