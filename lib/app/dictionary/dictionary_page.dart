@@ -8,10 +8,12 @@ import 'package:provider/provider.dart';
 class DictionaryPage extends StatelessWidget {
   const DictionaryPage({Key? key}) : super(key: key);
 
-  final double _appBarHeight = 150;
+  final double _appBarBaseHeight = 150;
 
   @override
   Widget build(BuildContext context) {
+    var appBarHeight = _appBarBaseHeight + MediaQuery.of(context).viewPadding.top;
+    print("appBarHeight: $appBarHeight");
     return ChangeNotifierProvider<DictionaryBloc>(
       create: (context) => DictionaryBloc(),
       child: Consumer<DictionaryBloc>(
@@ -19,10 +21,10 @@ class DictionaryPage extends StatelessWidget {
             Widget? child) {
           return Stack(
             children: <Widget>[
-              DictionaryAppBar(height: _appBarHeight, dictionaryBloc: dictionaryBloc),
+              DictionaryAppBar(height: appBarHeight, dictionaryBloc: dictionaryBloc),
               (dictionaryBloc.wordToTranslate == "")
-                  ? HistoryView(appBarHeight: _appBarHeight)
-                  : ResultView(appBarHeight: _appBarHeight),
+                  ? HistoryView(appBarHeight: appBarHeight)
+                  : ResultView(appBarHeight: appBarHeight),
             ],
           );
         },

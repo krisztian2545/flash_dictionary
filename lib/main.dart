@@ -1,12 +1,9 @@
 import 'package:flash_dictionary/app/landing_page.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
-  await Hive.initFlutter();
-  await Hive.openBox(HBoxName.history);
+  await HiveHelper.initAndOpenBoxes();
   runApp(const MyApp());
 }
 
@@ -18,10 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flash Dictionary',
-      theme: ThemeData(
+      theme: ThemeData( // TODO learn about styling and refactor accordingly
         primarySwatch: Colors.blue,
       ),
-      home: LandingPage(),
+      home: const LandingPage(),
     );
   }
 }

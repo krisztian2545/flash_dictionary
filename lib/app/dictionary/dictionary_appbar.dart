@@ -1,10 +1,8 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/app/widgets/language_dropdown_button.dart';
-import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class DictionaryAppBar extends StatefulWidget {
   const DictionaryAppBar(
@@ -19,11 +17,11 @@ class DictionaryAppBar extends StatefulWidget {
 }
 
 class _DictionaryAppBarState extends State<DictionaryAppBar> {
-  final ValueNotifier<bool> _languageValueNotifier = ValueNotifier<bool>(false);
+  // final ValueNotifier<bool> _languageValueNotifier = ValueNotifier<bool>(false);
 
-  void triggerLanguageButtonRebuilds() {
-    _languageValueNotifier.value = !_languageValueNotifier.value;
-  }
+  // void triggerLanguageButtonRebuilds() {
+  //   _languageValueNotifier.value = !_languageValueNotifier.value;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -36,54 +34,31 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
         child: Container(
           child: Column(
             children: <Widget>[
-              Container(
-                // color: Colors.blue,
-                child: ValueListenableBuilder<bool>(
-                  valueListenable: _languageValueNotifier,
-                  builder: (context, value, child) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        // TextButton(
-                        //     onPressed: () {},
-                        //     child: Text("English", style: appBarButtonTextStyle)),
-                        LanguageDropdownButton(
-                          onChanged: (value) {
-                            if (widget.dictionaryBloc.toLanguage == value) {
-                              widget.dictionaryBloc.switchLanguages();
-                            } else {
-                              widget.dictionaryBloc.fromLanguage = value!;
-                            }
-                            triggerLanguageButtonRebuilds();
-                          },
-                          value: widget.dictionaryBloc.fromLanguage,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            widget.dictionaryBloc.switchLanguages();
-                            triggerLanguageButtonRebuilds();
-                          },
-                          child: Text("<>", style: appBarButtonTextStyle),
-                        ),
-                        LanguageDropdownButton(
-                          onChanged: (value) {
-                            if (widget.dictionaryBloc.fromLanguage == value) {
-                              widget.dictionaryBloc.switchLanguages();
-                            } else {
-                              widget.dictionaryBloc.toLanguage = value!;
-                            }
-                            triggerLanguageButtonRebuilds();
-                          },
-                          value: widget.dictionaryBloc.toLanguage,
-                        ),
-                      ],
-                    );
-                  },
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  LanguageDropdownButton(
+                    onChanged: (value) {
+                      widget.dictionaryBloc.fromLanguage = value!;
+                    },
+                    value: widget.dictionaryBloc.fromLanguage,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      widget.dictionaryBloc.switchLanguages();
+                    },
+                    child: Text("<>", style: appBarButtonTextStyle),
+                  ),
+                  LanguageDropdownButton(
+                    onChanged: (value) {
+                      widget.dictionaryBloc.toLanguage = value!;
+                    },
+                    value: widget.dictionaryBloc.toLanguage,
+                  ),
+                ],
               ),
               Container(
-                // color: Colors.green,
-                padding: EdgeInsets.only(left: 8, right: 42),
+                padding: const EdgeInsets.only(left: 8, right: 42),
                 child: Row(
                   children: <Widget>[
                     Expanded(

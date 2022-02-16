@@ -1,5 +1,6 @@
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/service/definition_api_service.dart';
+import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -29,11 +30,13 @@ class DictionaryBloc extends ChangeNotifier {
   LanguageName get fromLanguage => _fromLanguage;
 
   set fromLanguage(LanguageName value) {
-    // if (value == _toLanguage) {
-    //   _toLanguage = _fromLanguage;
-    // }
-
+    HiveHelper.saveAsLastUsedFromLanguage(value);
+    if (value == toLanguage) {
+      switchLanguages();
+      return;
+    }
     _fromLanguage = value;
+    notifyListeners();
   }
 
   LanguageName _toLanguage;
@@ -41,25 +44,33 @@ class DictionaryBloc extends ChangeNotifier {
   LanguageName get toLanguage => _toLanguage;
 
   set toLanguage(LanguageName value) {
-    // if (value == _fromLanguage) {
-    //   _fromLanguage = _toLanguage;
-    // }
-
+    HiveHelper.saveAsLastUsedToLanguage(value);
+    if (value == fromLanguage) {
+      switchLanguages();
+      return;
+    }
     _toLanguage = value;
+    notifyListeners();
   }
-
-  void switchLanguages() {
-    var temp = _fromLanguage;
-    _fromLanguage = _toLanguage;
-    _toLanguage = temp;
-  }
-
 
   TranslationApi translationApi;
   DefinitionApi definitionApi;
 
   TranslationApiService translationService;
   DefinitionApiService definitionApiService;
+
+  void switchLanguages() {
+    var temp = _fromLanguage;
+    _fromLanguage = _toLanguage;
+    _toLanguage = temp;
+    notifyListeners();
+  }
+
+  void setWordAndLanguages(String word, LanguageName from, LanguageName to) {
+    _fromLanguage = from;
+    _toLanguage = to;
+    wordToTranslate = word;
+  }
 
   Future<Map<String, dynamic>> fetchData() async {
     var definitions =

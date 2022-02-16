@@ -21,10 +21,10 @@ class HistoryItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        var bloc = Provider.of<DictionaryBloc>(context, listen: false);
-        bloc.fromLanguage = languageNameFromString(fromLanguage);
-        bloc.toLanguage = languageNameFromString(toLanguage);
-        bloc.wordToTranslate = word;
+        Provider.of<DictionaryBloc>(context, listen: false).setWordAndLanguages(
+            word,
+            languageNameFromString(fromLanguage),
+            languageNameFromString(toLanguage));
       },
       child: Container(
         padding: const EdgeInsets.all(16),

@@ -3,15 +3,12 @@ import 'package:flash_dictionary/app/dictionary/dictionary_page.dart';
 import 'package:flash_dictionary/colors.dart';
 import 'package:flutter/material.dart';
 
-import 'dictionary/dictionary_appbar.dart';
-import 'dictionary/history/history_view.dart';
-
 class LandingPage extends StatelessWidget {
   const LandingPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return const DefaultTabController(
       length: 2,
       child: Scaffold(
         backgroundColor: primaryColor,

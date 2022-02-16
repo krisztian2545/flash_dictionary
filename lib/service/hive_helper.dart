@@ -1,12 +1,25 @@
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HBoxName {
   static const history = "history";
 }
 
+class BoxKey {
+  static const wordHistory = "wordHistory";
+  static const lastUsedFromLanguage = "lastUsedFromLanguage";
+  static const lastUsedToLanguage = "lastUsedToLanguage";
+}
+
 class HiveHelper {
+
+  static late Box _historyBox;
+
+  static Future<void> initAndOpenBoxes() async {
+    await Hive.initFlutter();
+    _historyBox = await Hive.openBox(HBoxName.history);
+  }
 
   static void saveWordInHistory(String word, LanguageName from, LanguageName to, TranslationApi api) {
     if (word == "") {
@@ -21,11 +34,27 @@ class HiveHelper {
     }
 
     wordHistory.add(compressedData);
-    Hive.box(HBoxName.history).put('wordHistory', wordHistory);
+    _historyBox.put(BoxKey.wordHistory, wordHistory);
   }
 
   static List<String> getWordHistory() {
-    return Hive.box(HBoxName.history).get('wordHistory', defaultValue: <String>[]);
+    return _historyBox.get(BoxKey.wordHistory, defaultValue: <String>[]);
+  }
+
+  static void saveAsLastUsedFromLanguage(LanguageName lang) {
+    _historyBox.put(BoxKey.lastUsedFromLanguage, lang.value);
+  }
+
+  static LanguageName getLastUsedFromLanguage() {
+    return _historyBox.get(BoxKey.lastUsedFromLanguage, defaultValue: LanguageName.eng);
+  }
+
+  static void saveAsLastUsedToLanguage(LanguageName lang) {
+    _historyBox.put(BoxKey.lastUsedToLanguage, lang.value);
+  }
+
+  static LanguageName getLastUsedToLanguage() {
+    return _historyBox.get(BoxKey.lastUsedToLanguage, defaultValue: LanguageName.hun);
   }
 
 }

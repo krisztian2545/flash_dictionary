@@ -48,7 +48,7 @@ class ResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
+    return Positioned( // TODO maybe multiple consumers of Dictionarybloc could save rebuilding this
       top: appBarHeight,
       left: 0,
       right: 0,

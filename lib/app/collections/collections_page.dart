@@ -7,16 +7,20 @@ import 'package:provider/provider.dart';
 class CollectionsPage extends StatelessWidget {
   const CollectionsPage({Key? key}) : super(key: key);
 
+  final double _appBarBaseHeight = 90;
+
   @override
   Widget build(BuildContext context) {
+    var appBarHeight = _appBarBaseHeight + MediaQuery.of(context).viewPadding.top;
+    print("appBarHeight: $appBarHeight"); // TODO remove prints from prodduction code
     return ChangeNotifierProvider<CollectionsBloc>(
       create: (context) => CollectionsBloc(),
       child: Stack(
         children: <Widget>[
-          CollectionsAppBar(height: 90),
+          CollectionsAppBar(height: appBarHeight),
           Consumer<CollectionsBloc>(
             builder: (context, collectionsBloc, child) {
-              return CollectionsView(appBarHeight: 90);
+              return CollectionsView(appBarHeight: appBarHeight);
             },
           ),
         ],
