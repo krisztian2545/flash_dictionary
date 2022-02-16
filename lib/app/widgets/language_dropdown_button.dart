@@ -12,6 +12,8 @@ class LanguageDropdownButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<LanguageName>(
+      alignment: AlignmentDirectional.center,
+      underline: Container(),
       icon: Container(),
       style: appBarButtonTextStyle,
       value: value,

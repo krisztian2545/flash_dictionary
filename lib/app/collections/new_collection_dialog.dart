@@ -24,29 +24,30 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Create new collection"),
+      title: const Text("Create new collection", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
       actions: [
         TextButton(
           // TODO change color of animation when you hold
           onPressed: () => Navigator.pop(context, "ok"),
           child: const Text(
             "Create",
-            style: TextStyle(color: Colors.black, fontSize: 16),
+            style: TextStyle(color: Colors.black, fontSize: 20),
           ),
         ),
-        SizedBox(width: 4),
+        const SizedBox(width: 4),
       ],
       content: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            TextField(
+            const SizedBox(height:8),
+            TextField( // TODO make text bigger?
               decoration: InputDecoration(
                   border: OutlineInputBorder(), labelText: "Collection name"),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 32),
             Text(
               "Collection type:",
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8),
             ValueListenableBuilder<bool>(
@@ -79,31 +80,42 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 16),
                     Row(
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            Text("From"),
+                            const Text("From", style: TextStyle(fontWeight: FontWeight.bold)),
                             ValueListenableBuilder<LanguageName>(
                               valueListenable: _fromLanguage,
                               builder: (context, value, child) {
                                 return LanguageDropdownButton(
-                                    onChanged: (value) =>
-                                        _fromLanguage.value = value!,
+                                    onChanged: (value) {
+                                      if (_toLanguage.value == value) {
+                                        _toLanguage.value = _fromLanguage.value;
+                                      }
+                                      _fromLanguage.value = value!;
+                                    },
                                     value: value);
                               },
                             ),
                           ],
                         ),
-                        if (!_isTranslationTypeSelected.value)
+                        const Spacer(),
+                        if (_isTranslationTypeSelected.value)
                           Column(
                             children: <Widget>[
-                              Text("To"),
+                              const Text("To", style: TextStyle(fontWeight: FontWeight.bold)),
                               ValueListenableBuilder<LanguageName>(
                                 valueListenable: _toLanguage,
                                 builder: (context, value, child) {
                                   return LanguageDropdownButton(
-                                    onChanged: (value) => _toLanguage.value = value!,
+                                    onChanged: (value) {
+                                      if (_fromLanguage.value == value) {
+                                        _fromLanguage.value = _toLanguage.value;
+                                      }
+                                      _toLanguage.value = value!;
+                                    },
                                     value: value,
                                   );
                                 },

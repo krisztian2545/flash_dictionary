@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class DictionaryPage extends StatelessWidget {
   const DictionaryPage({Key? key}) : super(key: key);
 
-  final double _appBarBaseHeight = 150;
+  final double _appBarBaseHeight = 120;
 
   @override
   Widget build(BuildContext context) {

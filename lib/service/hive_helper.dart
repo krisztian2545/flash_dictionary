@@ -46,7 +46,7 @@ class HiveHelper {
   }
 
   static LanguageName getLastUsedFromLanguage() {
-    return _historyBox.get(BoxKey.lastUsedFromLanguage, defaultValue: LanguageName.eng);
+    return languageNameFromString(_historyBox.get(BoxKey.lastUsedFromLanguage, defaultValue: LanguageName.eng.value));
   }
 
   static void saveAsLastUsedToLanguage(LanguageName lang) {
@@ -54,7 +54,7 @@ class HiveHelper {
   }
 
   static LanguageName getLastUsedToLanguage() {
-    return _historyBox.get(BoxKey.lastUsedToLanguage, defaultValue: LanguageName.hun);
+    return languageNameFromString(_historyBox.get(BoxKey.lastUsedToLanguage, defaultValue: LanguageName.hun.value));
   }
 
 }
