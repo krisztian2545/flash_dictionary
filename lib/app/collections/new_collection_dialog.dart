@@ -1,4 +1,5 @@
 import 'package:flash_dictionary/app/widgets/language_dropdown_button.dart';
+import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';
@@ -11,24 +12,34 @@ class NewCollectionDialog extends StatefulWidget {
 }
 
 class _NewCollectionDialogState extends State<NewCollectionDialog> {
-  final ValueNotifier<bool> _isTranslationTypeSelected = ValueNotifier(true);
+  final ValueNotifier<CollectionType> _collectionType =
+      ValueNotifier(CollectionType.translation);
   final ValueNotifier<LanguageName> _fromLanguage =
       ValueNotifier(HiveHelper.getLastUsedFromLanguage());
   final ValueNotifier<LanguageName> _toLanguage =
       ValueNotifier(HiveHelper.getLastUsedToLanguage());
 
-  void toggleCollectionType() {
-    _isTranslationTypeSelected.value = !_isTranslationTypeSelected.value;
-  }
+  final TextEditingController _collectionNameController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Create new collection", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+      title: const Text("Create new collection",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
       actions: [
         TextButton(
           // TODO change color of animation when you hold
-          onPressed: () => Navigator.pop(context, "ok"),
+          onPressed: () => Navigator.pop<CollectionDetails>(
+              context,
+              CollectionDetails(
+                name: _collectionNameController.text,
+                type: _collectionType.value,
+                fromLanguage: _fromLanguage.value,
+                toLanguage: _collectionType.value == CollectionType.translation
+                    ? _toLanguage.value
+                    : null,
+              )),
           child: const Text(
             "Create",
             style: TextStyle(color: Colors.black, fontSize: 20),
@@ -39,43 +50,53 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
       content: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            const SizedBox(height:8),
-            TextField( // TODO make text bigger?
-              decoration: InputDecoration(
+            const SizedBox(height: 8),
+            TextField(
+              // TODO make text bigger?
+              textCapitalization: TextCapitalization.sentences,
+              controller: _collectionNameController,
+              decoration: const InputDecoration(
                   border: OutlineInputBorder(), labelText: "Collection name"),
             ),
             const SizedBox(height: 32),
-            Text(
+            const Text(
               "Collection type:",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
-            ValueListenableBuilder<bool>(
-              valueListenable: _isTranslationTypeSelected,
+            const SizedBox(height: 8),
+            ValueListenableBuilder<CollectionType>(
+              valueListenable: _collectionType,
               builder: (context, value, child) {
                 return Column(
                   children: <Widget>[
                     Row(
                       children: <Widget>[
                         OutlinedButton(
-                          onPressed: toggleCollectionType,
-                          child: Text(
+                          onPressed: () => _collectionType.value =
+                              CollectionType.translation,
+                          child: const Text(
                             "Translation",
                             style: TextStyle(color: Colors.black),
                           ),
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(width: value ? 2 : 0),
+                            side: BorderSide(
+                                width: value == CollectionType.translation
+                                    ? 2
+                                    : 0),
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         OutlinedButton(
-                          onPressed: toggleCollectionType,
-                          child: Text(
+                          onPressed: () =>
+                              _collectionType.value = CollectionType.definition,
+                          child: const Text(
                             "Definition",
                             style: TextStyle(color: Colors.black),
                           ),
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(width: value ? 0 : 2),
+                            side: BorderSide(
+                                width:
+                                    value == CollectionType.definition ? 2 : 0),
                           ),
                         ),
                       ],
@@ -85,7 +106,8 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            const Text("From", style: TextStyle(fontWeight: FontWeight.bold)),
+                            const Text("From",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
                             ValueListenableBuilder<LanguageName>(
                               valueListenable: _fromLanguage,
                               builder: (context, value, child) {
@@ -102,10 +124,12 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
                           ],
                         ),
                         const Spacer(),
-                        if (_isTranslationTypeSelected.value)
+                        if (value == CollectionType.translation)
                           Column(
                             children: <Widget>[
-                              const Text("To", style: TextStyle(fontWeight: FontWeight.bold)),
+                              const Text("To",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               ValueListenableBuilder<LanguageName>(
                                 valueListenable: _toLanguage,
                                 builder: (context, value, child) {

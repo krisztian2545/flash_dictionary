@@ -1,29 +1,29 @@
-import 'package:flash_dictionary/colors.dart';
+import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flutter/material.dart';
 
 class CollectionsView extends StatelessWidget {
-  const CollectionsView({Key? key, required this.appBarHeight}) : super(key: key);
+  const CollectionsView({Key? key, required this.collectionList})
+      : super(key: key);
 
-  final double appBarHeight;
+  final List<CollectionDetails> collectionList;
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: appBarHeight,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Material(
-        color: whitishColor,
-        clipBehavior: Clip.antiAlias,
-        elevation: 16,
-        shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
-        ),
-        child: ListView(
-          padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-          children: [
-
+    return ListView.separated(
+      padding: const EdgeInsets.all(32),
+      itemCount: collectionList.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 32),
+      itemBuilder: (context, index) => Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+            border: Border.all(width: 2),
+            borderRadius: const BorderRadius.all(Radius.circular(4))),
+        child: Row(
+          children: <Widget>[
+            Text(
+              collectionList[index].name,
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            ),
           ],
         ),
       ),

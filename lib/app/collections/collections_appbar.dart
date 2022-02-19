@@ -1,4 +1,5 @@
 import 'package:flash_dictionary/app/collections/collections_bloc.dart';
+import 'package:flash_dictionary/app/collections/new_collection_dialog.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,22 +17,23 @@ class CollectionsAppBar extends StatelessWidget {
       right: 0,
       height: height,
       child: SafeArea(
-        child: Container(
-          child: Row(
-            children: <Widget>[
-              Spacer(),
-              Text("Collections", style: appBarTextStyle),
-              Spacer(flex: 5),
-              OutlinedButton(
-                onPressed: () {
-                  Provider.of<CollectionsBloc>(context, listen: false).createNewCollection(context);
-                },
-                style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
-                child: Text("New", style: appBarButtonTextStyle),
-              ),
-              Spacer(flex: 2),
-            ],
-          ),
+        child: Row(
+          children: <Widget>[
+            Spacer(),
+            Text("Collections", style: appBarTextStyle),
+            Spacer(flex: 5),
+            OutlinedButton(
+              onPressed: () {
+                showDialog(
+                context: context,
+                builder: (context) => NewCollectionDialog(),
+              ).then((result) => Provider.of<CollectionsBloc>(context, listen: false).createNewCollection(result));
+              },
+              style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
+              child: Text("New", style: appBarButtonTextStyle),
+            ),
+            Spacer(flex: 2),
+          ],
         ),
       ),
     );

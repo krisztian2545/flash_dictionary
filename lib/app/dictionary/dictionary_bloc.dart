@@ -63,6 +63,8 @@ class DictionaryBloc extends ChangeNotifier {
     var temp = _fromLanguage;
     _fromLanguage = _toLanguage;
     _toLanguage = temp;
+    HiveHelper.saveAsLastUsedFromLanguage(_fromLanguage);
+    HiveHelper.saveAsLastUsedToLanguage(_toLanguage);
     notifyListeners();
   }
 

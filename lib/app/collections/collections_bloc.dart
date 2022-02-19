@@ -1,11 +1,14 @@
-import 'package:flash_dictionary/app/collections/new_collection_dialog.dart';
+import 'package:flash_dictionary/domain/collections/collection_details.dart';
+import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';
 
 class CollectionsBloc extends ChangeNotifier {
-  void createNewCollection(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => NewCollectionDialog(),
-    );
+  void createNewCollection(CollectionDetails collectionDetails) {
+    HiveHelper.saveCollectionDetails(collectionDetails);
+    notifyListeners();
+  }
+
+  List<CollectionDetails> getCollectionList() {
+    return HiveHelper.getCollectionList();
   }
 }
