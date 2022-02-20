@@ -63,7 +63,6 @@ class HiveHelper {
     // Hive.openBox(collectionDetails.getStringId());
   }
 
-
   static List<CollectionDetails> getCollectionList() =>
       _collectionListBox.values
           .map((e) => CollectionDetails.fromMap(e))
