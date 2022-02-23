@@ -10,7 +10,7 @@ class ResultViewFlexibleSpaceBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: EdgeInsets.all(16),
       child: Row(
         children: [
           Text(title, style: TextStyle(fontSize: 24)),

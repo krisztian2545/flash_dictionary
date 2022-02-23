@@ -12,15 +12,15 @@ class WordsApi implements DefinitionApiService {
     }
 
     return (parsedJson['results'] as List).map((e) {
-      ((e['examples'] ?? []) as List).forEach((element) {
-        print("element: ${element as String}");
-      });
+      // ((e['examples'] ?? []) as List).forEach((element) {
+      //   print("element: ${element as String}");
+      // });
       var temp = DefinitionItem(
           e['definition'] as String,
           e['partOfSpeech'] as String,
           ((e['examples'] ?? []) as List).map((e) => e as String).toList());
-      print(
-          "Def item: ${temp.defintion} ${temp.partOfSpeech} ${temp.examples}");
+      // print(
+      //     "Def item: ${temp.defintion} ${temp.partOfSpeech} ${temp.examples}");
       return temp;
     }).toList();
   }

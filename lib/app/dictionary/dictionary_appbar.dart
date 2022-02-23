@@ -1,5 +1,6 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/app/widgets/language_dropdown_button.dart';
+import 'package:flash_dictionary/app/widgets/word_dialog.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,24 @@ class DictionaryAppBar extends StatefulWidget {
 }
 
 class _DictionaryAppBarState extends State<DictionaryAppBar> {
-  // final ValueNotifier<bool> _languageValueNotifier = ValueNotifier<bool>(false);
+  List<Widget> _addButton() {
+    var out = <Widget>[];
 
-  // void triggerLanguageButtonRebuilds() {
-  //   _languageValueNotifier.value = !_languageValueNotifier.value;
-  // }
+    if (widget.dictionaryBloc.wordToTranslate != "") {
+      out.add(const SizedBox(width: 8));
+      out.add(OutlinedButton(
+        onPressed: () {
+          showDialog(context: context, builder: (context) => WordDialog(title: "Add word to collection")).then((value) => print("exited"));
+        },
+        child: const Text("Add",
+            style: TextStyle(color: Colors.black, fontSize: 20)),
+        style: OutlinedButton.styleFrom(
+            side: BorderSide(width: 2), fixedSize: Size.fromHeight(60)),
+      ));
+    }
+
+    return out;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,45 +45,44 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
       right: 0,
       height: widget.height,
       child: SafeArea(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                LanguageDropdownButton(
+                  onChanged: (value) {
+                    widget.dictionaryBloc.fromLanguage = value!;
+                  },
+                  value: widget.dictionaryBloc.fromLanguage,
+                ),
+                TextButton(
+                  onPressed: () {
+                    widget.dictionaryBloc.switchLanguages();
+                  },
+                  child: Text("<>", style: appBarButtonTextStyle),
+                ),
+                LanguageDropdownButton(
+                  onChanged: (value) {
+                    widget.dictionaryBloc.toLanguage = value!;
+                  },
+                  value: widget.dictionaryBloc.toLanguage,
+                ),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 8, right: 42),
+              child: Row(
                 children: <Widget>[
-                  LanguageDropdownButton(
-                    onChanged: (value) {
-                      widget.dictionaryBloc.fromLanguage = value!;
-                    },
-                    value: widget.dictionaryBloc.fromLanguage,
+                  Expanded(
+                    child: AutocompleteTextField(
+                        dictionaryBloc: widget.dictionaryBloc),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      widget.dictionaryBloc.switchLanguages();
-                    },
-                    child: Text("<>", style: appBarButtonTextStyle),
-                  ),
-                  LanguageDropdownButton(
-                    onChanged: (value) {
-                      widget.dictionaryBloc.toLanguage = value!;
-                    },
-                    value: widget.dictionaryBloc.toLanguage,
-                  ),
+                  ..._addButton(),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.only(left: 8, right: 42),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: AutocompleteTextField(
-                          dictionaryBloc: widget.dictionaryBloc),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -111,9 +124,16 @@ class AutocompleteTextField extends StatelessWidget {
           controller: textEditingController,
           focusNode: focusNode,
           decoration: InputDecoration(
-            border: OutlineInputBorder(),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 2, color: Colors.black),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 2, color: Colors.black),
+              borderRadius: BorderRadius.circular(4),
+            ),
             suffixIcon: IconButton(
-              icon: Icon(Icons.clear),
+              icon: const Icon(Icons.clear),
               onPressed: () {
                 textEditingController.clear();
                 updateWordInBloc(context, "");

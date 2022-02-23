@@ -67,7 +67,7 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
       child: AlertDialog(
         title: const Text("Create new collection",
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-        actions: [
+        actions: <Widget>[
           TextButton(
             // TODO change color of animation when you hold
             onPressed: _onSubmit,

@@ -1,4 +1,5 @@
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
+import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flutter/material.dart';
 
 class CollectionsView extends StatelessWidget {
@@ -23,6 +24,11 @@ class CollectionsView extends StatelessWidget {
             Text(
               collectionList[index].name,
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(width: 4),
+            Text(
+              "[${collectionList[index].fromLanguage.value}${collectionList[index].toLanguage != null ? "-${collectionList[index].toLanguage!.value}" : ""}]",
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.grey),
             ),
           ],
         ),

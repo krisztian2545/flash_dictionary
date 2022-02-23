@@ -7,7 +7,6 @@ import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
 import 'package:flash_dictionary/styles.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -84,7 +83,6 @@ class ResultView extends StatelessWidget {
                         toolbarHeight: 32,
                         foregroundColor: Colors.black,
                         backgroundColor: whitishColor,
-                        actions: <Widget>[],
                       ),
                       if (resultBloc.showDefinitions && isDataLoaded)
                         _buildDefinitions(snapshot.data!['definitions']),
@@ -98,7 +96,6 @@ class ResultView extends StatelessWidget {
                         toolbarHeight: 32,
                         foregroundColor: Colors.black,
                         backgroundColor: whitishColor,
-                        actions: <Widget>[],
                       ),
                       if (resultBloc.showTranslations && isDataLoaded)
                         _buildTranslations(snapshot.data!['translations']),

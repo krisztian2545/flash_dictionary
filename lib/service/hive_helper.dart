@@ -12,6 +12,7 @@ class BoxKey {
   static const wordHistory = "wordHistory";
   static const lastUsedFromLanguage = "lastUsedFromLanguage";
   static const lastUsedToLanguage = "lastUsedToLanguage";
+  static const lastUsedCollectionIndex = "lastUsedCollectionIndex";
 }
 
 class HiveHelper {
@@ -67,4 +68,25 @@ class HiveHelper {
       _collectionListBox.values
           .map((e) => CollectionDetails.fromMap(e))
           .toList();
+
+  static saveAsLastUsedCollection(CollectionDetails collectionDetails) {
+    var index = getCollectionList().indexOf(collectionDetails);
+    if (index > 0) {
+      _historyBox.put(BoxKey.lastUsedCollectionIndex, index);
+    }
+  }
+
+  static CollectionDetails? getLastUsedCollection() {
+    var collectionList = getCollectionList();
+    if (collectionList.isEmpty) {
+      return null;
+    }
+
+    try {
+      return collectionList[_historyBox.get(BoxKey.lastUsedCollectionIndex, defaultValue: 0)];
+    }
+    on Exception {
+      return collectionList[0];
+    }
+  }
 }

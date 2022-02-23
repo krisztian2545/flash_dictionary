@@ -24,7 +24,9 @@ class CollectionDetails {
             : null);
   }
 
-  String getStringId() => "${name}_${type.index}_${fromLanguage.index}" + ((toLanguage != null) ? "_${toLanguage!.index}" : "");
+  String getStringId() =>
+      "${name}_${type.index}_${fromLanguage.index}" +
+      ((toLanguage != null) ? "_${toLanguage!.index}" : "");
 
   Map<String, dynamic> toMap() {
     var out = {
@@ -39,4 +41,13 @@ class CollectionDetails {
 
     return out;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      other is CollectionDetails &&
+      other.runtimeType == runtimeType &&
+      other.getStringId() == getStringId();
+
+  @override
+  int get hashCode => getStringId().hashCode;
 }
