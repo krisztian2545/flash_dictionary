@@ -1,4 +1,6 @@
+import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
+import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
 import 'package:flash_dictionary/service/definition_api_service.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
@@ -6,14 +8,16 @@ import 'package:flutter/material.dart';
 
 class DictionaryBloc extends ChangeNotifier {
   DictionaryBloc(
-      {LanguageName fromLanguage = LanguageName.eng,
-      LanguageName toLanguage = LanguageName.hun,
-      this.translationApi = TranslationApi.linkDictionary,
-      this.definitionApi = DefinitionApi.wordsApi})
-      : translationService = TranslationApiService.getApi(translationApi),
-        definitionApiService = DefinitionApiService.getApi(definitionApi),
-        _fromLanguage = fromLanguage,
-        _toLanguage = toLanguage;
+      {LanguageName? fromLanguage,
+      LanguageName? toLanguage,
+      this.translationApi =
+          TranslationApi.linkDictionary, // TODO save and get last apis too
+      this.definitionApi = DefinitionApi.wordsApi}) {
+    translationService = TranslationApiService.getApi(translationApi);
+    definitionApiService = DefinitionApiService.getApi(definitionApi);
+    _fromLanguage = fromLanguage ?? HiveHelper.getLastUsedFromLanguage();
+    _toLanguage = toLanguage ?? HiveHelper.getLastUsedToLanguage();
+  }
 
   String _wordToTranslate = "";
 
@@ -25,7 +29,7 @@ class DictionaryBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  LanguageName _fromLanguage;
+  late LanguageName _fromLanguage;
 
   LanguageName get fromLanguage => _fromLanguage;
 
@@ -39,7 +43,7 @@ class DictionaryBloc extends ChangeNotifier {
     notifyListeners();
   }
 
-  LanguageName _toLanguage;
+  late LanguageName _toLanguage;
 
   LanguageName get toLanguage => _toLanguage;
 
@@ -56,8 +60,11 @@ class DictionaryBloc extends ChangeNotifier {
   TranslationApi translationApi;
   DefinitionApi definitionApi;
 
-  TranslationApiService translationService;
-  DefinitionApiService definitionApiService;
+  late TranslationApiService translationService;
+  late DefinitionApiService definitionApiService;
+
+  List<DefinitionItem>? lastFetchedDefinitions;
+  List<TranslationItem>? lastFetchedTranslationItem;
 
   void switchLanguages() {
     var temp = _fromLanguage;
@@ -71,17 +78,19 @@ class DictionaryBloc extends ChangeNotifier {
   void setWordAndLanguages(String word, LanguageName from, LanguageName to) {
     _fromLanguage = from;
     _toLanguage = to;
+    HiveHelper.saveAsLastUsedFromLanguage(_fromLanguage);
+    HiveHelper.saveAsLastUsedToLanguage(_toLanguage);
     wordToTranslate = word;
   }
 
   Future<Map<String, dynamic>> fetchData() async {
-    var definitions =
+    lastFetchedDefinitions =
         await definitionApiService.getDefinition(wordToTranslate, fromLanguage);
-    var translations = await translationService.getTranslations(
+    lastFetchedTranslationItem = await translationService.getTranslations(
         wordToTranslate, fromLanguage, toLanguage);
     return {
-      'translations': translations,
-      'definitions': definitions,
+      'translations': lastFetchedTranslationItem,
+      'definitions': lastFetchedDefinitions,
     };
   }
 }

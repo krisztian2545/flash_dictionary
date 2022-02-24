@@ -1,5 +1,6 @@
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
+import 'package:flash_dictionary/domain/minigame/language_card.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -88,5 +89,23 @@ class HiveHelper {
     on Exception {
       return collectionList[0];
     }
+  }
+  
+  static Future<void> saveLanguageCardToCollection(CollectionDetails collection, LanguageCard languageCard) async {
+    Box collectionBox = await Hive.openBox(collection.getStringId());
+    collectionBox.put(languageCard.front, languageCard.back);
+  }
+
+  static Future<List<LanguageCard>> getLanguageCardsFromCollection(CollectionDetails collection) async {
+    Box collectionBox = await Hive.openBox(collection.getStringId());
+    var languageCardList = <LanguageCard>[];
+    var keys = collectionBox.keys.toList();
+    var values = collectionBox.values.toList();
+
+    for (int i = 0; i < collectionBox.length; i++) {
+      languageCardList.add(LanguageCard(front: keys[i], back: values[i]));
+    }
+
+    return languageCardList;
   }
 }

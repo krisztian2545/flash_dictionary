@@ -1,12 +1,24 @@
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
+import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
+import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
+import 'package:flash_dictionary/domain/minigame/language_card.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';
 
 class WordDialog extends StatefulWidget {
-  const WordDialog({Key? key, required this.title}) : super(key: key);
+  const WordDialog(
+      {Key? key,
+      required this.title,
+      required this.initialFront,
+      required this.definitions,
+      required this.translations})
+      : super(key: key);
 
   final String title;
+  final String initialFront;
+  final List<DefinitionItem>? definitions;
+  final List<TranslationItem>? translations;
 
   @override
   State<WordDialog> createState() => _WordDialogState();
@@ -14,31 +26,62 @@ class WordDialog extends StatefulWidget {
 
 class _WordDialogState extends State<WordDialog> {
   ValueNotifier<CollectionDetails>? selectedCollection;
+  late final List<CollectionDetails> collectionList;
+
   final TextEditingController _frontController = TextEditingController();
   final TextEditingController _backController = TextEditingController();
 
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  String _definitionsAsString() {
+    if (widget.definitions == null) {
+      return "";
+    }
+
+    return widget.definitions?.map((e) => "$e.").join("\n\n") ?? "";
+  }
+
+  String _translationsAsString() {
+    return "";
+  }
 
   @override
   void initState() {
-    var lastUsedCollection = HiveHelper.getLastUsedCollection();
+    collectionList = HiveHelper.getCollectionList()
+        .where((collection) => (collection.type == CollectionType.translation)
+            ? collection.fromLanguage == HiveHelper.getLastUsedFromLanguage() &&
+                collection.toLanguage == HiveHelper.getLastUsedToLanguage()
+            : collection.fromLanguage == HiveHelper.getLastUsedFromLanguage())
+        .toList();
+
+    var lastUsedCollection =
+        HiveHelper.getLastUsedCollection(); // TODO set only if languages match
     if (lastUsedCollection != null) {
-      selectedCollection = ValueNotifier(lastUsedCollection);
+      selectedCollection = (collectionList.contains(lastUsedCollection))
+          ? ValueNotifier(lastUsedCollection)
+          : ValueNotifier(collectionList[0]);
     }
 
     super.initState();
   }
 
+  String? _formFieldValidator(String? value) {
+    if (value == null || value == "") {
+      return "Field can't be empty!";
+    }
+  }
+
   bool validate() =>
       selectedCollection != null &&
-      _frontController.text.isNotEmpty &&
-      _backController.text.isNotEmpty;
-
-  
+      (_formKey.currentState?.validate() ?? false);
 
   void _onSubmit() {
     if (validate()) {
-      Navigator.pop(context);
+      Navigator.pop<Map<String, dynamic>>(context, <String, dynamic>{
+        'collectionDetails': selectedCollection!.value,
+        'languageCard': LanguageCard(
+            front: _frontController.text, back: _backController.text),
+      });
     }
   }
 
@@ -72,13 +115,18 @@ class _WordDialogState extends State<WordDialog> {
           child: Column(
             children: <Widget>[
               CollectionDropDownButton(
-                  selectedCollectionNotifier: selectedCollection),
+                selectedCollectionNotifier: selectedCollection,
+                collectionList: collectionList,
+              ),
               SizedBox(height: 16),
               Text("Front:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               SizedBox(height: 8),
               TextFormField(
+                // TODO maybe check if front already exists in deck or just overwrite
                 controller: _frontController,
+                validator: _formFieldValidator,
+                initialValue: widget.initialFront,
                 keyboardType: TextInputType.multiline,
                 minLines: 2,
                 maxLines: null,
@@ -94,6 +142,11 @@ class _WordDialogState extends State<WordDialog> {
               SizedBox(height: 8),
               TextFormField(
                 controller: _backController,
+                validator: _formFieldValidator,
+                initialValue:
+                    selectedCollection?.value.type == CollectionType.definition
+                        ? _definitionsAsString()
+                        : _translationsAsString(),
                 keyboardType: TextInputType.multiline,
                 minLines: 3,
                 maxLines: null,
@@ -113,10 +166,13 @@ class _WordDialogState extends State<WordDialog> {
 
 class CollectionDropDownButton extends StatelessWidget {
   const CollectionDropDownButton(
-      {Key? key, required this.selectedCollectionNotifier})
+      {Key? key,
+      required this.selectedCollectionNotifier,
+      required this.collectionList})
       : super(key: key);
 
   final ValueNotifier<CollectionDetails>? selectedCollectionNotifier;
+  final List<CollectionDetails> collectionList;
 
   @override
   Widget build(BuildContext context) {
@@ -125,16 +181,17 @@ class CollectionDropDownButton extends StatelessWidget {
         icon: Container(),
         underline: Container(),
         value: "There are no collections",
-        items: [
+        items: const [
           DropdownMenuItem<String>(
               value: "There are no collections",
-              child: Text("There are no collections")),
+              child: Text("There are no collections",
+                  style: TextStyle(color: Colors.grey))),
         ],
         onChanged: (_) {},
       );
     }
 
-    var collectionList = HiveHelper.getCollectionList();
+    // var collectionList = HiveHelper.getCollectionList();
     print("last used: ${selectedCollectionNotifier!.value.getStringId()}");
     print("list: ${collectionList.map((e) => e.getStringId()).join(", ")}");
     return ValueListenableBuilder<CollectionDetails>(
@@ -143,21 +200,22 @@ class CollectionDropDownButton extends StatelessWidget {
         icon: Container(),
         underline: Container(),
         value: value,
-        items: collectionList
-            .map((e) => DropdownMenuItem<CollectionDetails>(
-                  value: e,
-                  child: Row(
-                    children: <Widget>[
-                      Text(e.name),
-                      SizedBox(width: 4),
-                      Text(
-                        "[${e.fromLanguage.value}${e.toLanguage != null ? "-${e.toLanguage!.value}" : ""}]",
-                        style: TextStyle(color: Colors.grey),
+        items:
+            collectionList // TODO show only those, where the type and languages are the same
+                .map((e) => DropdownMenuItem<CollectionDetails>(
+                      value: e,
+                      child: Row(
+                        children: <Widget>[
+                          Text(e.name),
+                          SizedBox(width: 4),
+                          Text(
+                            "[${e.fromLanguage.value}${e.toLanguage != null ? "-${e.toLanguage!.value}" : ""}]",
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ))
-            .toList(),
+                    ))
+                .toList(),
         onChanged: (newValue) {
           if (newValue != null) {
             selectedCollectionNotifier!.value = newValue;

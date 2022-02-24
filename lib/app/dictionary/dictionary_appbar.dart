@@ -25,7 +25,14 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
       out.add(const SizedBox(width: 8));
       out.add(OutlinedButton(
         onPressed: () {
-          showDialog(context: context, builder: (context) => WordDialog(title: "Add word to collection")).then((value) => print("exited"));
+          showDialog(
+                  context: context,
+                  builder: (context) =>
+                      WordDialog(title: "Add word to collection",
+                      initialFront: widget.dictionaryBloc.wordToTranslate,
+                        initialBack: ,
+                      ))
+              .then((value) => print("exited"));
         },
         child: const Text("Add",
             style: TextStyle(color: Colors.black, fontSize: 20)),
