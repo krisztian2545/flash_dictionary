@@ -33,17 +33,14 @@ class _WordDialogState extends State<WordDialog> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _definitionsAsString() {
-    if (widget.definitions == null) {
-      return "";
-    }
+  String _definitionsAsString() =>
+      widget.definitions
+          ?.map((e) => "${e.defintion}\n${e.partOfSpeech}\n${e.examples}")
+          .join("\n\n") ??
+      "";
 
-    return widget.definitions?.map((e) => "$e.").join("\n\n") ?? "";
-  }
-
-  String _translationsAsString() {
-    return "";
-  }
+  String _translationsAsString() =>
+      widget.translations?.map((e) => e.word).join(", ") ?? "";
 
   @override
   void initState() {

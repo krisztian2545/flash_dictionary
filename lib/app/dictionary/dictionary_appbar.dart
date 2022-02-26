@@ -26,13 +26,20 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
       out.add(OutlinedButton(
         onPressed: () {
           showDialog(
-                  context: context,
-                  builder: (context) =>
-                      WordDialog(title: "Add word to collection",
-                      initialFront: widget.dictionaryBloc.wordToTranslate,
-                        initialBack: ,
-                      ))
-              .then((value) => print("exited"));
+              context: context,
+              builder: (context) => WordDialog(
+                    title: "Add word to collection",
+                    initialFront: widget.dictionaryBloc.wordToTranslate,
+                    definitions: widget.dictionaryBloc.lastFetchedDefinitions,
+                    translations:
+                        widget.dictionaryBloc.lastFetchedTranslationItems,
+                  )).then((value) {
+            if (value == null) {
+              return;
+            }
+            widget.dictionaryBloc.saveWordToCollection(
+                value['collectionDetails'], value['languageCard']);
+          });
         },
         child: const Text("Add",
             style: TextStyle(color: Colors.black, fontSize: 20)),

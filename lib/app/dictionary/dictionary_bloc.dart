@@ -1,6 +1,8 @@
+import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
+import 'package:flash_dictionary/domain/minigame/language_card.dart';
 import 'package:flash_dictionary/service/definition_api_service.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
@@ -64,7 +66,7 @@ class DictionaryBloc extends ChangeNotifier {
   late DefinitionApiService definitionApiService;
 
   List<DefinitionItem>? lastFetchedDefinitions;
-  List<TranslationItem>? lastFetchedTranslationItem;
+  List<TranslationItem>? lastFetchedTranslationItems;
 
   void switchLanguages() {
     var temp = _fromLanguage;
@@ -86,11 +88,17 @@ class DictionaryBloc extends ChangeNotifier {
   Future<Map<String, dynamic>> fetchData() async {
     lastFetchedDefinitions =
         await definitionApiService.getDefinition(wordToTranslate, fromLanguage);
-    lastFetchedTranslationItem = await translationService.getTranslations(
+    lastFetchedTranslationItems = await translationService.getTranslations(
         wordToTranslate, fromLanguage, toLanguage);
     return {
-      'translations': lastFetchedTranslationItem,
+      'translations': lastFetchedTranslationItems,
       'definitions': lastFetchedDefinitions,
     };
+  }
+
+  // void addButtonPressed
+
+  void saveWordToCollection(CollectionDetails collection, LanguageCard languageCard) {
+    HiveHelper.saveLanguageCardToCollection(collection, languageCard);
   }
 }
