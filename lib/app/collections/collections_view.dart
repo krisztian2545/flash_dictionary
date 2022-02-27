@@ -19,7 +19,7 @@ class CollectionsView extends StatelessWidget {
         decoration: BoxDecoration(
             border: Border.all(width: 2),
             borderRadius: const BorderRadius.all(Radius.circular(4))),
-        child: Row(
+        child: Row( // TODO word wrap
           children: <Widget>[
             Text(
               collectionList[index].name,

@@ -18,29 +18,38 @@ class DictionaryAppBar extends StatefulWidget {
 }
 
 class _DictionaryAppBarState extends State<DictionaryAppBar> {
+
+  void _onAddButtonPressed() {
+    // TODO make it appear after data is fetched
+    if (widget.dictionaryBloc.lastFetchedDefinitions == null || widget.dictionaryBloc.lastFetchedTranslationItems == null) {
+      return;
+    }
+
+    showDialog(
+        context: context,
+        builder: (context) =>
+            WordDialog(
+              title: "Add word to collection",
+              initialFront: widget.dictionaryBloc.wordToTranslate,
+              definitions: widget.dictionaryBloc.lastFetchedDefinitions,
+              translations:
+              widget.dictionaryBloc.lastFetchedTranslationItems,
+            )).then((value) {
+      if (value == null) {
+        return;
+      }
+      widget.dictionaryBloc.saveWordToCollection(
+          value['collectionDetails'], value['languageCard']);
+    });
+    }
+
   List<Widget> _addButton() {
     var out = <Widget>[];
 
     if (widget.dictionaryBloc.wordToTranslate != "") {
       out.add(const SizedBox(width: 8));
       out.add(OutlinedButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) => WordDialog(
-                    title: "Add word to collection",
-                    initialFront: widget.dictionaryBloc.wordToTranslate,
-                    definitions: widget.dictionaryBloc.lastFetchedDefinitions,
-                    translations:
-                        widget.dictionaryBloc.lastFetchedTranslationItems,
-                  )).then((value) {
-            if (value == null) {
-              return;
-            }
-            widget.dictionaryBloc.saveWordToCollection(
-                value['collectionDetails'], value['languageCard']);
-          });
-        },
+        onPressed: _onAddButtonPressed,
         child: const Text("Add",
             style: TextStyle(color: Colors.black, fontSize: 20)),
         style: OutlinedButton.styleFrom(

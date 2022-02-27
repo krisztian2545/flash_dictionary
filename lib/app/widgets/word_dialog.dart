@@ -59,6 +59,24 @@ class _WordDialogState extends State<WordDialog> {
           : ValueNotifier(collectionList[0]);
     }
 
+    selectedCollection?.addListener(() {
+      if (selectedCollection == null) {
+        return;
+      }
+      
+      _backController.text =
+      selectedCollection!.value.type == CollectionType.definition
+          ? _definitionsAsString()
+          : _translationsAsString();
+      HiveHelper.saveAsLastUsedCollection(selectedCollection!.value);
+    });
+
+    _frontController.text = widget.initialFront;
+    _backController.text =
+        selectedCollection?.value.type == CollectionType.definition
+            ? _definitionsAsString()
+            : _translationsAsString();
+
     super.initState();
   }
 
@@ -123,7 +141,6 @@ class _WordDialogState extends State<WordDialog> {
                 // TODO maybe check if front already exists in deck or just overwrite
                 controller: _frontController,
                 validator: _formFieldValidator,
-                initialValue: widget.initialFront,
                 keyboardType: TextInputType.multiline,
                 minLines: 2,
                 maxLines: null,
@@ -140,10 +157,6 @@ class _WordDialogState extends State<WordDialog> {
               TextFormField(
                 controller: _backController,
                 validator: _formFieldValidator,
-                initialValue:
-                    selectedCollection?.value.type == CollectionType.definition
-                        ? _definitionsAsString()
-                        : _translationsAsString(),
                 keyboardType: TextInputType.multiline,
                 minLines: 3,
                 maxLines: null,

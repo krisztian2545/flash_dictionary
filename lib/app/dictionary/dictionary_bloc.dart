@@ -96,8 +96,6 @@ class DictionaryBloc extends ChangeNotifier {
     };
   }
 
-  // void addButtonPressed
-
   void saveWordToCollection(CollectionDetails collection, LanguageCard languageCard) {
     HiveHelper.saveLanguageCardToCollection(collection, languageCard);
   }
