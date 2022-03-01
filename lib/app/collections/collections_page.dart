@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class CollectionsPage extends StatelessWidget {
   const CollectionsPage({Key? key}) : super(key: key);
 
-  final double _appBarBaseHeight = 60;
+  static const double _appBarBaseHeight = 60;
 
   @override
   Widget build(BuildContext context) {

@@ -25,7 +25,7 @@ class CollectionDetails {
   }
 
   String getStringId() =>
-      "${name}_${type.index}_${fromLanguage.index}" +
+      "${name.hashCode}_${type.index}_${fromLanguage.index}" + // TODO collection name must be ascii ...
       ((toLanguage != null) ? "_${toLanguage!.index}" : "");
 
   Map<String, dynamic> toMap() {

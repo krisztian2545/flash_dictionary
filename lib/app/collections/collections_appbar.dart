@@ -19,15 +19,21 @@ class CollectionsAppBar extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: <Widget>[
-            Spacer(),
+            SizedBox(width: 26),
             Text("Collections", style: appBarTextStyle),
             Spacer(flex: 5),
             OutlinedButton(
               onPressed: () {
                 showDialog(
-                context: context,
-                builder: (context) => NewCollectionDialog(),
-              ).then((result) => Provider.of<CollectionsBloc>(context, listen: false).createNewCollection(result));
+                  context: context,
+                  builder: (context) => NewCollectionDialog(),
+                ).then((result) {
+                  if (result == null) {
+                    return;
+                  }
+                  Provider.of<CollectionsBloc>(context, listen: false)
+                      .createNewCollection(result);
+                });
               },
               style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
               child: Text("New", style: appBarButtonTextStyle),

@@ -84,23 +84,32 @@ class HiveHelper {
     }
 
     try {
-      return collectionList[_historyBox.get(BoxKey.lastUsedCollectionIndex, defaultValue: 0)];
-    }
-    on Exception {
+      return collectionList[
+          _historyBox.get(BoxKey.lastUsedCollectionIndex, defaultValue: 0)];
+    } on Exception {
       return collectionList[0];
     }
   }
-  
-  static Future<void> saveLanguageCardToCollection(CollectionDetails collection, LanguageCard languageCard) async {
+
+  // TODO String keys need to be ASCII Strings with a max length of 255
+  static Future<void> saveLanguageCardToCollection(
+      CollectionDetails collection, LanguageCard languageCard) async {
     Box collectionBox = await Hive.openBox(collection.getStringId());
-    collectionBox.put(languageCard.front, languageCard.back);
+    collectionBox.put(
+        languageCard.front.codeUnits.join(","), languageCard.back);
   }
 
-  static Future<List<LanguageCard>> getLanguageCardsFromCollection(CollectionDetails collection) async {
+  static Future<List<LanguageCard>> getLanguageCardsFromCollection(
+      CollectionDetails collection) async {
     Box collectionBox = await Hive.openBox(collection.getStringId());
     var languageCardList = <LanguageCard>[];
-    var keys = collectionBox.keys.toList();
+    var keys = collectionBox.keys
+        .map((e) => (e as String).splitMapJoin(",", onMatch: (m) => "", onNonMatch: (n) => String.fromCharCode(int.parse(n))))
+        .toList();
     var values = collectionBox.values.toList();
+
+    print("keys: $keys");
+    print("values: $values");
 
     for (int i = 0; i < collectionBox.length; i++) {
       languageCardList.add(LanguageCard(front: keys[i], back: values[i]));

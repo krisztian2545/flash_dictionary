@@ -211,7 +211,7 @@ class CollectionDropDownButton extends StatelessWidget {
         underline: Container(),
         value: value,
         items:
-            collectionList // TODO show only those, where the type and languages are the same
+            collectionList
                 .map((e) => DropdownMenuItem<CollectionDetails>(
                       value: e,
                       child: Row(

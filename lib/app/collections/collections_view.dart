@@ -1,5 +1,5 @@
+import 'package:flash_dictionary/app/collections/collections_view_item_button.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
-import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flutter/material.dart';
 
 class CollectionsView extends StatelessWidget {
@@ -14,25 +14,7 @@ class CollectionsView extends StatelessWidget {
       padding: const EdgeInsets.all(32),
       itemCount: collectionList.length,
       separatorBuilder: (context, index) => const SizedBox(height: 32),
-      itemBuilder: (context, index) => Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-            border: Border.all(width: 2),
-            borderRadius: const BorderRadius.all(Radius.circular(4))),
-        child: Row( // TODO word wrap
-          children: <Widget>[
-            Text(
-              collectionList[index].name,
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(width: 4),
-            Text(
-              "[${collectionList[index].fromLanguage.value}${collectionList[index].toLanguage != null ? "-${collectionList[index].toLanguage!.value}" : ""}]",
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
+      itemBuilder: (context, index) => CollectionsViewItemButton(collectionDetails: collectionList[index]),
     );
   }
 }
