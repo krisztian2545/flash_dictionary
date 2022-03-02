@@ -23,8 +23,9 @@ class CollectionEditingView extends StatelessWidget {
 
           print("cards: ${snapshot.data}");
           return ListView.separated(
+            padding: const EdgeInsets.all(32),
             itemCount: snapshot.data!.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 8),
+            separatorBuilder: (context, index) => const SizedBox(height: 24),
             itemBuilder: (context, index) =>
                 CollectionEditingViewItem(languageCard: snapshot.data![index]),
           );

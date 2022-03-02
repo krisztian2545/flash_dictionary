@@ -20,6 +20,15 @@ class HiveHelper {
   static late Box _historyBox;
   static late Box _collectionListBox;
 
+  /// returns null if value not found
+  static dynamic findKeyOfValue(Map map, value) {
+    for (var entry in map.entries) {
+      if (entry.value == value) {
+        return entry.key;
+      }
+    }
+  }
+
   static Future<void> initAndOpenBoxes() async {
     await Hive.initFlutter();
     _historyBox = await Hive.openBox(HBoxName.history);
@@ -91,6 +100,16 @@ class HiveHelper {
     }
   }
 
+  static void deleteCollection(CollectionDetails collectionDetails) {
+    var mappedCollection = collectionDetails.toMap();
+    var key = findKeyOfValue(_collectionListBox.toMap(), mappedCollection);
+    if (key == null) {
+      return;
+    }
+    _collectionListBox.delete(key);
+    Hive.deleteBoxFromDisk(collectionDetails.getStringId());
+  }
+
   // TODO String keys need to be ASCII Strings with a max length of 255
   static Future<void> saveLanguageCardToCollection(
       CollectionDetails collection, LanguageCard languageCard) async {
@@ -116,5 +135,10 @@ class HiveHelper {
     }
 
     return languageCardList;
+  }
+  
+  static Future<void> deleteLanguageCardFromCollection(CollectionDetails collectionDetails, LanguageCard languageCard) async {
+    Box collectionBox = await Hive.openBox(collectionDetails.getStringId());
+    collectionBox.delete(key)
   }
 }

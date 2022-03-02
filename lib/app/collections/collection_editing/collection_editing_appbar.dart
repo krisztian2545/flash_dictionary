@@ -1,4 +1,6 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_bloc.dart';
+import 'package:flash_dictionary/app/widgets/delete_confirmation_dialog.dart';
+import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,12 +21,31 @@ class CollectionEditingAppbar extends StatelessWidget {
       child: SafeArea(
         child: Row(
           children: <Widget>[
-            SizedBox(width: 26),
+            SizedBox(width: 8),
+            IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.arrow_back_sharp)),
+            SizedBox(width: 16),
             Text(
               Provider.of<CollectionEditingBloc>(context, listen: false)
                   .collectionDetails
                   .name,
               style: appBarTextStyle,
+            ),
+            Spacer(),
+            IconButton(
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (_) => const DeleteConfirmationDialog(),
+                ).then((agreed) {
+                  if (agreed) {
+                    HiveHelper.deleteCollection(
+                        Provider.of<CollectionEditingBloc>(context, listen: false)
+                            .collectionDetails);
+                    Navigator.pop(context);
+                  }
+                }),
+              icon: Icon(Icons.delete),
             ),
           ],
         ),
