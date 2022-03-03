@@ -11,4 +11,6 @@ class CollectionsBloc extends ChangeNotifier {
   List<CollectionDetails> getCollectionList() {
     return HiveHelper.getCollectionList();
   }
+
+  void rebuild() => notifyListeners();
 }

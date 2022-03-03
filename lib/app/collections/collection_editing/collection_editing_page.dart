@@ -26,8 +26,17 @@ class CollectionEditingPage extends StatelessWidget {
             CollectionEditingBloc(collectionDetails: collectionDetails),
         child: Stack(
           children: <Widget>[
-            CollectionEditingAppbar(height: appBarHeight),
-            Positioned( // TODO make positioned and material together a custom widget
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: appBarHeight,
+              child: Consumer<CollectionEditingBloc>(
+                builder: (context, bloc, child) => CollectionEditingAppbar(),
+              ),
+            ),
+            Positioned(
+              // TODO make positioned and material together a custom widget
               top: appBarHeight,
               left: 0,
               right: 0,
@@ -37,9 +46,12 @@ class CollectionEditingPage extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 elevation: 16,
                 shape: const BeveledRectangleBorder(
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
+                  borderRadius:
+                      BorderRadius.only(topRight: Radius.circular(46)),
                 ),
-                child: CollectionEditingView(),
+                child: Consumer<CollectionEditingBloc>(
+                  builder: (context, bloc, child) => CollectionEditingView(),
+                ),
               ),
             ),
           ],

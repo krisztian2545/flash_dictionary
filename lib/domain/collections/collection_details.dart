@@ -14,7 +14,7 @@ class CollectionDetails {
   final LanguageName fromLanguage;
   final LanguageName? toLanguage;
 
-  static CollectionDetails fromMap(map) {
+  static CollectionDetails fromMap(Map map) {
     return CollectionDetails(
         name: map['name'],
         type: CollectionType.values[map['typeIndex']],

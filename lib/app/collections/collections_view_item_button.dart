@@ -1,15 +1,23 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_page.dart';
+import 'package:flash_dictionary/app/collections/collections_bloc.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CollectionsViewItemButton extends StatelessWidget {
-  const CollectionsViewItemButton({Key? key, required this.collectionDetails}) : super(key: key);
+  const CollectionsViewItemButton({Key? key, required this.collectionDetails})
+      : super(key: key);
 
   final CollectionDetails collectionDetails;
 
   void _onCollectionPressed(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => CollectionEditingPage(collectionDetails: collectionDetails)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) => CollectionEditingPage(
+                collectionDetails: collectionDetails))).then((value) =>
+        Provider.of<CollectionsBloc>(context, listen: false).rebuild());
   }
 
   @override
@@ -34,9 +42,7 @@ class CollectionsViewItemButton extends StatelessWidget {
           Text(
             "[${collectionDetails.fromLanguage.value}${collectionDetails.toLanguage != null ? "-${collectionDetails.toLanguage!.value}" : ""}]",
             style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey),
+                fontSize: 26, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
         ],
       ),

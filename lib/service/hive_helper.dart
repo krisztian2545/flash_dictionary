@@ -3,6 +3,7 @@ import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/domain/minigame/language_card.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:collection/collection.dart';
 
 class HBoxName {
   static const history = "history";
@@ -23,7 +24,14 @@ class HiveHelper {
   /// returns null if value not found
   static dynamic findKeyOfValue(Map map, value) {
     for (var entry in map.entries) {
-      if (entry.value == value) {
+      print("findKeyOfValue: ${entry.value} == ${value}");
+      if (value is Map) {
+        if (DeepCollectionEquality().equals(entry.value, value)) {
+          print("entry.key");
+          return entry.key;
+        }
+      } else if (entry.value == value) {
+        print("entry.key");
         return entry.key;
       }
     }
@@ -103,6 +111,7 @@ class HiveHelper {
   static void deleteCollection(CollectionDetails collectionDetails) {
     var mappedCollection = collectionDetails.toMap();
     var key = findKeyOfValue(_collectionListBox.toMap(), mappedCollection);
+    print("deleteng at key: $key");
     if (key == null) {
       return;
     }
@@ -110,35 +119,39 @@ class HiveHelper {
     Hive.deleteBoxFromDisk(collectionDetails.getStringId());
   }
 
-  // TODO String keys need to be ASCII Strings with a max length of 255
   static Future<void> saveLanguageCardToCollection(
       CollectionDetails collection, LanguageCard languageCard) async {
     Box collectionBox = await Hive.openBox(collection.getStringId());
-    collectionBox.put(
-        languageCard.front.codeUnits.join(","), languageCard.back);
+    collectionBox.add(languageCard.toMap());
+  }
+
+  static Future<void> updateLanguageCardInCollection(
+      CollectionDetails collection,
+      LanguageCard oldValue,
+      LanguageCard newValue) async {
+    Box collectionBox = await Hive.openBox(collection.getStringId());
+    var key = findKeyOfValue(collectionBox.toMap(), oldValue.toMap());
+    if (key == null) {
+      return;
+    }
+    collectionBox.put(key, newValue.toMap());
   }
 
   static Future<List<LanguageCard>> getLanguageCardsFromCollection(
       CollectionDetails collection) async {
     Box collectionBox = await Hive.openBox(collection.getStringId());
-    var languageCardList = <LanguageCard>[];
-    var keys = collectionBox.keys
-        .map((e) => (e as String).splitMapJoin(",", onMatch: (m) => "", onNonMatch: (n) => String.fromCharCode(int.parse(n))))
-        .toList();
-    var values = collectionBox.values.toList();
 
-    print("keys: $keys");
-    print("values: $values");
+    return collectionBox.values.map((e) => LanguageCard.fromMap(e)).toList();
+  }
 
-    for (int i = 0; i < collectionBox.length; i++) {
-      languageCardList.add(LanguageCard(front: keys[i], back: values[i]));
+  static Future<void> deleteLanguageCardFromCollection(
+      CollectionDetails collectionDetails, LanguageCard languageCard) async {
+    Box collectionBox = await Hive.openBox(collectionDetails.getStringId());
+    var key = findKeyOfValue(collectionBox.toMap(), languageCard.toMap());
+    if (key == null) {
+      return;
     }
 
-    return languageCardList;
-  }
-  
-  static Future<void> deleteLanguageCardFromCollection(CollectionDetails collectionDetails, LanguageCard languageCard) async {
-    Box collectionBox = await Hive.openBox(collectionDetails.getStringId());
-    collectionBox.delete(key)
+    collectionBox.delete(key);
   }
 }

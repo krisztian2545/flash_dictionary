@@ -13,7 +13,7 @@ class CollectionEditingView extends StatelessWidget {
     return FutureBuilder<List<LanguageCard>>(
       future: HiveHelper.getLanguageCardsFromCollection(
           Provider.of<CollectionEditingBloc>(context, listen: false)
-              .collectionDetails),
+              .collectionDetails), // TODO reverse the list
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data!.isEmpty) {
@@ -26,8 +26,11 @@ class CollectionEditingView extends StatelessWidget {
             padding: const EdgeInsets.all(32),
             itemCount: snapshot.data!.length,
             separatorBuilder: (context, index) => const SizedBox(height: 24),
-            itemBuilder: (context, index) =>
-                CollectionEditingViewItem(languageCard: snapshot.data![index]),
+            itemBuilder: (context, index) => CollectionEditingViewItem(
+              languageCard: snapshot.data![index],
+              collectionEditingBloc:
+                  Provider.of<CollectionEditingBloc>(context, listen: false),
+            ),
           );
         }
 
