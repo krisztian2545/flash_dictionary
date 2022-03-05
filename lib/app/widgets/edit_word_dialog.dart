@@ -1,4 +1,4 @@
-import 'package:flash_dictionary/domain/minigame/language_card.dart';
+import 'package:flash_dictionary/domain/collections/language_card.dart';
 import 'package:flutter/material.dart';
 
 class EditWordDialog extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_bloc.dart';
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_view_item.dart';
-import 'package:flash_dictionary/domain/minigame/language_card.dart';
+import 'package:flash_dictionary/domain/collections/language_card.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

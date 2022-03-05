@@ -1,6 +1,6 @@
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
-import 'package:flash_dictionary/domain/minigame/language_card.dart';
+import 'package:flash_dictionary/domain/collections/language_card.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:collection/collection.dart';

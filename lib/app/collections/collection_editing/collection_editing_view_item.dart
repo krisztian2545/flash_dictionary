@@ -1,7 +1,7 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_bloc.dart';
 import 'package:flash_dictionary/app/widgets/delete_confirmation_dialog.dart';
 import 'package:flash_dictionary/app/widgets/edit_word_dialog.dart';
-import 'package:flash_dictionary/domain/minigame/language_card.dart';
+import 'package:flash_dictionary/domain/collections/language_card.dart';
 import 'package:flutter/material.dart';
 
 enum MoreButtonOption { edit, delete }

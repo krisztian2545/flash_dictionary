@@ -44,6 +44,12 @@ class CollectionsViewItemButton extends StatelessWidget {
             style: TextStyle(
                 fontSize: 26, fontWeight: FontWeight.bold, color: Colors.grey),
           ),
+          Spacer(),
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.play_arrow_outlined, size: 48),
+            padding: EdgeInsets.zero,
+          ),
         ],
       ),
     );
