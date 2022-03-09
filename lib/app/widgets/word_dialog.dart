@@ -53,10 +53,10 @@ class _WordDialogState extends State<WordDialog> {
 
     var lastUsedCollection =
         HiveHelper.getLastUsedCollection(); // TODO set only if languages match
-    if (lastUsedCollection != null) {
+    if (lastUsedCollection != null && collectionList.isNotEmpty) {
       selectedCollection = (collectionList.contains(lastUsedCollection))
           ? ValueNotifier(lastUsedCollection)
-          : ValueNotifier(collectionList[0]);
+          : ValueNotifier(collectionList.first);
     }
 
     selectedCollection?.addListener(() {

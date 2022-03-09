@@ -182,7 +182,8 @@ class HiveHelper {
       gameCards.add(GameCard(
           card,
           CardValues.fromMap(cardValuesBox.values
-              .firstWhere((e) => e['front'] == card.front))));
+                  .firstWhereOrNull((e) => e['front'] == card.front)) ??
+              CardValues.zero));
     }
 
     return gameCards;

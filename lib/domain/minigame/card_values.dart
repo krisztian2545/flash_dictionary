@@ -6,12 +6,18 @@ class CardValues {
   final int confidenceValue;
   final int lastGameValue;
 
-  Map<String, dynamic> toMap(String front) => {
+  Map<String, dynamic> toMap(String front) =>
+      {
         'front': front,
         'confidenceValue': confidenceValue,
         'lastGameValue': lastGameValue,
       };
 
-  static CardValues fromMap(Map map) =>
-      CardValues(map['confidenceValue'], map['lastGameValue']);
+  static CardValues? fromMap(Map? map) {
+    if (map == null) {
+      return null;
+    }
+    CardValues(map['confidenceValue'], map['lastGameValue']);
+  }
+
 }

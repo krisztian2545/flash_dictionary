@@ -50,8 +50,17 @@ class MinigamePage extends StatelessWidget {
                     right: 0,
                     bottom: 0,
                     child: Material(
+                      color: whitishColor,
+                      clipBehavior: Clip.antiAlias,
+                      elevation: 16,
+                      shape: const BeveledRectangleBorder(
+                        borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
+                      ),
                       child: Consumer<MinigameBloc>(
-                        builder: (context, bloc, child) => MinigameView(),
+                        builder: (context, bloc, child) {
+                          print("consumer rebuild");
+                          return MinigameView();
+                        },
                       ),
                     ),
                   ),
