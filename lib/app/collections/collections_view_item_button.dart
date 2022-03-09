@@ -1,5 +1,6 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_page.dart';
 import 'package:flash_dictionary/app/collections/collections_bloc.dart';
+import 'package:flash_dictionary/app/minigame/minigame_page.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +13,22 @@ class CollectionsViewItemButton extends StatelessWidget {
   final CollectionDetails collectionDetails;
 
   void _onCollectionPressed(BuildContext context) {
+    // TODO close box after colelction closed
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (_) => CollectionEditingPage(
                 collectionDetails: collectionDetails))).then((value) =>
         Provider.of<CollectionsBloc>(context, listen: false).rebuild());
+  }
+
+  void _onPlayButtonPressed(BuildContext context) {
+    // TODO close box after game ended
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (_) =>
+                MinigamePage(collectionDetails: collectionDetails)));
   }
 
   @override
@@ -46,7 +57,7 @@ class CollectionsViewItemButton extends StatelessWidget {
           ),
           Spacer(),
           IconButton(
-            onPressed: () {},
+            onPressed: () => _onPlayButtonPressed(context),
             icon: Icon(Icons.play_arrow_outlined, size: 48),
             padding: EdgeInsets.zero,
           ),

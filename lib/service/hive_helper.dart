@@ -1,6 +1,8 @@
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/domain/collections/language_card.dart';
+import 'package:flash_dictionary/domain/minigame/card_values.dart';
+import 'package:flash_dictionary/domain/minigame/game_card.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:collection/collection.dart';
@@ -15,6 +17,9 @@ class BoxKey {
   static const lastUsedFromLanguage = "lastUsedFromLanguage";
   static const lastUsedToLanguage = "lastUsedToLanguage";
   static const lastUsedCollectionIndex = "lastUsedCollectionIndex";
+
+  static String cardValuesBoxNameFromCollection(CollectionDetails collection) =>
+      "cardValuesOf" + collection.getStringId();
 }
 
 class HiveHelper {
@@ -153,5 +158,44 @@ class HiveHelper {
     }
 
     collectionBox.delete(key);
+  }
+
+  static Future<void> initCardValuesForCollection(
+      CollectionDetails collection) async {
+    Box cardValuesBox =
+        await Hive.openBox(BoxKey.cardValuesBoxNameFromCollection(collection));
+
+    List<LanguageCard> cards = await getLanguageCardsFromCollection(collection);
+    for (var card in cards) {
+      cardValuesBox.add(CardValues.zero.toMap(card.front));
+    }
+  }
+
+  static Future<List<GameCard>> getGameCardsFromCollection(
+      CollectionDetails collection) async {
+    Box cardValuesBox =
+        await Hive.openBox(BoxKey.cardValuesBoxNameFromCollection(collection));
+    List<LanguageCard> cards = await getLanguageCardsFromCollection(collection);
+
+    List<GameCard> gameCards = <GameCard>[];
+    for (var card in cards) {
+      gameCards.add(GameCard(
+          card,
+          CardValues.fromMap(cardValuesBox.values
+              .firstWhere((e) => e['front'] == card.front))));
+    }
+
+    return gameCards;
+  }
+
+  static Future<void> saveGameCardList(
+      CollectionDetails collection, List<GameCard> gameCards) async {
+    Box cardValuesBox =
+        await Hive.openBox(BoxKey.cardValuesBoxNameFromCollection(collection));
+
+    cardValuesBox.clear();
+    cardValuesBox.addAll(gameCards.map((e) =>
+        CardValues(e.values.confidenceValue, e.values.lastGameValue)
+            .toMap(e.card.front)));
   }
 }

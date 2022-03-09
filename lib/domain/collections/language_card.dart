@@ -5,7 +5,7 @@ class LanguageCard {
 
   final String front;
   final String back;
-
+  
   Map<String, dynamic> toMap() {
     return {
       'front': front,
