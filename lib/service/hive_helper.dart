@@ -160,17 +160,6 @@ class HiveHelper {
     collectionBox.delete(key);
   }
 
-  static Future<void> initCardValuesForCollection(
-      CollectionDetails collection) async {
-    Box cardValuesBox =
-        await Hive.openBox(BoxKey.cardValuesBoxNameFromCollection(collection));
-
-    List<LanguageCard> cards = await getLanguageCardsFromCollection(collection);
-    for (var card in cards) {
-      cardValuesBox.add(CardValues.zero.toMap(card.front));
-    }
-  }
-
   static Future<List<GameCard>> getGameCardsFromCollection(
       CollectionDetails collection) async {
     Box cardValuesBox =
@@ -186,6 +175,8 @@ class HiveHelper {
               CardValues.zero));
     }
 
+    gameCards.forEach(print);
+
     return gameCards;
   }
 
@@ -194,8 +185,8 @@ class HiveHelper {
     Box cardValuesBox =
         await Hive.openBox(BoxKey.cardValuesBoxNameFromCollection(collection));
 
-    cardValuesBox.clear();
-    cardValuesBox.addAll(gameCards.map((e) =>
+    await cardValuesBox.clear();
+    await cardValuesBox.addAll(gameCards.map((e) =>
         CardValues(e.values.confidenceValue, e.values.lastGameValue)
             .toMap(e.card.front)));
   }

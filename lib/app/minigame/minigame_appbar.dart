@@ -7,6 +7,7 @@ class MinigameAppbar extends StatelessWidget {
   const MinigameAppbar({Key? key}) : super(key: key);
 
   void _onBackButtonPressed(BuildContext context) {
+    // Provider.of<MinigameBloc>(context, listen: false).close(); // TODO do I need this if I close in dispose?
     Navigator.pop(context);
   }
 

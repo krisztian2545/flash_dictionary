@@ -3,7 +3,6 @@ import 'package:flash_dictionary/app/minigame/minigame_bloc.dart';
 import 'package:flash_dictionary/app/minigame/minigame_view.dart';
 import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
-import 'package:flash_dictionary/domain/minigame/card_values.dart';
 import 'package:flash_dictionary/domain/minigame/game_card.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';

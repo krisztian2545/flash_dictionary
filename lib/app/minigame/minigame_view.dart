@@ -1,6 +1,7 @@
 import 'package:flash_dictionary/app/minigame/game_card_feedback_buttons.dart';
 import 'package:flash_dictionary/app/minigame/minigame_bloc.dart';
 import 'package:flash_dictionary/app/minigame/show_answer_button.dart';
+import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,13 +14,26 @@ class MinigameView extends StatefulWidget {
 
 class _MinigameViewState extends State<MinigameView> {
   bool showAnswer = false;
+  bool isGameOver = false;
   late final MinigameBloc minigameBloc;
+
+  void initRound() {
+    if (minigameBloc.pickRandomCard()) {
+      setState(() {
+        showAnswer = false;
+      });
+      return;
+    }
+    setState(() {
+      isGameOver = true;
+    });
+  }
 
   @override
   void initState() {
     print("new card");
     minigameBloc = Provider.of<MinigameBloc>(context, listen: false);
-    minigameBloc.pickRandomCard();
+    initRound();
     super.initState();
   }
 
@@ -27,14 +41,28 @@ class _MinigameViewState extends State<MinigameView> {
   void didUpdateWidget(covariant MinigameView oldWidget) {
     super.didUpdateWidget(oldWidget);
     print("didupdatewidget....");
+
+    initRound();
     setState(() {
-      minigameBloc.pickRandomCard();
-      showAnswer = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isGameOver) {
+      return Container(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text("Congratulations!", style: appBarTextStyle,),
+              Text("You learned all the cards", style: appBarTextStyle,),
+            ],
+          ),
+        ),
+      );
+    }
+
     List<Widget> upperPart;
     List<Widget> bottomPart;
 
@@ -69,5 +97,12 @@ class _MinigameViewState extends State<MinigameView> {
         ...bottomPart,
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    print("disposing minigame view...");
+    minigameBloc.saveData();
+    super.dispose();
   }
 }

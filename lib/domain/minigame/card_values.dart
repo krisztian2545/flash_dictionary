@@ -1,10 +1,10 @@
 class CardValues {
-  const CardValues(this.confidenceValue, [this.lastGameValue = 0]);
+  CardValues(this.confidenceValue, [this.lastGameValue = 0]);
 
-  static const CardValues zero = CardValues(0);
+  static CardValues get zero => CardValues(0);
 
-  final int confidenceValue;
-  final int lastGameValue;
+  int confidenceValue;
+  int lastGameValue;
 
   Map<String, dynamic> toMap(String front) =>
       {

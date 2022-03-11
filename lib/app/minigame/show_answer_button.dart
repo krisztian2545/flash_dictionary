@@ -1,3 +1,4 @@
+import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 
 class ShowAnswerButton extends StatelessWidget {
@@ -9,7 +10,8 @@ class ShowAnswerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: onPressed,
-      child: const Text("Show answer"),
+      style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
+      child: const Text("Show answer", style: appBarButtonTextStyle,),
     );
   }
 }
