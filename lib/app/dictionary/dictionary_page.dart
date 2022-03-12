@@ -5,13 +5,20 @@ import 'package:flash_dictionary/app/dictionary/result/result_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class DictionaryPage extends StatelessWidget {
+class DictionaryPage extends StatefulWidget {
   const DictionaryPage({Key? key}) : super(key: key);
 
+  @override
+  State<DictionaryPage> createState() => _DictionaryPageState();
+}
+
+class _DictionaryPageState extends State<DictionaryPage> with AutomaticKeepAliveClientMixin {
   final double _appBarBaseHeight = 120;
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // for keepAlive
+
     var appBarHeight = _appBarBaseHeight + MediaQuery.of(context).viewPadding.top;
     print("appBarHeight: $appBarHeight");
     return ChangeNotifierProvider<DictionaryBloc>(
@@ -31,15 +38,7 @@ class DictionaryPage extends StatelessWidget {
       ),
     );
   }
-}
 
-// class DictionaryPageBody extends StatelessWidget {
-//   const DictionaryPageBody({Key? key}) : super(key: key);
-//
-//   final
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
+  @override
+  bool get wantKeepAlive => true;
+}
