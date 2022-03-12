@@ -14,10 +14,13 @@ class CardValues {
       };
 
   static CardValues? fromMap(Map? map) {
+    print("fromMap map: $map");
     if (map == null) {
       return null;
     }
-    CardValues(map['confidenceValue'], map['lastGameValue']);
+    return CardValues(map['confidenceValue'], map['lastGameValue']);
   }
 
+  @override
+  String toString() => "CardValues($confidenceValue, $lastGameValue)";
 }

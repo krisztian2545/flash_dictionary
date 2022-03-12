@@ -166,16 +166,19 @@ class HiveHelper {
         await Hive.openBox(BoxKey.cardValuesBoxNameFromCollection(collection));
     List<LanguageCard> cards = await getLanguageCardsFromCollection(collection);
 
+    cardValuesBox.values.forEach(print);
+
     List<GameCard> gameCards = <GameCard>[];
     for (var card in cards) {
       gameCards.add(GameCard(
           card,
           CardValues.fromMap(cardValuesBox.values
-                  .firstWhereOrNull((e) => e['front'] == card.front)) ??
+                  .firstWhereOrNull((e) {
+                    print("${e['front']} == ${card.front}");
+            return e['front'] == card.front;
+          })) ??
               CardValues.zero));
     }
-
-    gameCards.forEach(print);
 
     return gameCards;
   }

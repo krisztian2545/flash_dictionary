@@ -68,9 +68,11 @@ class _MinigameViewState extends State<MinigameView> {
 
     if (showAnswer) {
       upperPart = <Widget>[
-        Text(minigameBloc.currentGameCard.card.front),
+        const SizedBox(height: 42),
+        Text(minigameBloc.currentGameCard.card.front, style: appBarTextStyle,),
+        const Divider(thickness: 2, color: Colors.black,),
         const Spacer(),
-        Text(minigameBloc.currentGameCard.card.back),
+        Text(minigameBloc.currentGameCard.card.back, style: appBarTextStyle.copyWith(fontWeight: FontWeight.normal),),
       ];
       bottomPart = <Widget>[
         GameCardFeedbackButtons()
@@ -79,7 +81,7 @@ class _MinigameViewState extends State<MinigameView> {
     } else {
       upperPart = <Widget>[
         const Spacer(),
-        Text(minigameBloc.currentGameCard.card.front),
+        Text(minigameBloc.currentGameCard.card.front, style: appBarTextStyle,),
       ];
       bottomPart = <Widget>[
         ShowAnswerButton(
@@ -90,12 +92,15 @@ class _MinigameViewState extends State<MinigameView> {
       ];
     }
 
-    return Column(
-      children: [
-        ...upperPart,
-        const Spacer(),
-        ...bottomPart,
-      ],
+    return Container(
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      child: Column(
+        children: [
+          ...upperPart,
+          const Spacer(),
+          ...bottomPart,
+        ],
+      ),
     );
   }
 

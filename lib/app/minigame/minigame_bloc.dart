@@ -10,13 +10,41 @@ enum CardDifficulty { easy, medium, hard }
 class MinigameBloc extends ChangeNotifier {
   MinigameBloc(
       {required this.collectionDetails, required List<GameCard> gameCards}) {
+    if (gameCards.any((card) => card.values.lastGameValue > 0)) {
+      // continue last game
+      for (var card in gameCards) {
+        if (card.values.lastGameValue >= _perGameScoreNeeded) {
+          learnedGameCards.add(card);
+          continue;
+        }
+        cardsByConfidenceValue[card.values.lastGameValue] ??= <GameCard>[];
+        cardsByConfidenceValue[card.values.lastGameValue]?.add(card);
+      }
+      return;
+    }
+
+    // new game
+    int smallestValue = gameCards
+        .reduce((smallest, current) =>
+            (current.values.confidenceValue < smallest.values.confidenceValue)
+                ? current
+                : smallest)
+        .values
+        .confidenceValue;
+
     for (var card in gameCards) {
-      cardsByConfidenceValue[card.values.confidenceValue] ??= <GameCard>[];
-      cardsByConfidenceValue[card.values.confidenceValue]?.add(card);
+      card.values.lastGameValue = card.values.confidenceValue - smallestValue;
+      card.values.confidenceValue = 0;
+
+      cardsByConfidenceValue[card.values.lastGameValue] ??= <GameCard>[];
+      cardsByConfidenceValue[card.values.lastGameValue]?.add(card);
     }
   }
 
   static const _perGameScoreNeeded = 5;
+  static const _easyConfiedenceValue = 4;
+  static const _mediumConfidenceValue = 3;
+  static const _hardConfidenceValue = 1;
 
   final CollectionDetails collectionDetails;
 
@@ -66,25 +94,25 @@ class MinigameBloc extends ChangeNotifier {
     print("feedback: $difficulty");
     switch (difficulty) {
       case CardDifficulty.easy:
-        _currentGameCard.values.lastGameValue += 4;
+        _currentGameCard.values.lastGameValue += _easyConfiedenceValue;
         break;
       case CardDifficulty.medium:
-        _currentGameCard.values.lastGameValue += 3;
+        _currentGameCard.values.lastGameValue += _mediumConfidenceValue;
         break;
       case CardDifficulty.hard:
-        _currentGameCard.values.lastGameValue += 1;
+        _currentGameCard.values.lastGameValue += _hardConfidenceValue;
         break;
     }
 
     if (_currentGameCard.values.lastGameValue >= _perGameScoreNeeded) {
-
       removeCurrentCardFromMap();
       learnedGameCards.add(_currentGameCard);
     } else {
-
       removeCurrentCardFromMap();
-      cardsByConfidenceValue[_currentGameCard.values.lastGameValue] ??= <GameCard>[];
-      cardsByConfidenceValue[_currentGameCard.values.lastGameValue]?.add(_currentGameCard);
+      cardsByConfidenceValue[_currentGameCard.values.lastGameValue] ??=
+          <GameCard>[];
+      cardsByConfidenceValue[_currentGameCard.values.lastGameValue]
+          ?.add(_currentGameCard);
     }
 
     notifyListeners();
