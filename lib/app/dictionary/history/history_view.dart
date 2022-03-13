@@ -24,12 +24,13 @@ class HistoryView extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: Material(
-        color: whitishColor,
+        // color: whitishColor,
+        color: Colors.transparent,
         clipBehavior: Clip.antiAlias,
-        elevation: 16,
-        shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
-        ),
+        // elevation: 16,
+        // shape: BeveledRectangleBorder(
+        //   borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
+        // ),
         child: ListView(
           padding: EdgeInsets.only(left: 16, right: 16, top: 16),
           children: _buildList(),

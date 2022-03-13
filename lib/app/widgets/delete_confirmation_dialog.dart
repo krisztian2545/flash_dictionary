@@ -8,7 +8,8 @@ class DeleteConfirmationDialog extends StatelessWidget {
     return SingleChildScrollView(
       child: AlertDialog(
         actions: <Widget>[
-          TextButton( // TODO make buttons look different
+          OutlinedButton( // TODO make buttons look different
+            style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
             onPressed: () => Navigator.pop<bool>(context, false),
             child: const Text(
               "Cancel",
@@ -25,7 +26,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
           ),
         ],
         content: Center(
-          child: Text("Are you sure you want to delete?"),
+          child: Text("Are you sure you want to delete?", style: TextStyle(fontSize: 20),),
         ),
       ),
     );

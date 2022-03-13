@@ -36,24 +36,57 @@ class CollectionsViewItemButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: () => _onCollectionPressed(context),
       style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.all(24),
-        side: BorderSide(width: 2),
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
+        padding: const EdgeInsets.all(20),
+        side: const BorderSide(width: 2),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
       ),
       child: Row(
         // TODO word wrap
         children: <Widget>[
-          Text(
-            collectionDetails.name,
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(width: 4),
-          Text(
-            "[${collectionDetails.fromLanguage.value}${collectionDetails.toLanguage != null ? "-${collectionDetails.toLanguage!.value}" : ""}]",
-            style: TextStyle(
-                fontSize: 26, fontWeight: FontWeight.bold, color: Colors.grey),
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: <Widget>[
+          //     LimitedBox(
+          //       maxWidth: 240,
+          //       child: Text(
+          //         collectionDetails.name,
+          //         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          //         maxLines: 2,
+          //         overflow: TextOverflow.ellipsis,
+          //       ),
+          //     ),
+          //     SizedBox(width: 4),
+          //     Text(
+          //       "[${collectionDetails.fromLanguage.value}${collectionDetails.toLanguage != null ? "-${collectionDetails.toLanguage!.value}" : ""}]",
+          //       style: TextStyle(
+          //           fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
+          //     ),
+          //   ],
+          // ),
+
+          LimitedBox(
+            maxWidth: 240,
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(color: Colors.black),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: collectionDetails.name,
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  ),
+                  TextSpan(
+                    text:
+                        " [${collectionDetails.fromLanguage.value}${collectionDetails.toLanguage != null ? "-${collectionDetails.toLanguage!.value}" : ""}]",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey),
+                  )
+                ],
+              ),
+            ),
           ),
           Spacer(),
           IconButton(

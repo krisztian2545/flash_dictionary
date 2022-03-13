@@ -1,6 +1,7 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/app/widgets/language_dropdown_button.dart';
 import 'package:flash_dictionary/app/widgets/word_dialog.dart';
+import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
@@ -67,45 +68,53 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
       left: 0,
       right: 0,
       height: widget.height,
-      child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                LanguageDropdownButton(
-                  onChanged: (value) {
-                    widget.dictionaryBloc.fromLanguage = value!;
-                  },
-                  value: widget.dictionaryBloc.fromLanguage,
-                ),
-                TextButton(
-                  onPressed: () {
-                    widget.dictionaryBloc.switchLanguages();
-                  },
-                  child: Text("<>", style: appBarButtonTextStyle),
-                ),
-                LanguageDropdownButton(
-                  onChanged: (value) {
-                    widget.dictionaryBloc.toLanguage = value!;
-                  },
-                  value: widget.dictionaryBloc.toLanguage,
-                ),
-              ],
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 8, right: 42),
-              child: Row(
+      child: Material(
+        clipBehavior: Clip.antiAlias,
+        color: primaryColor,
+        shape: BeveledRectangleBorder(
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(60)),
+          side: BorderSide(width: 1),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Expanded(
-                    child: AutocompleteTextField(
-                        dictionaryBloc: widget.dictionaryBloc),
+                  LanguageDropdownButton(
+                    onChanged: (value) {
+                      widget.dictionaryBloc.fromLanguage = value!;
+                    },
+                    value: widget.dictionaryBloc.fromLanguage,
                   ),
-                  ..._addButton(),
+                  TextButton(
+                    onPressed: () {
+                      widget.dictionaryBloc.switchLanguages();
+                    },
+                    child: Text("<>", style: appBarButtonTextStyle),
+                  ),
+                  LanguageDropdownButton(
+                    onChanged: (value) {
+                      widget.dictionaryBloc.toLanguage = value!;
+                    },
+                    value: widget.dictionaryBloc.toLanguage,
+                  ),
                 ],
               ),
-            ),
-          ],
+              Container(
+                padding: const EdgeInsets.only(left: 8, right: 60),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: AutocompleteTextField(
+                          dictionaryBloc: widget.dictionaryBloc),
+                    ),
+                    ..._addButton(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

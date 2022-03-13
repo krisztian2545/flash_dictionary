@@ -53,11 +53,17 @@ class CollectionEditingAppbar extends StatelessWidget {
               onPressed: () => _onBackButtonPressed(context),
               icon: const Icon(Icons.arrow_back_sharp)),
           const SizedBox(width: 16),
-          Text(
-            Provider.of<CollectionEditingBloc>(context, listen: false)
-                .collectionDetails
-                .name,
-            style: appBarTextStyle,
+          LimitedBox(
+            maxWidth: 200,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Text(
+                Provider.of<CollectionEditingBloc>(context, listen: false)
+                    .collectionDetails
+                    .name,
+                style: appBarTextStyle.copyWith(fontSize: 24),
+              ),
+            ),
           ),
           const Spacer(),
           IconButton(

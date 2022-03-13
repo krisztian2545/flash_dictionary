@@ -27,12 +27,13 @@ class CollectionsPage extends StatelessWidget {
             right: 0,
             bottom: 0,
             child: Material(
-              color: whitishColor,
+              // color: whitishColor,
+              color: Colors.transparent,
               clipBehavior: Clip.antiAlias,
-              elevation: 16,
-              shape: const BeveledRectangleBorder(
-                borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
-              ),
+              // elevation: 16,
+              // shape: const BeveledRectangleBorder(
+              //   borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
+              // ),
               child: Consumer<CollectionsBloc>(
                 builder: (context, collectionsBloc, child) {
                   return CollectionsView(collectionList: collectionsBloc.getCollectionList());
