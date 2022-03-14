@@ -66,7 +66,6 @@ class _EditWordDialogState extends State<EditWordDialog> {
           ),
           Spacer(),
           TextButton(
-            // TODO change color of animation when you hold
             onPressed: _onSubmit,
             child: const Text(
               "Save",

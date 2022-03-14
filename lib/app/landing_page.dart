@@ -11,28 +11,19 @@ class LandingPage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        // backgroundColor: primaryColor,
-        backgroundColor: whitishColor,
+        backgroundColor: primaryColor,
         body: TabBarView(
           children: <Widget>[
             DictionaryPage(),
             CollectionsPage(),
           ],
         ),
-        bottomNavigationBar: Container(
-          // color: primaryColor,
-          decoration: BoxDecoration(
-            color: primaryColor,
-            border: Border(top: BorderSide(width: 1)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey,
-                blurRadius: 1.0,
-              )
-            ],
-          ),
+        bottomNavigationBar: Material(
+          color: primaryColor,
+          elevation: 16,
           child: TabBar(
             labelColor: Colors.black,
+            indicatorPadding: EdgeInsets.only(bottom: 6, left: 64, right: 64),
             indicatorColor: Colors.black,
             // overlayColor: MaterialStateProperty.all(primaryColor),
             overlayColor: MaterialStateProperty.all(Colors.black),

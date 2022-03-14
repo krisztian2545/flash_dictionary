@@ -1,3 +1,4 @@
+import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 
 class DeleteConfirmationDialog extends StatelessWidget {
@@ -8,15 +9,16 @@ class DeleteConfirmationDialog extends StatelessWidget {
     return SingleChildScrollView(
       child: AlertDialog(
         actions: <Widget>[
-          OutlinedButton( // TODO make buttons look different
-            style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+                side: const BorderSide(width: borderWidth)),
             onPressed: () => Navigator.pop<bool>(context, false),
             child: const Text(
               "Cancel",
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
           ),
-          Spacer(),
+          SizedBox(width: 16),
           TextButton(
             onPressed: () => Navigator.pop<bool>(context, true),
             child: const Text(
@@ -26,7 +28,10 @@ class DeleteConfirmationDialog extends StatelessWidget {
           ),
         ],
         content: Center(
-          child: Text("Are you sure you want to delete?", style: TextStyle(fontSize: 20),),
+          child: Text(
+            "Are you sure you want to delete?",
+            style: TextStyle(fontSize: 18, color: Colors.grey[800]),
+          ),
         ),
       ),
     );

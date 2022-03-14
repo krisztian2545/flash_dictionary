@@ -1,7 +1,6 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/app/widgets/language_dropdown_button.dart';
 import 'package:flash_dictionary/app/widgets/word_dialog.dart';
-import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +53,7 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
         child: const Text("Add",
             style: TextStyle(color: Colors.black, fontSize: 20)),
         style: OutlinedButton.styleFrom(
-            side: BorderSide(width: 2), fixedSize: Size.fromHeight(60)),
+            side: BorderSide(width: borderWidth), fixedSize: Size.fromHeight(60)),
       ));
     }
 
@@ -70,18 +69,18 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
       height: widget.height,
       child: Material(
         clipBehavior: Clip.antiAlias,
-        color: primaryColor,
-        shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.only(bottomRight: Radius.circular(60)),
-          side: BorderSide(width: 1),
-        ),
+        color: Colors.transparent,
+        // shape: BeveledRectangleBorder(
+        //   borderRadius: BorderRadius.only(bottomRight: Radius.circular(60)),
+        //   side: BorderSide(width: 1),
+        // ),
         child: SafeArea(
           child: Column(
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  LanguageDropdownButton(
+                  LanguageDropdownButton( // TODO add all languages
                     onChanged: (value) {
                       widget.dictionaryBloc.fromLanguage = value!;
                     },
@@ -157,11 +156,11 @@ class AutocompleteTextField extends StatelessWidget {
           focusNode: focusNode,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2, color: Colors.black),
+              borderSide: BorderSide(width: borderWidth, color: Colors.black),
               borderRadius: BorderRadius.circular(4),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 2, color: Colors.black),
+              borderSide: BorderSide(width: borderWidth, color: Colors.black),
               borderRadius: BorderRadius.circular(4),
             ),
             suffixIcon: IconButton(

@@ -18,11 +18,7 @@ class CollectionsAppBar extends StatelessWidget {
       right: 0,
       height: height,
       child: Material(
-        color: primaryColor,
-        shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.only(bottomRight: Radius.circular(46)),
-          side: BorderSide(width: 0.8),
-        ),
+        color: Colors.transparent,
         child: SafeArea(
           child: Row(
             children: <Widget>[
@@ -42,7 +38,7 @@ class CollectionsAppBar extends StatelessWidget {
                         .createNewCollection(result);
                   });
                 },
-                style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
+                style: OutlinedButton.styleFrom(side: BorderSide(width: borderWidth)),
                 child: Text("New", style: appBarButtonTextStyle),
               ),
               Spacer(flex: 2),

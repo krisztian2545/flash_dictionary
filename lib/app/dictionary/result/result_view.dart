@@ -49,19 +49,17 @@ class ResultView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       // TODO maybe multiple consumers of Dictionarybloc could save rebuilding this
-      // top: appBarHeight,
-      top: 0,
+      top: appBarHeight,
       left: 0,
       right: 0,
       bottom: 0,
       child: Material(
-        // color: whitishColor,
-        color: Colors.transparent,
+        color: whitishColor,
         clipBehavior: Clip.antiAlias,
-        // elevation: 16,
-        // shape: BeveledRectangleBorder(
-        //   borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
-        // ),
+        elevation: 16,
+        shape: BeveledRectangleBorder(
+          borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
+        ),
         child: ChangeNotifierProvider<ResultBloc>(
           create: (context) => ResultBloc(),
           child: FutureBuilder<Map<String, dynamic>>(
@@ -77,10 +75,6 @@ class ResultView extends StatelessWidget {
                   return CustomScrollView(
                     slivers: <Widget>[
                       SliverAppBar(
-                        toolbarHeight: 120,
-                        backgroundColor: Colors.transparent,
-                      ),
-                      SliverAppBar(
                         flexibleSpace: ResultViewFlexibleSpaceBar(
                           title: "Definitions",
                           arrowFaceDown: resultBloc.showDefinitions,
@@ -89,8 +83,7 @@ class ResultView extends StatelessWidget {
                         shape: resultViewSliverAppBarBorder,
                         toolbarHeight: 32,
                         foregroundColor: Colors.black,
-                        // backgroundColor: whitishColor,
-                        backgroundColor: Colors.transparent,
+                        backgroundColor: whitishColor,
                       ),
                       if (resultBloc.showDefinitions && isDataLoaded)
                         _buildDefinitions(snapshot.data!['definitions']),

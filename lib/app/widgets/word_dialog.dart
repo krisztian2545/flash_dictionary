@@ -214,7 +214,7 @@ class CollectionDropDownButton extends StatelessWidget {
             collectionList
                 .map((e) => DropdownMenuItem<CollectionDetails>(
                       value: e,
-                      child: Row(
+                      child: Row( // TODO replace with richtext and limitedbox
                         children: <Widget>[
                           Text(e.name),
                           SizedBox(width: 4),

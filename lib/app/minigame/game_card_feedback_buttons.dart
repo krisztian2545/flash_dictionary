@@ -15,17 +15,17 @@ class GameCardFeedbackButtons extends StatelessWidget {
       children: <Widget>[
         OutlinedButton(
           onPressed: () => minigameBloc.giveFeedback(CardDifficulty.hard),
-          style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
+          style: OutlinedButton.styleFrom(side: BorderSide(width: borderWidth)),
           child: const Text("Hard", style: appBarButtonTextStyle,),
         ),
         OutlinedButton(
           onPressed: () => minigameBloc.giveFeedback(CardDifficulty.medium),
-          style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
+          style: OutlinedButton.styleFrom(side: BorderSide(width: borderWidth)),
           child: const Text("Medium", style: appBarButtonTextStyle,),
         ),
         OutlinedButton(
           onPressed: () => minigameBloc.giveFeedback(CardDifficulty.easy),
-          style: OutlinedButton.styleFrom(side: BorderSide(width: 2)),
+          style: OutlinedButton.styleFrom(side: BorderSide(width: borderWidth)),
           child: const Text("Easy" ,style: appBarButtonTextStyle,),
         ),
       ],

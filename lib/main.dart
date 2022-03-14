@@ -1,5 +1,6 @@
 import 'package:flash_dictionary/app/landing_page.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/theme.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -15,9 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flash Dictionary',
-      theme: ThemeData( // TODO learn about styling and refactor accordingly
-        primarySwatch: Colors.blue,
-      ),
+      theme: themeData,
       home: const LandingPage(),
     );
   }

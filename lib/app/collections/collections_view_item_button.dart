@@ -3,6 +3,7 @@ import 'package:flash_dictionary/app/collections/collections_bloc.dart';
 import 'package:flash_dictionary/app/minigame/minigame_page.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
+import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,7 @@ class CollectionsViewItemButton extends StatelessWidget {
       onPressed: () => _onCollectionPressed(context),
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.all(20),
-        side: const BorderSide(width: 2),
+        side: const BorderSide(width: borderWidth),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
@@ -45,27 +46,6 @@ class CollectionsViewItemButton extends StatelessWidget {
       child: Row(
         // TODO word wrap
         children: <Widget>[
-          // Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: <Widget>[
-          //     LimitedBox(
-          //       maxWidth: 240,
-          //       child: Text(
-          //         collectionDetails.name,
-          //         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          //         maxLines: 2,
-          //         overflow: TextOverflow.ellipsis,
-          //       ),
-          //     ),
-          //     SizedBox(width: 4),
-          //     Text(
-          //       "[${collectionDetails.fromLanguage.value}${collectionDetails.toLanguage != null ? "-${collectionDetails.toLanguage!.value}" : ""}]",
-          //       style: TextStyle(
-          //           fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey),
-          //     ),
-          //   ],
-          // ),
-
           LimitedBox(
             maxWidth: 240,
             child: RichText(
