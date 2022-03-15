@@ -55,7 +55,7 @@ class HiveHelper {
     }
 
     var wordHistory = getWordHistory();
-    var compressedData = "$word;${from.value}-${to.value};${api.value}";
+    var compressedData = "$word;${from.name}-${to.name};${api.value}";
 
     if (wordHistory.contains(compressedData)) {
       return;
@@ -69,18 +69,18 @@ class HiveHelper {
       _historyBox.get(BoxKey.wordHistory, defaultValue: <String>[]);
 
   static void saveAsLastUsedFromLanguage(LanguageName lang) =>
-      _historyBox.put(BoxKey.lastUsedFromLanguage, lang.value);
+      _historyBox.put(BoxKey.lastUsedFromLanguage, lang.name);
 
   static LanguageName getLastUsedFromLanguage() =>
       languageNameFromString(_historyBox.get(BoxKey.lastUsedFromLanguage,
-          defaultValue: LanguageName.eng.value));
+          defaultValue: LanguageName.eng.name));
 
   static void saveAsLastUsedToLanguage(LanguageName lang) =>
-      _historyBox.put(BoxKey.lastUsedToLanguage, lang.value);
+      _historyBox.put(BoxKey.lastUsedToLanguage, lang.name);
 
   static LanguageName getLastUsedToLanguage() =>
       languageNameFromString(_historyBox.get(BoxKey.lastUsedToLanguage,
-          defaultValue: LanguageName.hun.value));
+          defaultValue: LanguageName.hun.name));
 
   static void saveCollectionDetails(CollectionDetails collectionDetails) {
     _collectionListBox.add(collectionDetails.toMap());

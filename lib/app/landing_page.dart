@@ -25,8 +25,8 @@ class LandingPage extends StatelessWidget {
             labelColor: Colors.black,
             indicatorPadding: EdgeInsets.only(bottom: 6, left: 64, right: 64),
             indicatorColor: Colors.black,
-            // overlayColor: MaterialStateProperty.all(primaryColor),
-            overlayColor: MaterialStateProperty.all(Colors.black),
+            overlayColor: MaterialStateProperty.all(pastelGreen),
+            // overlayColor: MaterialStateProperty.all(Colors.black),
             tabs: <Widget>[
               Tab(
                 icon: Icon(Icons.translate),

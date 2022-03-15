@@ -18,7 +18,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           TextButton(
             onPressed: () => Navigator.pop<bool>(context, true),
             child: const Text(

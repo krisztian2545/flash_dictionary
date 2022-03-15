@@ -1,6 +1,5 @@
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
-import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
 import 'package:flash_dictionary/domain/collections/language_card.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
@@ -63,11 +62,11 @@ class _WordDialogState extends State<WordDialog> {
       if (selectedCollection == null) {
         return;
       }
-      
+
       _backController.text =
-      selectedCollection!.value.type == CollectionType.definition
-          ? _definitionsAsString()
-          : _translationsAsString();
+          selectedCollection!.value.type == CollectionType.definition
+              ? _definitionsAsString()
+              : _translationsAsString();
       HiveHelper.saveAsLastUsedCollection(selectedCollection!.value);
     });
 
@@ -115,13 +114,16 @@ class _WordDialogState extends State<WordDialog> {
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
           ),
-          Spacer(),
+          const SizedBox(width: 16),
           TextButton(
             // TODO change color of animation when you hold
-            onPressed: _onSubmit,
-            child: const Text(
+            onPressed: selectedCollection == null ? null : _onSubmit,
+            child: Text(
               "Save",
-              style: TextStyle(color: Colors.black, fontSize: 20),
+              style: TextStyle(
+                  color:
+                      selectedCollection == null ? Colors.grey : Colors.black,
+                  fontSize: 20),
             ),
           ),
         ],
@@ -210,22 +212,26 @@ class CollectionDropDownButton extends StatelessWidget {
         icon: Container(),
         underline: Container(),
         value: value,
-        items:
-            collectionList
-                .map((e) => DropdownMenuItem<CollectionDetails>(
-                      value: e,
-                      child: Row( // TODO replace with richtext and limitedbox
-                        children: <Widget>[
-                          Text(e.name),
-                          SizedBox(width: 4),
-                          Text(
-                            "[${e.fromLanguage.value}${e.toLanguage != null ? "-${e.toLanguage!.value}" : ""}]",
+        items: collectionList
+            .map((e) => DropdownMenuItem<CollectionDetails>(
+                  value: e,
+                  child: LimitedBox(
+                    maxWidth: 240,
+                    child: RichText(
+                      text: TextSpan(
+                        children: <TextSpan>[
+                          TextSpan(text: e.name, style: TextStyle(color: Colors.black)),
+                          TextSpan(
+                            text:
+                                " [${e.fromLanguage.name}${e.toLanguage != null ? "-${e.toLanguage!.name}" : ""}]",
                             style: TextStyle(color: Colors.grey),
                           ),
                         ],
                       ),
-                    ))
-                .toList(),
+                    ),
+                  ),
+                ))
+            .toList(),
         onChanged: (newValue) {
           if (newValue != null) {
             selectedCollectionNotifier!.value = newValue;

@@ -1,8 +1,8 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_page.dart';
 import 'package:flash_dictionary/app/collections/collections_bloc.dart';
-import 'package:flash_dictionary/app/minigame/minigame_page.dart';
+import 'package:flash_dictionary/app/widgets/play_minigame_button.dart';
+import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
-import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,20 +23,13 @@ class CollectionsViewItemButton extends StatelessWidget {
         Provider.of<CollectionsBloc>(context, listen: false).rebuild());
   }
 
-  void _onPlayButtonPressed(BuildContext context) {
-    // TODO close box after game ended
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) =>
-                MinigamePage(collectionDetails: collectionDetails)));
-  }
-
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
       onPressed: () => _onCollectionPressed(context),
       style: OutlinedButton.styleFrom(
+        elevation: 1,
+        backgroundColor: whitishColor,
         padding: const EdgeInsets.all(20),
         side: const BorderSide(width: borderWidth),
         shape: const RoundedRectangleBorder(
@@ -58,7 +51,7 @@ class CollectionsViewItemButton extends StatelessWidget {
                   ),
                   TextSpan(
                     text:
-                        " [${collectionDetails.fromLanguage.value}${collectionDetails.toLanguage != null ? "-${collectionDetails.toLanguage!.value}" : ""}]",
+                        " [${collectionDetails.fromLanguage.name}${collectionDetails.toLanguage != null ? "-${collectionDetails.toLanguage!.name}" : ""}]",
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -68,12 +61,8 @@ class CollectionsViewItemButton extends StatelessWidget {
               ),
             ),
           ),
-          Spacer(),
-          IconButton(
-            onPressed: () => _onPlayButtonPressed(context),
-            icon: Icon(Icons.play_arrow_outlined, size: 48),
-            padding: EdgeInsets.zero,
-          ),
+          const Spacer(),
+          PlayMinigameButton(collectionDetails: collectionDetails),
         ],
       ),
     );

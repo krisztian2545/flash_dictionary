@@ -7,10 +7,10 @@ import 'package:http/http.dart' as http;
 
 class LinkDictionaryApi implements TranslationApiService {
 
-  static const Map<LanguageName, String> languageStringName = {
-    LanguageName.eng: 'eng',
-    LanguageName.hun: 'hun',
-  };
+  // static const Map<LanguageName, String> languageStringName = {
+  //   LanguageName.eng: 'eng',
+  //   LanguageName.hun: 'hun',
+  // };
 
   static List<TranslationItem> translationItemListFormJson(parsedJson) =>
       (parsedJson['results'] as List)
@@ -21,7 +21,7 @@ class LinkDictionaryApi implements TranslationApiService {
   Future<List<TranslationItem>> getTranslations(String word, LanguageName from, LanguageName to) async {
     http.Response res = await http.get(
         Uri.parse(
-            "https://link-bilingual-dictionary.p.rapidapi.com/${languageStringName[from]}/${languageStringName[to]}/${word}"),
+            "https://link-bilingual-dictionary.p.rapidapi.com/${from.name}/${to.name}/${word}"),
         headers: {
           "x-rapidapi-key":
           "ce00069c30msh4cb29af9cfca0f7p1a3af7jsn38922cb7f89a",

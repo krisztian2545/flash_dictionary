@@ -18,22 +18,20 @@ class DictionaryAppBar extends StatefulWidget {
 }
 
 class _DictionaryAppBarState extends State<DictionaryAppBar> {
-
   void _onAddButtonPressed() {
     // TODO make it appear after data is fetched
-    if (widget.dictionaryBloc.lastFetchedDefinitions == null || widget.dictionaryBloc.lastFetchedTranslationItems == null) {
+    if (widget.dictionaryBloc.lastFetchedDefinitions == null ||
+        widget.dictionaryBloc.lastFetchedTranslationItems == null) {
       return;
     }
 
     showDialog(
         context: context,
-        builder: (context) =>
-            WordDialog(
+        builder: (context) => WordDialog(
               title: "Add word to collection",
               initialFront: widget.dictionaryBloc.wordToTranslate,
               definitions: widget.dictionaryBloc.lastFetchedDefinitions,
-              translations:
-              widget.dictionaryBloc.lastFetchedTranslationItems,
+              translations: widget.dictionaryBloc.lastFetchedTranslationItems,
             )).then((value) {
       if (value == null) {
         return;
@@ -41,7 +39,7 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
       widget.dictionaryBloc.saveWordToCollection(
           value['collectionDetails'], value['languageCard']);
     });
-    }
+  }
 
   List<Widget> _addButton() {
     var out = <Widget>[];
@@ -53,7 +51,8 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
         child: const Text("Add",
             style: TextStyle(color: Colors.black, fontSize: 20)),
         style: OutlinedButton.styleFrom(
-            side: BorderSide(width: borderWidth), fixedSize: Size.fromHeight(60)),
+            side: BorderSide(width: borderWidth),
+            fixedSize: Size.fromHeight(60)),
       ));
     }
 
@@ -80,7 +79,8 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  LanguageDropdownButton( // TODO add all languages
+                  LanguageDropdownButton(
+                    // TODO add all languages
                     onChanged: (value) {
                       widget.dictionaryBloc.fromLanguage = value!;
                     },

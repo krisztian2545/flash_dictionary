@@ -21,9 +21,14 @@ class MinigameAppbar extends StatelessWidget {
               onPressed: () => _onBackButtonPressed(context),
               icon: const Icon(Icons.arrow_back_sharp)),
           const SizedBox(width: 16),
-          Text(
-            Provider.of<MinigameBloc>(context, listen: false).collectionDetails.name,
-            style: appBarTextStyle,
+          LimitedBox(
+            maxWidth: 240,
+            child: Text(
+              Provider.of<MinigameBloc>(context, listen: false).collectionDetails.name,
+              style: appBarTextStyle,
+              overflow: TextOverflow.clip,
+              softWrap: true,
+            ),
           ),
         ],
       ),

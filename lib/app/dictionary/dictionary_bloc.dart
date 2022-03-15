@@ -85,11 +85,15 @@ class DictionaryBloc extends ChangeNotifier {
     wordToTranslate = word;
   }
 
-  Future<Map<String, dynamic>> fetchData() async {
+  Future<Map<String, dynamic>> fetchData([String? word, LanguageName? from, LanguageName? to]) async {
+    String w = word ?? wordToTranslate;
+    LanguageName fromL = from ?? fromLanguage;
+    LanguageName toL = to ?? toLanguage;
+
     lastFetchedDefinitions =
-        await definitionApiService.getDefinition(wordToTranslate, fromLanguage);
+        await definitionApiService.getDefinition(w, fromL);
     lastFetchedTranslationItems = await translationService.getTranslations(
-        wordToTranslate, fromLanguage, toLanguage);
+        w, fromL, toL);
     return {
       'translations': lastFetchedTranslationItems,
       'definitions': lastFetchedDefinitions,

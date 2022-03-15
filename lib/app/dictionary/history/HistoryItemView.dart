@@ -1,4 +1,5 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
+import 'package:flash_dictionary/app/widgets/word_dialog.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,27 @@ class HistoryItemView extends StatelessWidget {
   final String toLanguage;
   final String api;
 
+  Future<void> _onAddButtonPressed(BuildContext context) async {
+    var data = await Provider.of<DictionaryBloc>(context, listen: false)
+        .fetchData(word, languageNameFromString(fromLanguage),
+            languageNameFromString(toLanguage));
+
+    showDialog(
+        context: context,
+        builder: (context) => WordDialog(
+              title: "Add word to collection",
+              initialFront: word,
+              definitions: data['definitions'],
+              translations: data['translations'],
+            )).then((value) {
+      if (value == null) {
+        return;
+      }
+      Provider.of<DictionaryBloc>(context, listen: false).saveWordToCollection(
+          value['collectionDetails'], value['languageCard']);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -32,7 +54,10 @@ class HistoryItemView extends StatelessWidget {
           children: <Widget>[
             Text(word, style: const TextStyle(fontSize: 20)),
             const Spacer(),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.add)),
+            IconButton(
+              onPressed: () => _onAddButtonPressed(context),
+              icon: const Icon(Icons.add),
+            ),
           ],
         ),
       ),
