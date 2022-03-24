@@ -131,6 +131,9 @@ class _WordDialogState extends State<WordDialog> {
           key: _formKey,
           child: Column(
             children: <Widget>[
+              Text("Choose collection:",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              SizedBox(height: 8),
               CollectionDropDownButton(
                 selectedCollectionNotifier: selectedCollection,
                 collectionList: collectionList,

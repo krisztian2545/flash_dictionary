@@ -22,12 +22,13 @@ class CollectionEditingView extends StatelessWidget {
           }
 
           print("cards: ${snapshot.data}");
+          List<LanguageCard> cards = snapshot.data?.reversed.toList() ?? <LanguageCard>[];
           return ListView.separated(
             padding: const EdgeInsets.all(32),
-            itemCount: snapshot.data!.length,
+            itemCount: cards.length,
             separatorBuilder: (context, index) => const SizedBox(height: 24),
             itemBuilder: (context, index) => CollectionEditingViewItem(
-              languageCard: snapshot.data![index],
+              languageCard: cards[index],
               collectionEditingBloc:
                   Provider.of<CollectionEditingBloc>(context, listen: false),
             ),
