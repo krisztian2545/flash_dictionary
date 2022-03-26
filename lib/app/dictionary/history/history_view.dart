@@ -31,6 +31,7 @@ class HistoryView extends StatelessWidget {
           borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
         ),
         child: ListView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           padding: EdgeInsets.only(left: 16, right: 16, top: 16),
           children: _buildList(),
         ),

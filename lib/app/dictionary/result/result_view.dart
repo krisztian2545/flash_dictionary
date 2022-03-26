@@ -73,6 +73,7 @@ class ResultView extends StatelessWidget {
                 builder: (BuildContext context, ResultBloc resultBloc,
                     Widget? child) {
                   return CustomScrollView(
+                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
                     slivers: <Widget>[
                       SliverAppBar(
                         flexibleSpace: ResultViewFlexibleSpaceBar(

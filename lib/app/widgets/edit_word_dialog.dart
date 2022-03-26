@@ -52,6 +52,7 @@ class _EditWordDialogState extends State<EditWordDialog> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: AlertDialog(
         title: Text(widget.title,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
