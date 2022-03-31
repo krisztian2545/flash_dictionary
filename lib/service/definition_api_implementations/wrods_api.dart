@@ -6,9 +6,13 @@ import 'package:flash_dictionary/service/definition_api_service.dart';
 import 'package:http/http.dart' as http;
 
 class WordsApi implements DefinitionApiService {
-  static List<DefinitionItem> definitionItemListFromJson(parsedJson) {
+  static List<DefinitionItem> definitionItemListFromJson(String source) {
+    var parsedJson = jsonDecode(source);
+    print("// successfully parsed");
+
     if (parsedJson['results'] == null) {
-      return [];
+      print("returning empty list");
+      return <DefinitionItem>[];
     }
 
     return (parsedJson['results'] as List).map((e) {
@@ -16,8 +20,8 @@ class WordsApi implements DefinitionApiService {
       //   print("element: ${element as String}");
       // });
       var temp = DefinitionItem(
-          e['definition'] as String,
-          e['partOfSpeech'] as String,
+          (e['definition'] ?? "") as String,
+          (e['partOfSpeech'] ?? "") as String,
           ((e['examples'] ?? []) as List).map((e) => e as String).toList());
       // print(
       //     "Def item: ${temp.defintion} ${temp.partOfSpeech} ${temp.examples}");
@@ -36,6 +40,6 @@ class WordsApi implements DefinitionApiService {
         });
     print("definition status code: ${res.statusCode} body: ${res.body}");
 
-    return definitionItemListFromJson(jsonDecode(res.body));
+    return definitionItemListFromJson(res.body);
   }
 }

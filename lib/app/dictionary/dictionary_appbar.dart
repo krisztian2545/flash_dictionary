@@ -154,6 +154,7 @@ class AutocompleteTextField extends StatelessWidget {
         return TextField(
           controller: textEditingController,
           focusNode: focusNode,
+          autofocus: true,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(width: borderWidth, color: Colors.black),

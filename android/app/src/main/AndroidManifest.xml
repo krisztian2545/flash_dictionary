@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.krisztian2545.flash_dictionary">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="flash_dictionary"
         android:name="${applicationName}"
