@@ -16,7 +16,7 @@ class HistoryItemView extends StatelessWidget {
   final String word;
   final String fromLanguage;
   final String toLanguage;
-  final String api;
+  final String api; // TODO do I need this?
 
   Future<void> _onAddButtonPressed(BuildContext context) async {
     var data = await Provider.of<DictionaryBloc>(context, listen: false)
@@ -26,10 +26,11 @@ class HistoryItemView extends StatelessWidget {
     showDialog(
         context: context,
         builder: (context) => WordDialog(
-              title: "Add word to collection",
               initialFront: word,
               definitions: data['definitions'],
               translations: data['translations'],
+              fromLanguage: languageNameFromString(fromLanguage),
+              toLanguage: languageNameFromString(toLanguage),
             )).then((value) {
       if (value == null) {
         return;

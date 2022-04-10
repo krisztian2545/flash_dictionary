@@ -9,7 +9,7 @@ class HistoryView extends StatelessWidget {
   final double appBarHeight;
 
   List<Widget> _buildList() {
-    return HiveHelper.getWordHistory().map((e) {
+    return HiveHelper.getWordHistory().map((e) { // TODO move this to a bloc
       var wordData = e.split(";");
       var langData = wordData[1].split("-");
       return HistoryItemView(word: wordData[0], fromLanguage: langData[0], toLanguage: langData[1], api: wordData[2]);

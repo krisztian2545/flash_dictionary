@@ -1,5 +1,6 @@
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
+import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
 import 'package:flash_dictionary/domain/collections/language_card.dart';
 import 'package:flash_dictionary/service/hive_helper.dart';
@@ -8,16 +9,18 @@ import 'package:flutter/material.dart';
 class WordDialog extends StatefulWidget {
   const WordDialog(
       {Key? key,
-      required this.title,
       required this.initialFront,
       required this.definitions,
-      required this.translations})
+      required this.translations,
+      required this.fromLanguage,
+      required this.toLanguage})
       : super(key: key);
 
-  final String title;
   final String initialFront;
   final List<DefinitionItem>? definitions;
   final List<TranslationItem>? translations;
+  final LanguageName fromLanguage;
+  final LanguageName toLanguage;
 
   @override
   State<WordDialog> createState() => _WordDialogState();
@@ -45,15 +48,15 @@ class _WordDialogState extends State<WordDialog> {
   void initState() {
     collectionList = HiveHelper.getCollectionList()
         .where((collection) => (collection.type == CollectionType.translation)
-            ? collection.fromLanguage == HiveHelper.getLastUsedFromLanguage() &&
-                collection.toLanguage == HiveHelper.getLastUsedToLanguage()
-            : collection.fromLanguage == HiveHelper.getLastUsedFromLanguage())
+            ? collection.fromLanguage == widget.fromLanguage &&
+                collection.toLanguage == widget.toLanguage
+            : collection.fromLanguage == widget.fromLanguage)
         .toList();
 
     var lastUsedCollection =
-        HiveHelper.getLastUsedCollection(); // TODO set only if languages match
-    if (lastUsedCollection != null && collectionList.isNotEmpty) {
-      selectedCollection = (collectionList.contains(lastUsedCollection))
+        HiveHelper.getLastUsedCollection();
+    if (collectionList.isNotEmpty) {
+      selectedCollection = (lastUsedCollection != null && collectionList.contains(lastUsedCollection))
           ? ValueNotifier(lastUsedCollection)
           : ValueNotifier(collectionList.first);
     }
@@ -104,11 +107,10 @@ class _WordDialogState extends State<WordDialog> {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: AlertDialog(
-        title: Text(widget.title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        title: const Text("Add word to collection",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         actions: <Widget>[
           TextButton(
-            // TODO change color of animation when you hold
             onPressed: () => Navigator.pop(context),
             child: const Text(
               "Cancel",
@@ -117,7 +119,6 @@ class _WordDialogState extends State<WordDialog> {
           ),
           const SizedBox(width: 16),
           TextButton(
-            // TODO change color of animation when you hold
             onPressed: selectedCollection == null ? null : _onSubmit,
             child: Text(
               "Save",

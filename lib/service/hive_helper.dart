@@ -49,7 +49,7 @@ class HiveHelper {
   }
 
   static void saveWordInHistory(
-      String word, LanguageName from, LanguageName to, TranslationApi api) {
+      String word, LanguageName from, LanguageName to, TranslationApi api) { // TODO create a class for this data
     if (word == "") {
       return;
     }

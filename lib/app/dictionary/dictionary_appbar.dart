@@ -28,10 +28,11 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
     showDialog(
         context: context,
         builder: (context) => WordDialog(
-              title: "Add word to collection",
               initialFront: widget.dictionaryBloc.wordToTranslate,
               definitions: widget.dictionaryBloc.lastFetchedDefinitions,
               translations: widget.dictionaryBloc.lastFetchedTranslationItems,
+              fromLanguage: widget.dictionaryBloc.fromLanguage,
+              toLanguage: widget.dictionaryBloc.toLanguage,
             )).then((value) {
       if (value == null) {
         return;
@@ -80,7 +81,6 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   LanguageDropdownButton(
-                    // TODO add all languages
                     onChanged: (value) {
                       widget.dictionaryBloc.fromLanguage = value!;
                     },
@@ -151,6 +151,7 @@ class AutocompleteTextField extends StatelessWidget {
           (context, textEditingController, focusNode, onEditingComplete) {
         textEditingController.text =
             dictionaryBloc.wordToTranslate; // initial value
+
         return TextField(
           controller: textEditingController,
           focusNode: focusNode,
@@ -175,6 +176,7 @@ class AutocompleteTextField extends StatelessWidget {
           onEditingComplete: () {
             updateWordInBloc(context, textEditingController.text);
             HiveHelper.saveWordInHistory(
+                // TODO move this to bloc
                 dictionaryBloc.wordToTranslate,
                 dictionaryBloc.fromLanguage,
                 dictionaryBloc.toLanguage,
