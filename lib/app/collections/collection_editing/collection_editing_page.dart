@@ -1,6 +1,7 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_appbar.dart';
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_bloc.dart';
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_view.dart';
+import 'package:flash_dictionary/app/widgets/positioned_material.dart';
 import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flutter/material.dart';
@@ -35,23 +36,10 @@ class CollectionEditingPage extends StatelessWidget {
                 builder: (context, bloc, child) => CollectionEditingAppbar(),
               ),
             ),
-            Positioned(
-              // TODO make positioned and material together a custom widget
-              top: appBarHeight,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Material(
-                color: whitishColor,
-                clipBehavior: Clip.antiAlias,
-                elevation: 16,
-                shape: const BeveledRectangleBorder(
-                  borderRadius:
-                      BorderRadius.only(topRight: Radius.circular(46)),
-                ),
-                child: Consumer<CollectionEditingBloc>(
-                  builder: (context, bloc, child) => CollectionEditingView(),
-                ),
+            PositionedMaterial(
+              appBarHeight: appBarHeight,
+              child: Consumer<CollectionEditingBloc>(
+                builder: (context, bloc, child) => CollectionEditingView(),
               ),
             ),
           ],

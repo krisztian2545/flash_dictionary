@@ -3,6 +3,7 @@ import 'package:flash_dictionary/app/dictionary/result/ResultViewFlexibleSpaceBa
 import 'package:flash_dictionary/app/dictionary/result/definition_item_view.dart';
 import 'package:flash_dictionary/app/dictionary/result/result_bloc.dart';
 import 'package:flash_dictionary/app/dictionary/result/translation_item_view.dart';
+import 'package:flash_dictionary/app/widgets/positioned_material.dart';
 import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
@@ -47,66 +48,54 @@ class ResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      // TODO maybe multiple consumers of Dictionarybloc could save rebuilding this
-      top: appBarHeight,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: Material(
-        color: whitishColor,
-        clipBehavior: Clip.antiAlias,
-        elevation: 16,
-        shape: BeveledRectangleBorder(
-          borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
-        ),
-        child: ChangeNotifierProvider<ResultBloc>(
-          create: (context) => ResultBloc(),
-          child: FutureBuilder<Map<String, dynamic>>(
-            future:
-                Provider.of<DictionaryBloc>(context, listen: false).fetchData(),
-            builder: (context, snapshot) {
-              var isDataLoaded =
-                  snapshot.connectionState == ConnectionState.done;
+    return PositionedMaterial(
+      appBarHeight: appBarHeight,
+      child: ChangeNotifierProvider<ResultBloc>(
+        create: (context) => ResultBloc(),
+        child: FutureBuilder<Map<String, dynamic>>(
+          future:
+              Provider.of<DictionaryBloc>(context, listen: false).fetchData(),
+          builder: (context, snapshot) {
+            var isDataLoaded = snapshot.connectionState == ConnectionState.done;
 
-              return Consumer<ResultBloc>(
-                builder: (BuildContext context, ResultBloc resultBloc,
-                    Widget? child) {
-                  return CustomScrollView(
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                    slivers: <Widget>[
-                      SliverAppBar(
-                        flexibleSpace: ResultViewFlexibleSpaceBar(
-                          title: "Definitions",
-                          arrowFaceDown: resultBloc.showDefinitions,
-                          onIconPressed: resultBloc.toggleShowDefinitions,
-                        ),
-                        shape: resultViewSliverAppBarBorder,
-                        toolbarHeight: 32,
-                        foregroundColor: Colors.black,
-                        backgroundColor: whitishColor,
+            return Consumer<ResultBloc>(
+              builder:
+                  (BuildContext context, ResultBloc resultBloc, Widget? child) {
+                return CustomScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      flexibleSpace: ResultViewFlexibleSpaceBar(
+                        title: "Definitions",
+                        arrowFaceDown: resultBloc.showDefinitions,
+                        onIconPressed: resultBloc.toggleShowDefinitions,
                       ),
-                      if (resultBloc.showDefinitions && isDataLoaded)
-                        _buildDefinitions(snapshot.data!['definitions']),
-                      SliverAppBar(
-                        flexibleSpace: ResultViewFlexibleSpaceBar(
-                          title: "Translation",
-                          arrowFaceDown: resultBloc.showTranslations,
-                          onIconPressed: resultBloc.toggleShowTranslations,
-                        ),
-                        shape: resultViewSliverAppBarBorder,
-                        toolbarHeight: 32,
-                        foregroundColor: Colors.black,
-                        backgroundColor: whitishColor,
+                      shape: resultViewSliverAppBarBorder,
+                      toolbarHeight: 32,
+                      foregroundColor: Colors.black,
+                      backgroundColor: whitishColor,
+                    ),
+                    if (resultBloc.showDefinitions && isDataLoaded)
+                      _buildDefinitions(snapshot.data!['definitions']),
+                    SliverAppBar(
+                      flexibleSpace: ResultViewFlexibleSpaceBar(
+                        title: "Translation",
+                        arrowFaceDown: resultBloc.showTranslations,
+                        onIconPressed: resultBloc.toggleShowTranslations,
                       ),
-                      if (resultBloc.showTranslations && isDataLoaded)
-                        _buildTranslations(snapshot.data!['translations']),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
+                      shape: resultViewSliverAppBarBorder,
+                      toolbarHeight: 32,
+                      foregroundColor: Colors.black,
+                      backgroundColor: whitishColor,
+                    ),
+                    if (resultBloc.showTranslations && isDataLoaded)
+                      _buildTranslations(snapshot.data!['translations']),
+                  ],
+                );
+              },
+            );
+          },
         ),
       ),
     );

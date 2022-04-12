@@ -28,10 +28,10 @@ class _DictionaryPageState extends State<DictionaryPage> with AutomaticKeepAlive
             Widget? child) {
           return Stack(
             children: <Widget>[
+              DictionaryAppBar(height: appBarHeight, dictionaryBloc: dictionaryBloc),
               (dictionaryBloc.wordToTranslate == "")
                   ? HistoryView(appBarHeight: appBarHeight)
-                  : ResultView(appBarHeight: appBarHeight),
-              DictionaryAppBar(height: appBarHeight, dictionaryBloc: dictionaryBloc), // last on top
+                  : ResultView(appBarHeight: appBarHeight), // last on top
             ],
           );
         },

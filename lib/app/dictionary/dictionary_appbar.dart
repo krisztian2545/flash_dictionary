@@ -67,53 +67,45 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
       left: 0,
       right: 0,
       height: widget.height,
-      child: Material(
-        clipBehavior: Clip.antiAlias,
-        color: Colors.transparent,
-        // shape: BeveledRectangleBorder(
-        //   borderRadius: BorderRadius.only(bottomRight: Radius.circular(60)),
-        //   side: BorderSide(width: 1),
-        // ),
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                LanguageDropdownButton(
+                  onChanged: (value) {
+                    widget.dictionaryBloc.fromLanguage = value!;
+                  },
+                  value: widget.dictionaryBloc.fromLanguage,
+                ),
+                TextButton(
+                  onPressed: () {
+                    widget.dictionaryBloc.switchLanguages();
+                  },
+                  child: Text("<>", style: appBarButtonTextStyle),
+                ),
+                LanguageDropdownButton(
+                  onChanged: (value) {
+                    widget.dictionaryBloc.toLanguage = value!;
+                  },
+                  value: widget.dictionaryBloc.toLanguage,
+                ),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 8, right: 60),
+              child: Row(
                 children: <Widget>[
-                  LanguageDropdownButton(
-                    onChanged: (value) {
-                      widget.dictionaryBloc.fromLanguage = value!;
-                    },
-                    value: widget.dictionaryBloc.fromLanguage,
+                  Expanded(
+                    child: AutocompleteTextField(
+                        dictionaryBloc: widget.dictionaryBloc),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      widget.dictionaryBloc.switchLanguages();
-                    },
-                    child: Text("<>", style: appBarButtonTextStyle),
-                  ),
-                  LanguageDropdownButton(
-                    onChanged: (value) {
-                      widget.dictionaryBloc.toLanguage = value!;
-                    },
-                    value: widget.dictionaryBloc.toLanguage,
-                  ),
+                  ..._addButton(),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.only(left: 8, right: 60),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: AutocompleteTextField(
-                          dictionaryBloc: widget.dictionaryBloc),
-                    ),
-                    ..._addButton(),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

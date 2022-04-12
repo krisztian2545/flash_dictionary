@@ -1,6 +1,7 @@
 import 'package:flash_dictionary/app/minigame/minigame_appbar.dart';
 import 'package:flash_dictionary/app/minigame/minigame_bloc.dart';
 import 'package:flash_dictionary/app/minigame/minigame_view.dart';
+import 'package:flash_dictionary/app/widgets/positioned_material.dart';
 import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/minigame/game_card.dart';
@@ -43,24 +44,12 @@ class MinigamePage extends StatelessWidget {
                     height: appBarHeight,
                     child: MinigameAppbar(),
                   ),
-                  Positioned(
-                    top: appBarHeight,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: Material(
-                      color: whitishColor,
-                      clipBehavior: Clip.antiAlias,
-                      elevation: 16,
-                      shape: const BeveledRectangleBorder(
-                        borderRadius: BorderRadius.only(topRight: Radius.circular(46)),
-                      ),
-                      child: Consumer<MinigameBloc>(
-                        builder: (context, bloc, child) {
-                          print("consumer rebuild");
-                          return MinigameView();
-                        },
-                      ),
+                  PositionedMaterial(
+                    appBarHeight: appBarHeight,
+                    child: Consumer<MinigameBloc>(
+                      builder: (context, bloc, child) {
+                        return MinigameView();
+                      },
                     ),
                   ),
                 ],
