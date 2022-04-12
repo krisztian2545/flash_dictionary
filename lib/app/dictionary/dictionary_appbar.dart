@@ -127,11 +127,6 @@ class AutocompleteTextField extends StatelessWidget {
   static const List<String> _kOptions = <String>[];
   final DictionaryBloc dictionaryBloc;
 
-  void updateWordInBloc(BuildContext context, String word) {
-    print(word);
-    dictionaryBloc.wordToTranslate = word;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Autocomplete<String>(
@@ -145,7 +140,7 @@ class AutocompleteTextField extends StatelessWidget {
       },
       onSelected: (String selection) {
         debugPrint('You just selected $selection');
-        updateWordInBloc(context, selection);
+        dictionaryBloc.searchForWord(selection);
       },
       fieldViewBuilder:
           (context, textEditingController, focusNode, onEditingComplete) {
@@ -169,18 +164,12 @@ class AutocompleteTextField extends StatelessWidget {
               icon: const Icon(Icons.clear),
               onPressed: () {
                 textEditingController.clear();
-                updateWordInBloc(context, "");
+                dictionaryBloc.clearText();
               },
             ),
           ),
           onEditingComplete: () {
-            updateWordInBloc(context, textEditingController.text);
-            HiveHelper.saveWordInHistory(
-                // TODO move this to bloc
-                dictionaryBloc.wordToTranslate,
-                dictionaryBloc.fromLanguage,
-                dictionaryBloc.toLanguage,
-                dictionaryBloc.translationApi);
+            dictionaryBloc.searchForWord(textEditingController.text);
             focusNode.unfocus();
             onEditingComplete();
           },

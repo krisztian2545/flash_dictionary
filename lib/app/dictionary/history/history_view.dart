@@ -1,19 +1,19 @@
+import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/app/dictionary/history/HistoryItemView.dart';
 import 'package:flash_dictionary/colors.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HistoryView extends StatelessWidget {
   const HistoryView({Key? key, required this.appBarHeight}) : super(key: key);
 
   final double appBarHeight;
 
-  List<Widget> _buildList() {
-    return HiveHelper.getWordHistory().map((e) { // TODO move this to a bloc
-      var wordData = e.split(";");
-      var langData = wordData[1].split("-");
-      return HistoryItemView(word: wordData[0], fromLanguage: langData[0], toLanguage: langData[1], api: wordData[2]);
-    }).toList().reversed.toList();
+  List<Widget> _buildList(BuildContext context) {
+    return Provider.of<DictionaryBloc>(context, listen: false)
+        .getWordHistory()
+        .map((e) => HistoryItemView(e))
+        .toList();
   }
 
   @override
@@ -33,7 +33,7 @@ class HistoryView extends StatelessWidget {
         child: ListView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           padding: EdgeInsets.only(left: 16, right: 16, top: 16),
-          children: _buildList(),
+          children: _buildList(context),
         ),
       ),
     );

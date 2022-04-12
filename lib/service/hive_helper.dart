@@ -1,9 +1,9 @@
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/domain/collections/language_card.dart';
+import 'package:flash_dictionary/domain/dictionary/word_with_params.dart';
 import 'package:flash_dictionary/domain/minigame/card_values.dart';
 import 'package:flash_dictionary/domain/minigame/game_card.dart';
-import 'package:flash_dictionary/service/translation_api_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:collection/collection.dart';
 
@@ -44,29 +44,36 @@ class HiveHelper {
 
   static Future<void> initAndOpenBoxes() async {
     await Hive.initFlutter();
+
+    Hive.registerAdapter(WordWithParamsAdapter());
+    Hive.registerAdapter(LanguageNameAdapter());
+
     _historyBox = await Hive.openBox(HBoxName.history);
     _collectionListBox = await Hive.openBox(HBoxName.collectionList);
   }
 
-  static void saveWordInHistory(
-      String word, LanguageName from, LanguageName to, TranslationApi api) { // TODO create a class for this data
-    if (word == "") {
+  static void saveWordInHistory(WordWithParams wordWithParams) {
+    if (wordWithParams.word == "") {
       return;
     }
 
     var wordHistory = getWordHistory();
-    var compressedData = "$word;${from.name}-${to.name};${api.value}";
+    var compressedData = wordWithParams;
 
     if (wordHistory.contains(compressedData)) {
-      return;
+      wordHistory.remove(compressedData);
     }
 
     wordHistory.add(compressedData);
     _historyBox.put(BoxKey.wordHistory, wordHistory);
   }
 
-  static List<String> getWordHistory() =>
-      _historyBox.get(BoxKey.wordHistory, defaultValue: <String>[]);
+  static List<WordWithParams> getWordHistory() => (_historyBox
+      .get(BoxKey.wordHistory, defaultValue: <WordWithParams>[]) as List)
+      .map((e) => e as WordWithParams)
+      .toList()
+      .reversed
+      .toList();
 
   static void saveAsLastUsedFromLanguage(LanguageName lang) =>
       _historyBox.put(BoxKey.lastUsedFromLanguage, lang.name);
@@ -172,11 +179,10 @@ class HiveHelper {
     for (var card in cards) {
       gameCards.add(GameCard(
           card,
-          CardValues.fromMap(cardValuesBox.values
-                  .firstWhereOrNull((e) {
-                    print("${e['front']} == ${card.front}");
-            return e['front'] == card.front;
-          })) ??
+          CardValues.fromMap(cardValuesBox.values.firstWhereOrNull((e) {
+                print("${e['front']} == ${card.front}");
+                return e['front'] == card.front;
+              })) ??
               CardValues.zero));
     }
 
