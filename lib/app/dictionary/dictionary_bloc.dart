@@ -26,31 +26,37 @@ class DictionaryBloc extends ChangeNotifier {
 
   String get wordToTranslate => _wordToTranslate;
 
-  late LanguageName _fromLanguage;
+  late LanguageName __fromLanguage;
 
-  LanguageName get fromLanguage => _fromLanguage;
+  LanguageName get fromLanguage => __fromLanguage;
 
-  set fromLanguage(LanguageName value) {
+  set _fromLanguage(LanguageName value) {
     HiveHelper.saveAsLastUsedFromLanguage(value);
-    if (value == toLanguage) {
-      switchLanguages();
-      return;
+    __fromLanguage = value;
+  }
+
+  void switchFromLanguageTo(LanguageName lang) {
+    if (lang == toLanguage) {
+      _toLanguage = fromLanguage;
     }
-    _fromLanguage = value;
+    _fromLanguage = lang;
     notifyListeners();
   }
 
-  late LanguageName _toLanguage;
+  late LanguageName __toLanguage;
 
-  LanguageName get toLanguage => _toLanguage;
+  LanguageName get toLanguage => __toLanguage;
 
-  set toLanguage(LanguageName value) {
+  set _toLanguage(LanguageName value) {
     HiveHelper.saveAsLastUsedToLanguage(value);
-    if (value == fromLanguage) {
-      switchLanguages();
-      return;
+    __toLanguage = value;
+  }
+
+  void switchToLanguageTo(LanguageName lang) {
+    if (lang == fromLanguage) {
+      _fromLanguage = toLanguage;
     }
-    _toLanguage = value;
+    _toLanguage = lang;
     notifyListeners();
   }
 
@@ -62,15 +68,6 @@ class DictionaryBloc extends ChangeNotifier {
 
   List<DefinitionItem>? lastFetchedDefinitions;
   List<TranslationItem>? lastFetchedTranslationItems;
-
-  void switchLanguages() {
-    var temp = _fromLanguage;
-    _fromLanguage = _toLanguage;
-    _toLanguage = temp;
-    HiveHelper.saveAsLastUsedFromLanguage(_fromLanguage);
-    HiveHelper.saveAsLastUsedToLanguage(_toLanguage);
-    notifyListeners();
-  }
 
   void clearText() {
     _wordToTranslate = "";
@@ -88,8 +85,7 @@ class DictionaryBloc extends ChangeNotifier {
       String word, LanguageName from, LanguageName to) {
     _fromLanguage = from;
     _toLanguage = to;
-    HiveHelper.saveAsLastUsedFromLanguage(_fromLanguage);
-    HiveHelper.saveAsLastUsedToLanguage(_toLanguage);
+
     searchForWord(word);
   }
 

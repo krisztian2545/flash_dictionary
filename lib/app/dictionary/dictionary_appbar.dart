@@ -1,7 +1,6 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/app/widgets/language_dropdown_button.dart';
 import 'package:flash_dictionary/app/widgets/word_dialog.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -75,19 +74,19 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
               children: <Widget>[
                 LanguageDropdownButton(
                   onChanged: (value) {
-                    widget.dictionaryBloc.fromLanguage = value!;
+                    widget.dictionaryBloc.switchFromLanguageTo(value!);
                   },
                   value: widget.dictionaryBloc.fromLanguage,
                 ),
                 TextButton(
                   onPressed: () {
-                    widget.dictionaryBloc.switchLanguages();
+                    widget.dictionaryBloc.switchToLanguageTo(widget.dictionaryBloc.fromLanguage);
                   },
                   child: Text("<>", style: appBarButtonTextStyle),
                 ),
                 LanguageDropdownButton(
                   onChanged: (value) {
-                    widget.dictionaryBloc.toLanguage = value!;
+                    widget.dictionaryBloc.switchToLanguageTo(value!);
                   },
                   value: widget.dictionaryBloc.toLanguage,
                 ),
