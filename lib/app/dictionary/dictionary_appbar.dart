@@ -164,11 +164,6 @@ class AutocompleteTextField extends StatelessWidget {
             focusNode.unfocus();
             onEditingComplete();
           },
-          onChanged: (value) {
-            // if (value == "") {
-            //   updateWordInBloc(context, "");
-            // }
-          },
         );
       },
     );

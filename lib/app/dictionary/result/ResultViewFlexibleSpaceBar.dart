@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ResultViewFlexibleSpaceBar extends StatelessWidget {
-  const ResultViewFlexibleSpaceBar({Key? key, required this.title, required this.arrowFaceDown, required this.onIconPressed}) : super(key: key);
+  const ResultViewFlexibleSpaceBar(
+      {Key? key,
+      required this.title,
+      required this.arrowFaceDown,
+      required this.onIconPressed})
+      : super(key: key);
 
   final String title;
   final VoidCallback onIconPressed;
@@ -9,20 +14,21 @@ class ResultViewFlexibleSpaceBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
+    return TextButton(
+      style: TextButton.styleFrom(
+        padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
+        splashFactory: NoSplash.splashFactory,
+      ),
+      onPressed: onIconPressed,
       child: Row(
         children: [
-          Text(title, style: TextStyle(fontSize: 24)),
-          Spacer(flex: 8),
-          IconButton(
-            padding: EdgeInsets.zero,
-            iconSize: 32,
-            onPressed: onIconPressed,
-            icon: Icon(arrowFaceDown
-                ? Icons.keyboard_arrow_up
-                : Icons.keyboard_arrow_down),),
-          Spacer(),
+          Text(title, style: const TextStyle(fontSize: 24)),
+          const Spacer(flex: 8),
+          Icon(
+            arrowFaceDown ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+            size: 32,
+          ),
+          const Spacer(),
         ],
       ),
     );

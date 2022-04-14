@@ -74,7 +74,7 @@ class ResultView extends StatelessWidget {
                       shape: resultViewSliverAppBarBorder,
                       toolbarHeight: 32,
                       foregroundColor: Colors.black,
-                      backgroundColor: whitishColor,
+                      backgroundColor: Colors.white70,
                     ),
                     if (resultBloc.showDefinitions && isDataLoaded)
                       _buildDefinitions(snapshot.data!['definitions']),
@@ -87,7 +87,7 @@ class ResultView extends StatelessWidget {
                       shape: resultViewSliverAppBarBorder,
                       toolbarHeight: 32,
                       foregroundColor: Colors.black,
-                      backgroundColor: whitishColor,
+                      backgroundColor: Colors.white70,
                     ),
                     if (resultBloc.showTranslations && isDataLoaded)
                       _buildTranslations(snapshot.data!['translations']),

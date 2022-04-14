@@ -2,8 +2,9 @@ import 'package:flash_dictionary/colors.dart';
 import 'package:flutter/material.dart';
 
 class PositionedMaterial extends StatelessWidget {
-  const PositionedMaterial({Key? key, required this.appBarHeight, required this.child}) : super(key: key);
+  const PositionedMaterial({Key? key, this.backgroundColor = whitishColor, required this.appBarHeight, required this.child}) : super(key: key);
 
+  final Color? backgroundColor;
   final Widget child;
   final double appBarHeight;
 
@@ -15,7 +16,7 @@ class PositionedMaterial extends StatelessWidget {
       right: 0,
       bottom: 0,
       child: Material(
-        color: whitishColor,
+        color: backgroundColor,
         clipBehavior: Clip.antiAlias,
         elevation: 16,
         shape: const BeveledRectangleBorder(

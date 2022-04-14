@@ -26,7 +26,7 @@ class MinigameShowAnswerView extends StatelessWidget {
             child: Center(
               child: Text(
                 back,
-                style: appBarTextStyle.copyWith(fontWeight: FontWeight.normal),
+                style: const TextStyle(fontSize: 20),
               ),
             ),
           ),

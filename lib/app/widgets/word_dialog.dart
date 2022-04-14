@@ -36,9 +36,13 @@ class _WordDialogState extends State<WordDialog> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String _definitionsAsString() =>
-      widget.definitions
-          ?.map((e) => "${e.defintion}\n${e.partOfSpeech}\n${e.examples}")
-          .join("\n\n") ??
+      widget.definitions?.map((e) {
+        String text = "Def.: [${e.partOfSpeech}] ${e.defintion}";
+        if (e.examples.isNotEmpty) {
+          text += "\nExamples: ${e.examples.join("; ")}";
+        }
+        return text;
+      }).join("\n\n") ??
       "";
 
   String _translationsAsString() =>
@@ -53,10 +57,10 @@ class _WordDialogState extends State<WordDialog> {
             : collection.fromLanguage == widget.fromLanguage)
         .toList();
 
-    var lastUsedCollection =
-        HiveHelper.getLastUsedCollection();
+    var lastUsedCollection = HiveHelper.getLastUsedCollection();
     if (collectionList.isNotEmpty) {
-      selectedCollection = (lastUsedCollection != null && collectionList.contains(lastUsedCollection))
+      selectedCollection = (lastUsedCollection != null &&
+              collectionList.contains(lastUsedCollection))
           ? ValueNotifier(lastUsedCollection)
           : ValueNotifier(collectionList.first);
     }
@@ -225,7 +229,9 @@ class CollectionDropDownButton extends StatelessWidget {
                     child: RichText(
                       text: TextSpan(
                         children: <TextSpan>[
-                          TextSpan(text: e.name, style: TextStyle(color: Colors.black)),
+                          TextSpan(
+                              text: e.name,
+                              style: TextStyle(color: Colors.black)),
                           TextSpan(
                             text:
                                 " [${e.fromLanguage.name}${e.toLanguage != null ? "-${e.toLanguage!.name}" : ""}]",
