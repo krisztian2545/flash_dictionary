@@ -16,6 +16,8 @@ class BoxKey {
   static const wordHistory = "wordHistory";
   static const lastUsedFromLanguage = "lastUsedFromLanguage";
   static const lastUsedToLanguage = "lastUsedToLanguage";
+  static const lastShowDefinitionsState = "lastShowDefinitionsState";
+  static const lastShowTranslationsState = "lastShowTranslationsState";
   static const lastUsedCollectionIndex = "lastUsedCollectionIndex";
 
   static String cardValuesBoxNameFromCollection(CollectionDetails collection) =>
@@ -64,16 +66,18 @@ class HiveHelper {
       wordHistory.remove(compressedData);
     }
 
+    // TODO limit history size / add ability to clear
     wordHistory.add(compressedData);
     _historyBox.put(BoxKey.wordHistory, wordHistory);
   }
 
-  static List<WordWithParams> getWordHistory() => (_historyBox
-      .get(BoxKey.wordHistory, defaultValue: <WordWithParams>[]) as List)
-      .map((e) => e as WordWithParams)
-      .toList()
-      .reversed
-      .toList();
+  static List<WordWithParams> getWordHistory() =>
+      (_historyBox.get(BoxKey.wordHistory, defaultValue: <WordWithParams>[])
+              as List)
+          .map((e) => e as WordWithParams)
+          .toList()
+          .reversed
+          .toList();
 
   static void saveAsLastUsedFromLanguage(LanguageName lang) =>
       _historyBox.put(BoxKey.lastUsedFromLanguage, lang.name);
@@ -88,6 +92,18 @@ class HiveHelper {
   static LanguageName getLastUsedToLanguage() =>
       languageNameFromString(_historyBox.get(BoxKey.lastUsedToLanguage,
           defaultValue: LanguageName.hun.name));
+
+  static void saveLastShowDefinitionsState(bool value) =>
+      _historyBox.put(BoxKey.lastShowDefinitionsState, value);
+
+  static bool getLastShowDefinitionsState() =>
+      _historyBox.get(BoxKey.lastShowDefinitionsState, defaultValue: true);
+
+  static void saveLastShowTranslationsState(bool value) =>
+      _historyBox.put(BoxKey.lastShowTranslationsState, value);
+
+  static bool getLastShowTranslationsState() =>
+      _historyBox.get(BoxKey.lastShowTranslationsState, defaultValue: true);
 
   static void saveCollectionDetails(CollectionDetails collectionDetails) {
     _collectionListBox.add(collectionDetails.toMap());

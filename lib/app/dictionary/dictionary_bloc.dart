@@ -16,7 +16,7 @@ class DictionaryBloc extends ChangeNotifier {
       this.translationApi =
           TranslationApi.linkDictionary, // TODO save and get last apis too
       this.definitionApi = DefinitionApi.wordsApi}) {
-    translationService = TranslationApiService.getApi(translationApi);
+    translationApiService = TranslationApiService.getApi(translationApi);
     definitionApiService = DefinitionApiService.getApi(definitionApi);
     _fromLanguage = fromLanguage ?? HiveHelper.getLastUsedFromLanguage();
     _toLanguage = toLanguage ?? HiveHelper.getLastUsedToLanguage();
@@ -36,7 +36,7 @@ class DictionaryBloc extends ChangeNotifier {
   }
 
   void switchFromLanguageTo(LanguageName lang) {
-    if (lang == toLanguage) {
+    if (lang == toLanguage) { // TODO maybe dont switch languages, so it can work like a synonym dictionary too with this api
       _toLanguage = fromLanguage;
     }
     _fromLanguage = lang;
@@ -63,7 +63,7 @@ class DictionaryBloc extends ChangeNotifier {
   TranslationApi translationApi;
   DefinitionApi definitionApi;
 
-  late TranslationApiService translationService;
+  late TranslationApiService translationApiService;
   late DefinitionApiService definitionApiService;
 
   List<DefinitionItem>? lastFetchedDefinitions;
@@ -92,7 +92,7 @@ class DictionaryBloc extends ChangeNotifier {
   Future<Map<String, dynamic>> fetchData() async {
     lastFetchedDefinitions =
         await definitionApiService.getDefinition(wordToTranslate, fromLanguage);
-    lastFetchedTranslationItems = await translationService.getTranslations(
+    lastFetchedTranslationItems = await translationApiService.getTranslations(
         wordToTranslate, fromLanguage, toLanguage);
     return {
       'translations': lastFetchedTranslationItems,

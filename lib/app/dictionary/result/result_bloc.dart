@@ -1,3 +1,4 @@
+import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';
 
 class ResultBloc extends ChangeNotifier {
@@ -9,6 +10,7 @@ class ResultBloc extends ChangeNotifier {
   bool get showDefinitions => _showDefinitions;
   void toggleShowDefinitions() {
     _showDefinitions = !_showDefinitions;
+    HiveHelper.saveLastShowDefinitionsState(showDefinitions);
     notifyListeners();
   }
 
@@ -16,6 +18,7 @@ class ResultBloc extends ChangeNotifier {
   bool get showTranslations => _showTranslations;
   void toggleShowTranslations() {
     _showTranslations = !_showTranslations;
+    HiveHelper.saveLastShowTranslationsState(showTranslations);
     notifyListeners();
   }
 }
