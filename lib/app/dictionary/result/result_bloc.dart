@@ -1,10 +1,10 @@
 import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flutter/material.dart';
 
-class ResultBloc extends ChangeNotifier {
-  ResultBloc({showDefs = true, showTransl = true})
-      : _showDefinitions = showDefs,
-        _showTranslations = showTransl;
+class ResultBloc extends ChangeNotifier { // TODO remove or will I need this?
+  ResultBloc() :
+    _showDefinitions = HiveHelper.getLastShowDefinitionsState(),
+    _showTranslations = HiveHelper.getLastShowTranslationsState();
 
   bool _showDefinitions;
   bool get showDefinitions => _showDefinitions;

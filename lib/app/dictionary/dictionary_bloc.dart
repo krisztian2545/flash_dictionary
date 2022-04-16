@@ -36,7 +36,7 @@ class DictionaryBloc extends ChangeNotifier {
   }
 
   void switchFromLanguageTo(LanguageName lang) {
-    if (lang == toLanguage) { // TODO maybe dont switch languages, so it can work like a synonym dictionary too with this api
+    if (lang == toLanguage) { // TODO maybe dont switch languages, so it can work like a synonym dictionary too with this api, but beware of coollections
       _toLanguage = fromLanguage;
     }
     _fromLanguage = lang;

@@ -1,5 +1,4 @@
 class DefinitionItem {
-
   DefinitionItem(this.defintion, this.partOfSpeech, this.examples);
 
   final String defintion;

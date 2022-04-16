@@ -1,12 +1,11 @@
 import 'package:flash_dictionary/app/dictionary/dictionary_bloc.dart';
 import 'package:flash_dictionary/app/dictionary/result/ResultViewFlexibleSpaceBar.dart';
 import 'package:flash_dictionary/app/dictionary/result/definition_item_view.dart';
-import 'package:flash_dictionary/app/dictionary/result/result_bloc.dart';
 import 'package:flash_dictionary/app/dictionary/result/translation_item_view.dart';
 import 'package:flash_dictionary/app/widgets/positioned_material.dart';
-import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
+import 'package:flash_dictionary/service/hive_helper.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +15,63 @@ class ResultView extends StatelessWidget {
 
   final double appBarHeight;
 
+  @override
+  Widget build(BuildContext context) {
+    return PositionedMaterial(
+      appBarHeight: appBarHeight,
+      child: FutureBuilder<Map<String, dynamic>>(
+        future:
+        Provider.of<DictionaryBloc>(context, listen: false).fetchData(),
+        builder: (context, snapshot) {
+          return ResultViewBuilder(
+            isDataLoaded: snapshot.connectionState == ConnectionState.done,
+            data: snapshot.data ?? {},
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ResultViewBuilder extends StatefulWidget {
+  const ResultViewBuilder(
+      {Key? key, required this.isDataLoaded, required this.data})
+      : super(key: key);
+
+  final bool isDataLoaded;
+  final Map<String, dynamic> data;
+
+  @override
+  _ResultViewBuilderState createState() => _ResultViewBuilderState();
+}
+
+class _ResultViewBuilderState extends State<ResultViewBuilder> {
+  late bool _showDefinitions;
+  late bool _showTranslations;
+
+  void toggleShowDefinitions() {
+    _showDefinitions = !_showDefinitions;
+    HiveHelper.saveLastShowDefinitionsState(_showDefinitions);
+    setState(() {});
+  }
+
+  void toggleShowTranslations() {
+    _showTranslations = !_showTranslations;
+    HiveHelper.saveLastShowTranslationsState(_showTranslations);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    _showDefinitions = HiveHelper.getLastShowDefinitionsState();
+    _showTranslations = HiveHelper.getLastShowTranslationsState();
+    super.initState();
+  }
+
+  // Widget _buildContent() {
+  //
+  // }
+
   Widget _buildDefinitions(List<DefinitionItem> definitions) {
     if (definitions.isEmpty) {
       return const NotFoundSliverText();
@@ -23,7 +79,7 @@ class ResultView extends StatelessWidget {
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
+            (BuildContext context, int index) {
           return DefinitionItemView(definitionItem: definitions[index]);
         },
         childCount: definitions.length,
@@ -38,7 +94,7 @@ class ResultView extends StatelessWidget {
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
+            (BuildContext context, int index) {
           return TranslationItemView(translationItem: translations[index]);
         },
         childCount: translations.length,
@@ -48,56 +104,38 @@ class ResultView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PositionedMaterial(
-      appBarHeight: appBarHeight,
-      child: ChangeNotifierProvider<ResultBloc>(
-        create: (context) => ResultBloc(),
-        child: FutureBuilder<Map<String, dynamic>>(
-          future:
-              Provider.of<DictionaryBloc>(context, listen: false).fetchData(),
-          builder: (context, snapshot) {
-            var isDataLoaded = snapshot.connectionState == ConnectionState.done;
-
-            return Consumer<ResultBloc>(
-              builder:
-                  (BuildContext context, ResultBloc resultBloc, Widget? child) {
-                return CustomScrollView(
-                  keyboardDismissBehavior:
-                      ScrollViewKeyboardDismissBehavior.onDrag,
-                  slivers: <Widget>[
-                    SliverAppBar(
-                      flexibleSpace: ResultViewFlexibleSpaceBar(
-                        title: "Definitions",
-                        arrowFaceDown: resultBloc.showDefinitions,
-                        onIconPressed: resultBloc.toggleShowDefinitions,
-                      ),
-                      shape: resultViewSliverAppBarBorder,
-                      toolbarHeight: 32,
-                      foregroundColor: Colors.black,
-                      backgroundColor: Colors.white70,
-                    ),
-                    if (resultBloc.showDefinitions && isDataLoaded)
-                      _buildDefinitions(snapshot.data!['definitions']),
-                    SliverAppBar(
-                      flexibleSpace: ResultViewFlexibleSpaceBar(
-                        title: "Translation",
-                        arrowFaceDown: resultBloc.showTranslations,
-                        onIconPressed: resultBloc.toggleShowTranslations,
-                      ),
-                      shape: resultViewSliverAppBarBorder,
-                      toolbarHeight: 32,
-                      foregroundColor: Colors.black,
-                      backgroundColor: Colors.white70,
-                    ),
-                    if (resultBloc.showTranslations && isDataLoaded)
-                      _buildTranslations(snapshot.data!['translations']),
-                  ],
-                );
-              },
-            );
-          },
+    return CustomScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      slivers: <Widget>[
+        SliverAppBar(
+          // pinned: true,
+          flexibleSpace: ResultViewFlexibleSpaceBar(
+            title: "Definitions",
+            arrowFaceDown: _showDefinitions,
+            onPressed: toggleShowDefinitions,
+          ),
+          shape: resultViewSliverAppBarBorder,
+          toolbarHeight: 32,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white70,
         ),
-      ),
+        if (_showDefinitions && widget.isDataLoaded)
+          _buildDefinitions(widget.data['definitions']),
+        SliverAppBar(
+          // pinned: true,
+          flexibleSpace: ResultViewFlexibleSpaceBar(
+            title: "Translation",
+            arrowFaceDown: _showTranslations,
+            onPressed: toggleShowTranslations,
+          ),
+          shape: resultViewSliverAppBarBorder,
+          toolbarHeight: 32,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white70,
+        ),
+        if (_showTranslations && widget.isDataLoaded)
+          _buildTranslations(widget.data['translations']),
+      ],
     );
   }
 }

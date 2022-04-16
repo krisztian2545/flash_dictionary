@@ -5,11 +5,11 @@ class ResultViewFlexibleSpaceBar extends StatelessWidget {
       {Key? key,
       required this.title,
       required this.arrowFaceDown,
-      required this.onIconPressed})
+      required this.onPressed})
       : super(key: key);
 
   final String title;
-  final VoidCallback onIconPressed;
+  final VoidCallback onPressed;
   final bool arrowFaceDown;
 
   @override
@@ -19,7 +19,7 @@ class ResultViewFlexibleSpaceBar extends StatelessWidget {
         padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
         splashFactory: NoSplash.splashFactory,
       ),
-      onPressed: onIconPressed,
+      onPressed: onPressed,
       child: Row(
         children: [
           Text(title, style: const TextStyle(fontSize: 24)),

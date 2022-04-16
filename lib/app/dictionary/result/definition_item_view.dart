@@ -40,7 +40,7 @@ class DefinitionItemView extends StatelessWidget {
                 text: TextSpan(
                   style: const TextStyle(color: Colors.black),
                   children: <TextSpan>[
-                    TextSpan(
+                    if (definitionItem.partOfSpeech.isNotEmpty) TextSpan(
                         text: "[${definitionItem.partOfSpeech}] ",
                         style: const TextStyle(
                             color: pastelGreen, fontWeight: FontWeight.w600)),
