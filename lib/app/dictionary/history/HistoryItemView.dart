@@ -41,6 +41,7 @@ class HistoryItemView extends StatelessWidget {
                 wordWithParams.fromLanguage, wordWithParams.toLanguage);
       },
       child: Container(
+        color: Colors.transparent, // this solved background not being detected by GestureDetector
         padding: const EdgeInsets.all(16),
         child: Row(
           children: <Widget>[

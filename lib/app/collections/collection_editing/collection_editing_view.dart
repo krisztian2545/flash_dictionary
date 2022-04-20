@@ -1,7 +1,7 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_bloc.dart';
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_view_item.dart';
 import 'package:flash_dictionary/domain/collections/language_card.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +11,7 @@ class CollectionEditingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<LanguageCard>>(
-      future: HiveHelper.getLanguageCardsFromCollection(
+      future: StorageService.getLanguageCardsFromCollection(
           Provider.of<CollectionEditingBloc>(context, listen: false)
               .collectionDetails), // TODO reverse the list
       builder: (context, snapshot) {

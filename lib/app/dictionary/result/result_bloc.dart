@@ -1,16 +1,16 @@
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class ResultBloc extends ChangeNotifier { // TODO remove or will I need this?
   ResultBloc() :
-    _showDefinitions = HiveHelper.getLastShowDefinitionsState(),
-    _showTranslations = HiveHelper.getLastShowTranslationsState();
+    _showDefinitions = StorageService.getLastShowDefinitionsState(),
+    _showTranslations = StorageService.getLastShowTranslationsState();
 
   bool _showDefinitions;
   bool get showDefinitions => _showDefinitions;
   void toggleShowDefinitions() {
     _showDefinitions = !_showDefinitions;
-    HiveHelper.saveLastShowDefinitionsState(showDefinitions);
+    StorageService.saveLastShowDefinitionsState(showDefinitions);
     notifyListeners();
   }
 
@@ -18,7 +18,7 @@ class ResultBloc extends ChangeNotifier { // TODO remove or will I need this?
   bool get showTranslations => _showTranslations;
   void toggleShowTranslations() {
     _showTranslations = !_showTranslations;
-    HiveHelper.saveLastShowTranslationsState(showTranslations);
+    StorageService.saveLastShowTranslationsState(showTranslations);
     notifyListeners();
   }
 }

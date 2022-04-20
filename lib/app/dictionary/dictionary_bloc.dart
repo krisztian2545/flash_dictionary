@@ -5,7 +5,7 @@ import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
 import 'package:flash_dictionary/domain/collections/language_card.dart';
 import 'package:flash_dictionary/domain/dictionary/word_with_params.dart';
 import 'package:flash_dictionary/service/definition_api_service.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flash_dictionary/service/translation_api_service.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +18,8 @@ class DictionaryBloc extends ChangeNotifier {
       this.definitionApi = DefinitionApi.wordsApi}) {
     translationApiService = TranslationApiService.getApi(translationApi);
     definitionApiService = DefinitionApiService.getApi(definitionApi);
-    _fromLanguage = fromLanguage ?? HiveHelper.getLastUsedFromLanguage();
-    _toLanguage = toLanguage ?? HiveHelper.getLastUsedToLanguage();
+    _fromLanguage = fromLanguage ?? StorageService.getLastUsedFromLanguage();
+    _toLanguage = toLanguage ?? StorageService.getLastUsedToLanguage();
   }
 
   String _wordToTranslate = "";
@@ -31,7 +31,7 @@ class DictionaryBloc extends ChangeNotifier {
   LanguageName get fromLanguage => __fromLanguage;
 
   set _fromLanguage(LanguageName value) {
-    HiveHelper.saveAsLastUsedFromLanguage(value);
+    StorageService.saveAsLastUsedFromLanguage(value);
     __fromLanguage = value;
   }
 
@@ -48,7 +48,7 @@ class DictionaryBloc extends ChangeNotifier {
   LanguageName get toLanguage => __toLanguage;
 
   set _toLanguage(LanguageName value) {
-    HiveHelper.saveAsLastUsedToLanguage(value);
+    StorageService.saveAsLastUsedToLanguage(value);
     __toLanguage = value;
   }
 
@@ -76,7 +76,7 @@ class DictionaryBloc extends ChangeNotifier {
 
   void searchForWord(String word) {
     _wordToTranslate = word;
-    HiveHelper.saveWordInHistory(
+    StorageService.saveWordInHistory(
         WordWithParams(wordToTranslate, fromLanguage, toLanguage));
     notifyListeners();
   }
@@ -111,8 +111,8 @@ class DictionaryBloc extends ChangeNotifier {
 
   void saveWordToCollection(
       CollectionDetails collection, LanguageCard languageCard) {
-    HiveHelper.saveLanguageCardToCollection(collection, languageCard);
+    StorageService.saveLanguageCardToCollection(collection, languageCard);
   }
 
-  List<WordWithParams> getWordHistory() => HiveHelper.getWordHistory();
+  List<WordWithParams> getWordHistory() => StorageService.getWordHistory();
 }

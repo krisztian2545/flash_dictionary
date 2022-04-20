@@ -5,7 +5,7 @@ import 'package:flash_dictionary/app/dictionary/result/translation_item_view.dar
 import 'package:flash_dictionary/app/widgets/positioned_material.dart';
 import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,20 +51,20 @@ class _ResultViewBuilderState extends State<ResultViewBuilder> {
 
   void toggleShowDefinitions() {
     _showDefinitions = !_showDefinitions;
-    HiveHelper.saveLastShowDefinitionsState(_showDefinitions);
+    StorageService.saveLastShowDefinitionsState(_showDefinitions);
     setState(() {});
   }
 
   void toggleShowTranslations() {
     _showTranslations = !_showTranslations;
-    HiveHelper.saveLastShowTranslationsState(_showTranslations);
+    StorageService.saveLastShowTranslationsState(_showTranslations);
     setState(() {});
   }
 
   @override
   void initState() {
-    _showDefinitions = HiveHelper.getLastShowDefinitionsState();
-    _showTranslations = HiveHelper.getLastShowTranslationsState();
+    _showDefinitions = StorageService.getLastShowDefinitionsState();
+    _showTranslations = StorageService.getLastShowTranslationsState();
     super.initState();
   }
 

@@ -2,7 +2,7 @@ import 'package:flash_dictionary/app/collections/collection_editing/collection_e
 import 'package:flash_dictionary/app/widgets/delete_confirmation_dialog.dart';
 import 'package:flash_dictionary/app/widgets/play_minigame_button.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -24,7 +24,7 @@ class CollectionEditingAppbar extends StatelessWidget {
       builder: (_) => const DeleteConfirmationDialog(),
     ).then((agreed) {
       if (agreed) {
-        HiveHelper.deleteCollection(collection);
+        StorageService.deleteCollection(collection);
         Navigator.pop(context);
       }
     });

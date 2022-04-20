@@ -3,7 +3,7 @@ import 'package:flash_dictionary/domain/dictionary/definition_item.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
 import 'package:flash_dictionary/domain/dictionary/translation_item.dart';
 import 'package:flash_dictionary/domain/collections/language_card.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class WordDialog extends StatefulWidget {
@@ -27,7 +27,7 @@ class WordDialog extends StatefulWidget {
 }
 
 class _WordDialogState extends State<WordDialog> {
-  ValueNotifier<CollectionDetails>? selectedCollection;
+  ValueNotifier<CollectionDetails?> selectedCollection = ValueNotifier(null);
   late final List<CollectionDetails> collectionList;
 
   final TextEditingController _frontController = TextEditingController();
@@ -50,36 +50,36 @@ class _WordDialogState extends State<WordDialog> {
 
   @override
   void initState() {
-    collectionList = HiveHelper.getCollectionList()
+    collectionList = StorageService.getCollectionList()
         .where((collection) => (collection.type == CollectionType.translation)
             ? collection.fromLanguage == widget.fromLanguage &&
                 collection.toLanguage == widget.toLanguage
             : collection.fromLanguage == widget.fromLanguage)
         .toList();
 
-    var lastUsedCollection = HiveHelper.getLastUsedCollection();
+    var lastUsedCollection = StorageService.getLastUsedCollection();
     if (collectionList.isNotEmpty) {
-      selectedCollection = (lastUsedCollection != null &&
+      selectedCollection.value = (lastUsedCollection != null &&
               collectionList.contains(lastUsedCollection))
-          ? ValueNotifier(lastUsedCollection)
-          : ValueNotifier(collectionList.first);
+          ? lastUsedCollection
+          : collectionList.first;
     }
 
-    selectedCollection?.addListener(() {
-      if (selectedCollection == null) {
+    selectedCollection.addListener(() {
+      if (selectedCollection.value == null) { // TODO maybe I dont even need this anymore
         return;
       }
 
       _backController.text =
-          selectedCollection!.value.type == CollectionType.definition
+          selectedCollection.value!.type == CollectionType.definition
               ? _definitionsAsString()
               : _translationsAsString();
-      HiveHelper.saveAsLastUsedCollection(selectedCollection!.value);
+      StorageService.saveAsLastUsedCollection(selectedCollection.value!);
     });
 
     _frontController.text = widget.initialFront;
     _backController.text =
-        selectedCollection?.value.type == CollectionType.definition
+        (selectedCollection.value?.type ?? CollectionType.translation) == CollectionType.definition
             ? _definitionsAsString()
             : _translationsAsString();
 
@@ -93,13 +93,13 @@ class _WordDialogState extends State<WordDialog> {
   }
 
   bool validate() =>
-      selectedCollection != null &&
+      selectedCollection.value != null &&
       (_formKey.currentState?.validate() ?? false);
 
   void _onSubmit() {
     if (validate()) {
       Navigator.pop<Map<String, dynamic>>(context, <String, dynamic>{
-        'collectionDetails': selectedCollection!.value,
+        'collectionDetails': selectedCollection.value,
         'languageCard': LanguageCard(
             front: _frontController.text, back: _backController.text),
       });
@@ -123,12 +123,12 @@ class _WordDialogState extends State<WordDialog> {
           ),
           const SizedBox(width: 16),
           TextButton(
-            onPressed: selectedCollection == null ? null : _onSubmit,
+            onPressed: selectedCollection.value == null ? null : _onSubmit,
             child: Text(
               "Save",
               style: TextStyle(
                   color:
-                      selectedCollection == null ? Colors.grey : Colors.black,
+                      selectedCollection.value == null ? Colors.grey : Colors.black,
                   fontSize: 20),
             ),
           ),
@@ -137,17 +137,17 @@ class _WordDialogState extends State<WordDialog> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              Text("Choose collection:",
+              const Text("Choose collection:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               CollectionDropDownButton(
                 selectedCollectionNotifier: selectedCollection,
                 collectionList: collectionList,
               ),
-              SizedBox(height: 16),
-              Text("Front:",
+              const SizedBox(height: 16),
+              const Text("Front:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TextFormField(
                 // TODO maybe check if front already exists in deck or just overwrite
                 controller: _frontController,
@@ -161,10 +161,10 @@ class _WordDialogState extends State<WordDialog> {
                   fillColor: Colors.grey[200],
                 ),
               ),
-              SizedBox(height: 16),
-              Text("Back:",
+              const SizedBox(height: 16),
+              const Text("Back:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _backController,
                 validator: _formFieldValidator,
@@ -192,34 +192,24 @@ class CollectionDropDownButton extends StatelessWidget {
       required this.collectionList})
       : super(key: key);
 
-  final ValueNotifier<CollectionDetails>? selectedCollectionNotifier;
+  final ValueNotifier<CollectionDetails?> selectedCollectionNotifier;
   final List<CollectionDetails> collectionList;
 
   @override
   Widget build(BuildContext context) {
-    if (selectedCollectionNotifier == null) {
-      return DropdownButton<String>(
-        icon: Container(),
-        underline: Container(),
-        value: "There are no collections",
-        items: const [
-          DropdownMenuItem<String>(
-              value: "There are no collections",
-              child: Text("There are no collections",
-                  style: TextStyle(color: Colors.grey))),
-        ],
-        onChanged: (_) {},
-      );
-    }
-
-    // var collectionList = HiveHelper.getCollectionList();
-    print("last used: ${selectedCollectionNotifier!.value.getStringId()}");
+    print("last used: ${selectedCollectionNotifier.value?.getStringId()}");
     print("list: ${collectionList.map((e) => e.getStringId()).join(", ")}");
-    return ValueListenableBuilder<CollectionDetails>(
-      valueListenable: selectedCollectionNotifier!,
+    return ValueListenableBuilder<CollectionDetails?>(
+      valueListenable: selectedCollectionNotifier,
       builder: (context, value, child) => DropdownButton<CollectionDetails>(
         icon: Container(),
         underline: Container(),
+        disabledHint: Expanded(
+          child: RichText(
+            text: TextSpan( text: "There are no collections in these languages.",
+                style: TextStyle(color: Colors.grey)),
+          ),
+        ),
         value: value,
         items: collectionList
             .map((e) => DropdownMenuItem<CollectionDetails>(
@@ -231,11 +221,11 @@ class CollectionDropDownButton extends StatelessWidget {
                         children: <TextSpan>[
                           TextSpan(
                               text: e.name,
-                              style: TextStyle(color: Colors.black)),
+                              style: const TextStyle(color: Colors.black)),
                           TextSpan(
                             text:
                                 " [${e.fromLanguage.name}${e.toLanguage != null ? "-${e.toLanguage!.name}" : ""}]",
-                            style: TextStyle(color: Colors.grey),
+                            style: const TextStyle(color: Colors.grey),
                           ),
                         ],
                       ),
@@ -245,7 +235,7 @@ class CollectionDropDownButton extends StatelessWidget {
             .toList(),
         onChanged: (newValue) {
           if (newValue != null) {
-            selectedCollectionNotifier!.value = newValue;
+            selectedCollectionNotifier.value = newValue;
           }
         },
       ),

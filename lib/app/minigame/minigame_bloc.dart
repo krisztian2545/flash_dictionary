@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/minigame/game_card.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
 
 enum CardDifficulty { easy, medium, hard }
@@ -127,6 +127,6 @@ class MinigameBloc extends ChangeNotifier {
       allCards.addAll(cardList);
     }
 
-    HiveHelper.saveGameCardList(collectionDetails, allCards);
+    StorageService.saveGameCardList(collectionDetails, allCards);
   }
 }

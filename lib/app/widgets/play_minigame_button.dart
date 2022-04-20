@@ -1,7 +1,7 @@
 import 'package:flash_dictionary/app/minigame/minigame_page.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/minigame/game_card.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class PlayMinigameButton extends StatelessWidget {
@@ -22,7 +22,7 @@ class PlayMinigameButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<GameCard>>(
-      future: HiveHelper.getGameCardsFromCollection(collectionDetails),
+      future: StorageService.getGameCardsFromCollection(collectionDetails),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done &&
             (snapshot.data?.isNotEmpty ?? false)) {

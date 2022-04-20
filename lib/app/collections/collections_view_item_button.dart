@@ -14,7 +14,7 @@ class CollectionsViewItemButton extends StatelessWidget {
   final CollectionDetails collectionDetails;
 
   void _onCollectionPressed(BuildContext context) {
-    // TODO close box after colelction closed
+    // TODO close box after collection closed
     Navigator.push(
         context,
         MaterialPageRoute(

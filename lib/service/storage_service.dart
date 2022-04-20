@@ -24,7 +24,7 @@ class BoxKey {
       "cardValuesOf" + collection.getStringId();
 }
 
-class HiveHelper {
+class StorageService {
   static late Box _historyBox;
   static late Box _collectionListBox;
 

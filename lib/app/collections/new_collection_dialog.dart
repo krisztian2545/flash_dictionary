@@ -1,7 +1,7 @@
 import 'package:flash_dictionary/app/widgets/language_dropdown_button.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/dictionary/language_names.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
 
 class NewCollectionDialog extends StatefulWidget {
@@ -16,10 +16,10 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
       ValueNotifier(CollectionType.translation);
 
   final ValueNotifier<LanguageName> _fromLanguage =
-      ValueNotifier(HiveHelper.getLastUsedFromLanguage());
+      ValueNotifier(StorageService.getLastUsedFromLanguage());
 
   final ValueNotifier<LanguageName> _toLanguage =
-      ValueNotifier(HiveHelper.getLastUsedToLanguage());
+      ValueNotifier(StorageService.getLastUsedToLanguage());
 
   final TextEditingController _collectionNameController =
       TextEditingController();
@@ -31,7 +31,7 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
       return "Name can't be empty!";
     }
 
-    var collectionList = HiveHelper.getCollectionList();
+    var collectionList = StorageService.getCollectionList();
     for (int i = 0; i < collectionList.length; i++) {
       var collection = collectionList[i];
       if (collection.name.toLowerCase() == value.toLowerCase() &&
@@ -69,7 +69,6 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         actions: <Widget>[
           TextButton(
-            // TODO change color of animation when you hold
             onPressed: _onSubmit,
             child: const Text(
               "Create",

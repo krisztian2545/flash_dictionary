@@ -32,7 +32,7 @@ class DefinitionItemView extends StatelessWidget {
         children: <Widget>[
           const Text("Defintion:",
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-          LimitedBox(
+          LimitedBox( // TODO do I need this?
             maxWidth: textBoxWidth,
             child: Container(
               padding: const EdgeInsets.only(left: 8),

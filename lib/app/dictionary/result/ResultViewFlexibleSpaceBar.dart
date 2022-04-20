@@ -17,7 +17,7 @@ class ResultViewFlexibleSpaceBar extends StatelessWidget {
     return TextButton(
       style: TextButton.styleFrom(
         padding: const EdgeInsets.only(top: 4, left: 8, right: 8),
-        splashFactory: NoSplash.splashFactory,
+        splashFactory: NoSplash.splashFactory, // or maybe use GestureDetectorinstead of TextButton?
       ),
       onPressed: onPressed,
       child: Row(

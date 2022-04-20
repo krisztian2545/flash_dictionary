@@ -1,10 +1,10 @@
 import 'package:flash_dictionary/app/landing_page.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flash_dictionary/theme.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
-  await HiveHelper.initAndOpenBoxes();
+  await StorageService.initAndOpenBoxes();
   runApp(const MyApp());
 }
 

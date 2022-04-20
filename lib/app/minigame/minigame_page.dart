@@ -5,7 +5,7 @@ import 'package:flash_dictionary/app/widgets/positioned_material.dart';
 import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/minigame/game_card.dart';
-import 'package:flash_dictionary/service/hive_helper.dart';
+import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +18,7 @@ class MinigamePage extends StatelessWidget {
   final CollectionDetails collectionDetails;
 
   Future<List<GameCard>> _loadData() async {
-    return await HiveHelper.getGameCardsFromCollection(collectionDetails);
+    return await StorageService.getGameCardsFromCollection(collectionDetails);
   }
 
   @override
