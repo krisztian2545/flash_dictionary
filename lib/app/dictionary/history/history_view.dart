@@ -22,7 +22,7 @@ class HistoryView extends StatelessWidget {
       appBarHeight: appBarHeight,
       child: ListView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
         children: _buildList(context),
       ),
     );

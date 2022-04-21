@@ -39,7 +39,7 @@ class _NewCollectionDialogState extends State<NewCollectionDialog> {
           collection.fromLanguage == _fromLanguage.value) {
         if (collection.type == CollectionType.translation &&
             collection.toLanguage != _toLanguage.value) {
-          return null;
+          continue;
         }
         return "Name already exsists with this settings!";
       }

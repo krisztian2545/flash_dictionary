@@ -12,7 +12,7 @@ class LandingPage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         backgroundColor: primaryColor,
-        body: TabBarView(
+        body: const TabBarView(
           children: <Widget>[
             DictionaryPage(),
             CollectionsPage(), // TODO dismiss keyboard when switching tab
@@ -23,11 +23,11 @@ class LandingPage extends StatelessWidget {
           elevation: 16,
           child: TabBar(
             labelColor: Colors.black,
-            indicatorPadding: EdgeInsets.only(bottom: 6, left: 64, right: 64),
+            indicatorPadding: const EdgeInsets.only(bottom: 6, left: 64, right: 64),
             indicatorColor: Colors.black,
             overlayColor: MaterialStateProperty.all(pastelGreen),
             // overlayColor: MaterialStateProperty.all(Colors.black),
-            tabs: <Widget>[
+            tabs: const <Widget>[
               Tab(
                 icon: Icon(Icons.translate),
               ),

@@ -20,7 +20,7 @@ class _DictionaryPageState extends State<DictionaryPage> with AutomaticKeepAlive
     super.build(context); // for keepAlive
 
     var appBarHeight = _appBarBaseHeight + MediaQuery.of(context).viewPadding.top;
-    print("appBarHeight: $appBarHeight");
+    // print("appBarHeight: $appBarHeight");
     return ChangeNotifierProvider<DictionaryBloc>(
       create: (context) => DictionaryBloc(),
       child: Consumer<DictionaryBloc>(

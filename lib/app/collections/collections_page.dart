@@ -15,8 +15,8 @@ class CollectionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appBarHeight =
         _appBarBaseHeight + MediaQuery.of(context).viewPadding.top;
-    print(
-        "appBarHeight: $appBarHeight"); // TODO remove prints from prodduction code
+    // print(
+    //     "appBarHeight: $appBarHeight"); // TODO remove prints from prodduction code
     return ChangeNotifierProvider<CollectionsBloc>(
       create: (context) => CollectionsBloc(),
       child: Stack(
