@@ -48,7 +48,7 @@ class HistoryItemView extends StatelessWidget {
             Text(wordWithParams.word, style: const TextStyle(fontSize: 20)),
             const Spacer(),
             IconButton(
-              onPressed: () => _onAddButtonPressed(context),
+              onPressed: () => _onAddButtonPressed(context), // TODO disable while the dialog opens
               icon: const Icon(Icons.add),
             ),
           ],

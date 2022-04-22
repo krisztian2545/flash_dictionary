@@ -47,7 +47,7 @@ class _DictionaryAppBarState extends State<DictionaryAppBar> {
     if (widget.dictionaryBloc.wordToTranslate != "") {
       out.add(const SizedBox(width: 8));
       out.add(OutlinedButton(
-        onPressed: _onAddButtonPressed,
+        onPressed: _onAddButtonPressed, // TODO disable while the dialog opens
         child: const Text("Add",
             style: TextStyle(color: Colors.black, fontSize: 20)),
         style: OutlinedButton.styleFrom(

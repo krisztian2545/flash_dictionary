@@ -116,7 +116,7 @@ class StorageService {
           .toList();
 
   static saveAsLastUsedCollection(CollectionDetails collectionDetails) {
-    var index = getCollectionList().indexOf(collectionDetails);
+    var index = getCollectionList().indexOf(collectionDetails); // TODO save colection instead
     if (index > 0) {
       _historyBox.put(BoxKey.lastUsedCollectionIndex, index);
     }
@@ -137,6 +137,7 @@ class StorageService {
   }
 
   static void deleteCollection(CollectionDetails collectionDetails) {
+    // TODO delete from lastUsedCollection too
     var mappedCollection = collectionDetails.toMap();
     var key = findKeyOfValue(_collectionListBox.toMap(), mappedCollection);
     print("deleteng at key: $key");

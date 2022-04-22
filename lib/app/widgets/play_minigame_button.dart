@@ -19,13 +19,17 @@ class PlayMinigameButton extends StatelessWidget {
     );
   }
 
+  Future<bool> isCollectionPlayable() async =>
+      (await StorageService.getGameCardsFromCollection(collectionDetails))
+          .isNotEmpty;
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<GameCard>>(
-      future: StorageService.getGameCardsFromCollection(collectionDetails),
+    return FutureBuilder<bool>(
+      future: isCollectionPlayable(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done &&
-            (snapshot.data?.isNotEmpty ?? false)) {
+            (snapshot.data ?? false)) {
           return IconButton(
             onPressed: () => _onPressed(context),
             icon: const Icon(Icons.play_arrow_outlined, size: 38),

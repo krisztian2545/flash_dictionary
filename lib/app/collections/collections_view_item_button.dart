@@ -25,7 +25,8 @@ class CollectionsViewItemButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    double buttonContentWidth = MediaQuery.of(context).size.width - 104; // screen size - paddings
+    print("button width: ${buttonContentWidth * 0.75}");
 
     return OutlinedButton(
       onPressed: () => _onCollectionPressed(context),
@@ -42,7 +43,7 @@ class CollectionsViewItemButton extends StatelessWidget {
         // TODO word wrap
         children: <Widget>[
           LimitedBox(
-            maxWidth: screenWidth * 0.6,
+            maxWidth: buttonContentWidth * 0.8,
             child: RichText(
               text: TextSpan(
                 style: const TextStyle(color: Colors.black),

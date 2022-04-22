@@ -59,7 +59,7 @@ class CollectionEditingViewItem extends StatelessWidget {
                 });
                 break;
               case MoreButtonOption.delete:
-                showDialog(context: context, builder: (_) => DeleteConfirmationDialog()).then((agreed) {
+                showDialog(context: context, builder: (_) => const DeleteConfirmationDialog()).then((agreed) {
                   if (agreed) {
                     _onDelete(context);
                   }

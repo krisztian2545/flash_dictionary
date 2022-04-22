@@ -140,7 +140,7 @@ class _WordDialogState extends State<WordDialog> {
               const Text("Choose collection:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
-              CollectionDropDownButton(
+              CollectionDropdownButton(
                 selectedCollectionNotifier: selectedCollection,
                 collectionList: collectionList,
               ),
@@ -185,8 +185,8 @@ class _WordDialogState extends State<WordDialog> {
   }
 }
 
-class CollectionDropDownButton extends StatelessWidget {
-  const CollectionDropDownButton(
+class CollectionDropdownButton extends StatelessWidget {
+  const CollectionDropdownButton(
       {Key? key,
       required this.selectedCollectionNotifier,
       required this.collectionList})
