@@ -14,7 +14,7 @@ class CollectionEditingAppbar extends StatelessWidget {
   void _onBackButtonPressed(
       BuildContext context, CollectionDetails collection) {
     Navigator.pop(context);
-    Hive.box(collection.getStringId()).close();
+    Hive.box(collection.getStringId()).close(); // maybe i could do this in a WillPopScope
   }
 
   void _onDeleteButtonPressed(

@@ -8,13 +8,18 @@ class CollectionEditingBloc extends ChangeNotifier {
 
   final CollectionDetails collectionDetails;
 
+  Future<List<LanguageCard>> getLanguageCards() =>
+      StorageService.getLanguageCardsFromCollection(collectionDetails);
+
   void editLanguageCard(LanguageCard oldValue, LanguageCard newValue) {
-    StorageService.updateLanguageCardInCollection(collectionDetails, oldValue, newValue);
+    StorageService.updateLanguageCardInCollection(
+        collectionDetails, oldValue, newValue);
     notifyListeners();
   }
 
   void deleteLanguageCard(LanguageCard languageCard) {
-    StorageService.deleteLanguageCardFromCollection(collectionDetails, languageCard);
+    StorageService.deleteLanguageCardFromCollection(
+        collectionDetails, languageCard);
     notifyListeners();
   }
 }

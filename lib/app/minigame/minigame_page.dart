@@ -42,7 +42,7 @@ class MinigamePage extends StatelessWidget {
                     left: 0,
                     right: 0,
                     height: appBarHeight,
-                    child: MinigameAppbar(),
+                    child: const MinigameAppbar(),
                   ),
                   PositionedMaterial(
                     appBarHeight: appBarHeight,

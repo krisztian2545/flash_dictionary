@@ -1,7 +1,6 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_bloc.dart';
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_view_item.dart';
 import 'package:flash_dictionary/domain/collections/language_card.dart';
-import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,15 +9,15 @@ class CollectionEditingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CollectionEditingBloc bloc = Provider.of<CollectionEditingBloc>(context, listen: false);
+
     return FutureBuilder<List<LanguageCard>>(
-      future: StorageService.getLanguageCardsFromCollection(
-          Provider.of<CollectionEditingBloc>(context, listen: false)
-              .collectionDetails), // TODO reverse the list
+      future: bloc.getLanguageCards(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.data!.isEmpty) {
-            return Center(
-                child: Text("No data!")); // TODO create no data widget
+            return const Center(
+                child: Text("No data!"));
           }
 
           print("cards: ${snapshot.data}");
@@ -29,13 +28,12 @@ class CollectionEditingView extends StatelessWidget {
             separatorBuilder: (context, index) => const SizedBox(height: 24),
             itemBuilder: (context, index) => CollectionEditingViewItem(
               languageCard: cards[index],
-              collectionEditingBloc:
-                  Provider.of<CollectionEditingBloc>(context, listen: false),
+              collectionEditingBloc: bloc,
             ),
           );
         }
 
-        return Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

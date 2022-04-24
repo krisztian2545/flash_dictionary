@@ -22,8 +22,8 @@ class MinigameShowFrontView extends StatelessWidget {
         OutlinedButton(
           onPressed: onShowAnswerButtonPressed,
           style: OutlinedButton.styleFrom(
-            side: BorderSide(width: borderWidth),
-            padding: EdgeInsets.symmetric(horizontal: 22, vertical: 8),
+            side: const BorderSide(width: borderWidth),
+            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 8),
           ),
           child: const Text(
             "Show answer",

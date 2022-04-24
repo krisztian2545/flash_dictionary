@@ -49,20 +49,21 @@ class _MinigameViewState extends State<MinigameView> {
   @override
   Widget build(BuildContext context) {
     if (isGameOver) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              "Congratulations!",
-              style: appBarTextStyle,
-            ),
-            Text(
-              "You learned all the cards",
-              style: appBarTextStyle,
-            ),
-          ],
-        ),
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            "Congratulations!\nYou learned all the cards",
+            textAlign: TextAlign.center,
+            style: appBarTextStyle,
+          ),
+          const SizedBox(height: 16),
+          OutlinedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("Return to main menu."),
+          ),
+        ],
       );
     }
 

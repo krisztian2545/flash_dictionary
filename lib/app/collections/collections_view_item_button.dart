@@ -14,7 +14,6 @@ class CollectionsViewItemButton extends StatelessWidget {
   final CollectionDetails collectionDetails;
 
   void _onCollectionPressed(BuildContext context) {
-    // TODO close box after collection closed
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -26,7 +25,7 @@ class CollectionsViewItemButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double buttonContentWidth = MediaQuery.of(context).size.width - 104; // screen size - paddings
-    print("button width: ${buttonContentWidth * 0.75}");
+    // print("button width: ${buttonContentWidth * 0.75}");
 
     return OutlinedButton(
       onPressed: () => _onCollectionPressed(context),

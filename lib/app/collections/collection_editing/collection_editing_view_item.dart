@@ -7,18 +7,35 @@ import 'package:flutter/material.dart';
 enum MoreButtonOption { edit, delete }
 
 class CollectionEditingViewItem extends StatelessWidget {
-  const CollectionEditingViewItem({Key? key, required this.languageCard, required this.collectionEditingBloc})
+  const CollectionEditingViewItem(
+      {Key? key,
+      required this.languageCard,
+      required this.collectionEditingBloc})
       : super(key: key);
 
   final LanguageCard languageCard;
   final CollectionEditingBloc collectionEditingBloc;
 
-  void _onEdit(BuildContext context, LanguageCard newValue) {
-    collectionEditingBloc.editLanguageCard(languageCard, newValue);
+  void _onEdit(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => EditWordDialog(
+          initialFront: languageCard.front, initialBack: languageCard.back),
+    ).then((value) {
+      if (value != null) {
+        collectionEditingBloc.editLanguageCard(languageCard, value);
+      }
+    });
   }
 
   void _onDelete(BuildContext context) {
-    collectionEditingBloc.deleteLanguageCard(languageCard);
+    showDialog(
+        context: context,
+        builder: (_) => const DeleteConfirmationDialog()).then((agreed) {
+      if (agreed) {
+        collectionEditingBloc.deleteLanguageCard(languageCard);
+      }
+    });
   }
 
   @override
@@ -26,7 +43,7 @@ class CollectionEditingViewItem extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(languageCard.front, style: const TextStyle(fontSize: 22)),
-        Spacer(),
+        const Spacer(),
         PopupMenuButton<MoreButtonOption>(
           child: const Center(
               child: Icon(
@@ -46,29 +63,15 @@ class CollectionEditingViewItem extends StatelessWidget {
           onSelected: (selected) {
             switch (selected) {
               case MoreButtonOption.edit:
-                showDialog(
-                  context: context,
-                  builder: (_) => EditWordDialog(
-                      title: "Edit word",
-                      initialFront: languageCard.front,
-                      initialBack: languageCard.back),
-                ).then((value) {
-                  if (value != null) {
-                    _onEdit(context, value);
-                  }
-                });
+                _onEdit(context);
                 break;
               case MoreButtonOption.delete:
-                showDialog(context: context, builder: (_) => const DeleteConfirmationDialog()).then((agreed) {
-                  if (agreed) {
-                    _onDelete(context);
-                  }
-                });
+                _onDelete(context);
                 break;
             }
           },
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
       ],
     );
   }

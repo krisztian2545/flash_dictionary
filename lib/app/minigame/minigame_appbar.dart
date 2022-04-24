@@ -14,7 +14,7 @@ class MinigameAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Row(
+      child: Row( // TODO add option to restart game?
         children: <Widget>[
           const SizedBox(width: 8),
           IconButton(

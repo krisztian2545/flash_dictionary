@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 class EditWordDialog extends StatefulWidget {
   const EditWordDialog(
       {Key? key,
-      required this.title,
       required this.initialFront,
       required this.initialBack})
       : super(key: key);
 
-  final String title;
   final String initialFront;
   final String initialBack;
 
@@ -54,8 +52,8 @@ class _EditWordDialogState extends State<EditWordDialog> {
     return SingleChildScrollView(
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: AlertDialog(
-        title: Text(widget.title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        title: const Text("Edit word",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         actions: <Widget>[
           TextButton(
             // TODO change color of animation when you hold
@@ -65,7 +63,7 @@ class _EditWordDialogState extends State<EditWordDialog> {
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           TextButton(
             onPressed: _onSubmit,
             child: const Text(
@@ -78,9 +76,9 @@ class _EditWordDialogState extends State<EditWordDialog> {
           key: _formKey,
           child: Column(
             children: <Widget>[
-              Text("Front:",
+              const Text("Front:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TextFormField(
                 // TODO maybe check if front already exists in deck or just overwrite
                 controller: _frontController,
@@ -94,10 +92,10 @@ class _EditWordDialogState extends State<EditWordDialog> {
                   fillColor: Colors.grey[200],
                 ),
               ),
-              SizedBox(height: 16),
-              Text("Back:",
+              const SizedBox(height: 16),
+              const Text("Back:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               TextFormField(
                 controller: _backController,
                 validator: _formFieldValidator,

@@ -27,11 +27,9 @@ class DeleteConfirmationDialog extends StatelessWidget {
             ),
           ),
         ],
-        content: Center(
-          child: Text(
-            "Are you sure you want to delete?",
-            style: TextStyle(fontSize: 18, color: Colors.grey[800]),
-          ),
+        content: Text(
+          "Are you sure you want to delete?",
+          style: TextStyle(fontSize: 18, color: Colors.grey[800]),
         ),
       ),
     );
