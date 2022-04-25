@@ -4,8 +4,6 @@ import 'package:flash_dictionary/app/minigame/minigame_view.dart';
 import 'package:flash_dictionary/app/widgets/positioned_material.dart';
 import 'package:flash_dictionary/colors.dart';
 import 'package:flash_dictionary/domain/collections/collection_details.dart';
-import 'package:flash_dictionary/domain/minigame/game_card.dart';
-import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,48 +15,33 @@ class MinigamePage extends StatelessWidget {
 
   final CollectionDetails collectionDetails;
 
-  Future<List<GameCard>> _loadData() async {
-    return await StorageService.getGameCardsFromCollection(collectionDetails);
-  }
-
   @override
   Widget build(BuildContext context) {
     var appBarHeight =
-        _appBarBaseHeight + MediaQuery.of(context).viewPadding.top;
+        MinigamePage._appBarBaseHeight + MediaQuery.of(context).viewPadding.top;
     return Scaffold(
       backgroundColor: primaryColor,
-      body: FutureBuilder<List<GameCard>>(
-        future: _loadData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return ChangeNotifierProvider<MinigameBloc>(
-              create: (_) => MinigameBloc(
-                  collectionDetails: collectionDetails,
-                  gameCards: snapshot.data!),
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: appBarHeight,
-                    child: const MinigameAppbar(),
-                  ),
-                  PositionedMaterial(
-                    appBarHeight: appBarHeight,
-                    child: Consumer<MinigameBloc>(
-                      builder: (context, bloc, child) {
-                        return MinigameView();
-                      },
-                    ),
-                  ),
-                ],
+      body: ChangeNotifierProvider<MinigameBloc>(
+        create: (_) => MinigameBloc(collectionDetails: collectionDetails),
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: appBarHeight,
+              child: const MinigameAppbar(),
+            ),
+            PositionedMaterial(
+              appBarHeight: appBarHeight,
+              child: Consumer<MinigameBloc>(
+                builder: (context, bloc, child) {
+                  return const MinigameView();
+                },
               ),
-            );
-          }
-
-          return const Center(child: CircularProgressIndicator());
-        },
+            ),
+          ],
+        ),
       ),
     );
   }

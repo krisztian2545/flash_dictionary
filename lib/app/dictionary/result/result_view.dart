@@ -21,7 +21,7 @@ class ResultView extends StatelessWidget {
       appBarHeight: appBarHeight,
       child: FutureBuilder<Map<String, dynamic>>(
         future:
-        Provider.of<DictionaryBloc>(context, listen: false).fetchData(),
+        Provider.of<DictionaryBloc>(context, listen: false).fetchData(), // TODO move future calls out of build method and use variables
         builder: (context, snapshot) {
           return ResultViewBuilder(
             isDataLoaded: snapshot.connectionState == ConnectionState.done,

@@ -13,73 +13,66 @@ class MinigameView extends StatefulWidget {
 }
 
 class _MinigameViewState extends State<MinigameView> {
-  bool showAnswer = false;
-  bool isGameOver = false;
-  late final MinigameBloc minigameBloc;
 
-  void initRound() {
-    if (minigameBloc.pickRandomCard()) {
-      setState(() {
-        showAnswer = false;
-      });
-      return;
-    }
-    setState(() {
-      isGameOver = true;
-    });
-  }
+  late final MinigameBloc minigameBloc;
+  late Future<void> initBloc;
 
   @override
   void initState() {
     print("new card");
     minigameBloc = Provider.of<MinigameBloc>(context, listen: false);
-    initRound();
+    initBloc = minigameBloc.init().then((value) => minigameBloc.initRound());
     super.initState();
   }
 
   @override
-  void didUpdateWidget(covariant MinigameView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    print("didupdatewidget....");
-
-    initRound();
-    setState(() {}); // TODO do I need this?
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (isGameOver) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            "Congratulations!\nYou learned all the cards",
-            textAlign: TextAlign.center,
-            style: appBarTextStyle,
-          ),
-          const SizedBox(height: 16),
-          OutlinedButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Return to main menu."),
-          ),
-        ],
-      );
-    }
+    return FutureBuilder(
+      future: initBloc,
+      builder: (context, snapshot) {
+        print("building...");
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-    return Container(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: showAnswer
-          ? MinigameShowAnswerView(
-              front: minigameBloc.currentGameCard.card.front,
-              back: minigameBloc.currentGameCard.card.back,
-            )
-          : MinigameShowFrontView(
-              front: minigameBloc.currentGameCard.card.front,
-              onShowAnswerButtonPressed: () => setState(() {
-                showAnswer = true;
-              }),
-            ),
+        return Consumer<MinigameBloc>(
+          builder: (context, bloc, child) {
+            print("building consumer...");
+
+            if (bloc.isGameOver) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Congratulations!\nYou learned all the cards",
+                    textAlign: TextAlign.center,
+                    style: appBarTextStyle,
+                  ),
+                  const SizedBox(height: 16),
+                  OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("Return to main menu."),
+                  ),
+                ],
+              );
+            }
+
+            return Container(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: bloc.getShowAnswer
+                  ? MinigameShowAnswerView(
+                front: minigameBloc.currentGameCard.card.front,
+                back: minigameBloc.currentGameCard.card.back,
+              )
+                  : MinigameShowFrontView(
+                front: minigameBloc.currentGameCard.card.front,
+                onShowAnswerButtonPressed: () => bloc.showAnswer(),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 

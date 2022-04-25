@@ -9,7 +9,50 @@ enum CardDifficulty { easy, medium, hard }
 
 class MinigameBloc extends ChangeNotifier {
   MinigameBloc(
-      {required this.collectionDetails, required List<GameCard> gameCards}) {
+      {required this.collectionDetails});
+
+  static const _perGameScoreNeeded = 5;
+  static const _easyConfiedenceValue = 4;
+  static const _mediumConfidenceValue = 3;
+  static const _hardConfidenceValue = 1;
+
+  bool _showAnswer = false;
+  // set _showAnswer(bool value) {
+  //   __showAnswer = value;
+  //   notifyListeners();
+  // }
+  bool get getShowAnswer => _showAnswer;
+
+  void showAnswer() {
+    _showAnswer = true;
+    notifyListeners();
+  }
+
+  void hideAnswer() {
+    _showAnswer = false;
+    notifyListeners();
+  }
+
+  bool _isGameOver = false;
+  bool get isGameOver => _isGameOver;
+
+  final CollectionDetails collectionDetails;
+
+  final List<GameCard> learnedGameCards = <GameCard>[];
+  final Map<int, List<GameCard>> cardsByConfidenceValue =
+      <int, List<GameCard>>{};
+
+  late GameCard _currentGameCard;
+
+  GameCard get currentGameCard => _currentGameCard;
+
+  late int _smallestConfidenceValue;
+
+  final _random = Random();
+
+  Future<void> init() async {
+    var gameCards = await StorageService.getGameCardsFromCollection(collectionDetails);
+
     if (gameCards.any((card) => card.values.lastGameValue > 0)) {
       // continue last game
       for (var card in gameCards) {
@@ -26,9 +69,9 @@ class MinigameBloc extends ChangeNotifier {
     // new game
     int smallestValue = gameCards
         .reduce((smallest, current) =>
-            (current.values.confidenceValue < smallest.values.confidenceValue)
-                ? current
-                : smallest)
+    (current.values.confidenceValue < smallest.values.confidenceValue)
+        ? current
+        : smallest)
         .values
         .confidenceValue;
 
@@ -41,25 +84,15 @@ class MinigameBloc extends ChangeNotifier {
     }
   }
 
-  static const _perGameScoreNeeded = 5;
-  static const _easyConfiedenceValue = 4;
-  static const _mediumConfidenceValue = 3;
-  static const _hardConfidenceValue = 1;
-
-  final CollectionDetails collectionDetails;
-
-  // final List<GameCard> _gameCards;
-  final List<GameCard> learnedGameCards = <GameCard>[];
-  final Map<int, List<GameCard>> cardsByConfidenceValue =
-      <int, List<GameCard>>{};
-
-  late GameCard _currentGameCard;
-
-  GameCard get currentGameCard => _currentGameCard;
-
-  late int smallestConfidenceValue;
-
-  final _random = Random();
+  void initRound() {
+    print("init round...");
+    if (pickRandomCard()) {
+      hideAnswer();
+      return;
+    }
+    _isGameOver = true;
+    notifyListeners();
+  }
 
   /// Returns false if game over
   bool pickRandomCard() {
@@ -75,18 +108,18 @@ class MinigameBloc extends ChangeNotifier {
       return false;
     }
 
-    smallestConfidenceValue = cardsByConfidenceValue.keys.reduce(
+    _smallestConfidenceValue = cardsByConfidenceValue.keys.reduce(
         (smallest, current) => (current < smallest) ? current : smallest);
 
-    _currentGameCard = cardsByConfidenceValue[smallestConfidenceValue]![_random
-        .nextInt(cardsByConfidenceValue[smallestConfidenceValue]!.length)];
+    _currentGameCard = cardsByConfidenceValue[_smallestConfidenceValue]![_random
+        .nextInt(cardsByConfidenceValue[_smallestConfidenceValue]!.length)];
     return true;
   }
 
   void removeCurrentCardFromMap() {
-    cardsByConfidenceValue[smallestConfidenceValue]?.remove(_currentGameCard);
-    if (cardsByConfidenceValue[smallestConfidenceValue]!.isEmpty) {
-      cardsByConfidenceValue.remove(smallestConfidenceValue);
+    cardsByConfidenceValue[_smallestConfidenceValue]?.remove(_currentGameCard);
+    if (cardsByConfidenceValue[_smallestConfidenceValue]!.isEmpty) {
+      cardsByConfidenceValue.remove(_smallestConfidenceValue);
     }
   }
 
@@ -115,7 +148,8 @@ class MinigameBloc extends ChangeNotifier {
           ?.add(_currentGameCard);
     }
 
-    notifyListeners();
+    initRound();
+    // notifyListeners();
   }
 
   void saveData() {

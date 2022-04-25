@@ -31,7 +31,7 @@ class MinigameShowAnswerView extends StatelessWidget {
             ),
           ),
         ),
-        GameCardFeedbackButtons(),
+        const GameCardFeedbackButtons(),
       ],
     );
   }
