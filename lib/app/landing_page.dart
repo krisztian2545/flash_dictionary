@@ -15,7 +15,7 @@ class LandingPage extends StatelessWidget {
         body: const TabBarView(
           children: <Widget>[
             DictionaryPage(),
-            CollectionsPage(), // TODO dismiss keyboard when switching tab
+            CollectionsPage(), // TODO dismiss keyboard when switching tab (try NotificationListener or tabController.addlistener)
           ],
         ),
         bottomNavigationBar: Material(

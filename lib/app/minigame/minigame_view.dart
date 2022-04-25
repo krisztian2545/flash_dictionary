@@ -80,6 +80,7 @@ class _MinigameViewState extends State<MinigameView> {
   void dispose() {
     print("disposing minigame view...");
     minigameBloc.saveData();
+    minigameBloc.close();
     super.dispose();
   }
 }

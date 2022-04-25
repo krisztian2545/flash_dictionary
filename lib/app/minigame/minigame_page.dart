@@ -34,11 +34,7 @@ class MinigamePage extends StatelessWidget {
             ),
             PositionedMaterial(
               appBarHeight: appBarHeight,
-              child: Consumer<MinigameBloc>(
-                builder: (context, bloc, child) {
-                  return const MinigameView();
-                },
-              ),
+              child: const MinigameView(),
             ),
           ],
         ),

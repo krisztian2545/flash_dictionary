@@ -122,15 +122,18 @@ class StorageService {
     }
   }
 
-  static CollectionDetails? getLastUsedCollection() {
+  static CollectionDetails? getLastUsedCollection() { // TODO check why does this not work all the times
     var collectionList = getCollectionList();
     if (collectionList.isEmpty) {
       return null;
     }
 
     try {
-      return collectionList[
-          _historyBox.get(BoxKey.lastUsedCollectionIndex, defaultValue: 0)];
+      int index = _historyBox.get(BoxKey.lastUsedCollectionIndex, defaultValue: 0);
+      if (index >= collectionList.length) {
+        index = 0;
+      }
+      return collectionList[index];
     } on Exception {
       return collectionList[0];
     }
@@ -200,7 +203,7 @@ class StorageService {
                 print("${e['front']} == ${card.front}");
                 return e['front'] == card.front;
               })) ??
-              CardValues.zero));
+              CardValues.newCard)); // TODO test if works: load card with confValue of 5, so values are balanced after new game
     }
 
     return gameCards;

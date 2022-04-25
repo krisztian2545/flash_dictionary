@@ -1,7 +1,7 @@
 class CardValues {
   CardValues(this.confidenceValue, [this.lastGameValue = 0]);
 
-  static CardValues get zero => CardValues(0);
+  static CardValues get newCard => CardValues(5, 5);
 
   int confidenceValue;
   int lastGameValue;

@@ -1,30 +1,26 @@
 import 'package:flash_dictionary/app/collections/collection_editing/collection_editing_bloc.dart';
 import 'package:flash_dictionary/app/widgets/delete_confirmation_dialog.dart';
 import 'package:flash_dictionary/app/widgets/play_minigame_button.dart';
-import 'package:flash_dictionary/domain/collections/collection_details.dart';
-import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flash_dictionary/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 class CollectionEditingAppbar extends StatelessWidget {
   const CollectionEditingAppbar({Key? key}) : super(key: key);
 
-  void _onBackButtonPressed(
-      BuildContext context, CollectionDetails collection) {
+  void _onBackButtonPressed(BuildContext context, CollectionEditingBloc bloc) {
     Navigator.pop(context);
-    Hive.box(collection.getStringId()).close(); // maybe i could do this in a WillPopScope
+    bloc.close(); // maybe i could do this in a WillPopScope
   }
 
   void _onDeleteButtonPressed(
-      BuildContext context, CollectionDetails collection) {
+      BuildContext context, CollectionEditingBloc bloc) {
     showDialog(
       context: context,
       builder: (_) => const DeleteConfirmationDialog(),
     ).then((agreed) {
       if (agreed) {
-        StorageService.deleteCollection(collection);
+        bloc.deleteCollection();
         Navigator.pop(context);
       }
     });
@@ -32,9 +28,7 @@ class CollectionEditingAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CollectionDetails collectionDetails =
-        Provider.of<CollectionEditingBloc>(context, listen: false)
-            .collectionDetails;
+    CollectionEditingBloc bloc = Provider.of<CollectionEditingBloc>(context, listen: false);
 
     return SafeArea(
       // TODO create a unified appbar
@@ -42,7 +36,7 @@ class CollectionEditingAppbar extends StatelessWidget {
         children: <Widget>[
           const SizedBox(width: 8),
           IconButton(
-              onPressed: () => _onBackButtonPressed(context, collectionDetails),
+              onPressed: () => _onBackButtonPressed(context, bloc),
               icon: const Icon(Icons.arrow_back_sharp)),
           const SizedBox(width: 16),
           LimitedBox(
@@ -50,16 +44,16 @@ class CollectionEditingAppbar extends StatelessWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Text(
-                collectionDetails.name,
+                bloc.collectionDetails.name,
                 style: appBarTextStyle.copyWith(fontSize: 24),
               ),
             ),
           ),
           const Spacer(),
-          PlayMinigameButton(collectionDetails: collectionDetails),
+          PlayMinigameButton(collectionDetails: bloc.collectionDetails),
           const SizedBox(width: 8),
           IconButton(
-            onPressed: () => _onDeleteButtonPressed(context, collectionDetails),
+            onPressed: () => _onDeleteButtonPressed(context, bloc),
             icon: const Icon(Icons.delete),
           ),
           const SizedBox(width: 8),

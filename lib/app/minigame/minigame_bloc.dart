@@ -4,6 +4,7 @@ import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/minigame/game_card.dart';
 import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 enum CardDifficulty { easy, medium, hard }
 
@@ -17,10 +18,6 @@ class MinigameBloc extends ChangeNotifier {
   static const _hardConfidenceValue = 1;
 
   bool _showAnswer = false;
-  // set _showAnswer(bool value) {
-  //   __showAnswer = value;
-  //   notifyListeners();
-  // }
   bool get getShowAnswer => _showAnswer;
 
   void showAnswer() {
@@ -86,34 +83,31 @@ class MinigameBloc extends ChangeNotifier {
 
   void initRound() {
     print("init round...");
-    if (pickRandomCard()) {
-      hideAnswer();
-      return;
-    }
-    _isGameOver = true;
-    notifyListeners();
-  }
-
-  /// Returns false if game over
-  bool pickRandomCard() {
-    print("cardsByConfidenceValue: $cardsByConfidenceValue");
-
     if (cardsByConfidenceValue.keys.isEmpty) {
       // game over
       for (var card in learnedGameCards) {
         card.values.confidenceValue = card.values.lastGameValue;
         card.values.lastGameValue = 0;
       }
+      saveData();
 
-      return false;
+      _isGameOver = true;
+      notifyListeners();
+      return;
     }
+    pickRandomCard();
+    hideAnswer();
+  }
+
+  /// Returns false if game over
+  void pickRandomCard() {
+    print("cardsByConfidenceValue: $cardsByConfidenceValue");
 
     _smallestConfidenceValue = cardsByConfidenceValue.keys.reduce(
         (smallest, current) => (current < smallest) ? current : smallest);
 
-    _currentGameCard = cardsByConfidenceValue[_smallestConfidenceValue]![_random
-        .nextInt(cardsByConfidenceValue[_smallestConfidenceValue]!.length)];
-    return true;
+    List<GameCard> hardestCards = cardsByConfidenceValue[_smallestConfidenceValue]!;
+    _currentGameCard = hardestCards[_random.nextInt(hardestCards.length)];
   }
 
   void removeCurrentCardFromMap() {
@@ -149,7 +143,6 @@ class MinigameBloc extends ChangeNotifier {
     }
 
     initRound();
-    // notifyListeners();
   }
 
   void saveData() {
@@ -162,5 +155,9 @@ class MinigameBloc extends ChangeNotifier {
     }
 
     StorageService.saveGameCardList(collectionDetails, allCards);
+  }
+
+  void close() {
+    Hive.box(collectionDetails.getStringId()).close();
   }
 }

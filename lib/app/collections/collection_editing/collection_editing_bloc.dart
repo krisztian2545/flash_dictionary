@@ -2,6 +2,7 @@ import 'package:flash_dictionary/domain/collections/collection_details.dart';
 import 'package:flash_dictionary/domain/collections/language_card.dart';
 import 'package:flash_dictionary/service/storage_service.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 class CollectionEditingBloc extends ChangeNotifier {
   CollectionEditingBloc({required this.collectionDetails});
@@ -21,5 +22,13 @@ class CollectionEditingBloc extends ChangeNotifier {
     StorageService.deleteLanguageCardFromCollection(
         collectionDetails, languageCard);
     notifyListeners();
+  }
+
+  void deleteCollection() {
+    StorageService.deleteCollection(collectionDetails);
+  }
+
+  void close() {
+    Hive.box(collectionDetails.getStringId()).close();
   }
 }
