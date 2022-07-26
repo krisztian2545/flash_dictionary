@@ -21,7 +21,7 @@ class LinkDictionaryApi implements TranslationApiService {
   Future<List<TranslationItem>> getTranslations(String word, LanguageName from, LanguageName to) async {
     http.Response res = await http.get(
         Uri.parse(
-            "https://link-bilingual-dictionary.p.rapidapi.com/${from.name}/${to.name}/${word}"),
+            "https://link-bilingual-dictionary.p.rapidapi.com/${from.name}/${to.name}/$word"),
         headers: {
           "x-rapidapi-key":
           "ce00069c30msh4cb29af9cfca0f7p1a3af7jsn38922cb7f89a",
@@ -33,6 +33,5 @@ class LinkDictionaryApi implements TranslationApiService {
 
     return translationItemListFormJson(jsonDecode(res.body));
   }
-
 
 }

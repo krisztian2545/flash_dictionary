@@ -90,6 +90,7 @@ class DictionaryBloc extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> fetchData() async {
+    // TODO don't fetch definitions if fromLanguage didn't change
     lastFetchedDefinitions =
         await definitionApiService.getDefinition(wordToTranslate, fromLanguage);
     lastFetchedTranslationItems = await translationApiService.getTranslations(
