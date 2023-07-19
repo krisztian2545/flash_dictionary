@@ -63,7 +63,7 @@ class _EditWordDialogState extends State<EditWordDialog> {
               style: TextStyle(color: Colors.black, fontSize: 20),
             ),
           ),
-          const Spacer(),
+          const SizedBox(width: 16),
           TextButton(
             onPressed: _onSubmit,
             child: const Text(

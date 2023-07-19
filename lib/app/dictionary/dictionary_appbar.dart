@@ -160,7 +160,7 @@ class AutocompleteTextField extends StatelessWidget {
             ),
           ),
           onEditingComplete: () {
-            dictionaryBloc.searchForWord(textEditingController.text);
+            dictionaryBloc.searchForWord(textEditingController.text.trim());
             focusNode.unfocus();
             onEditingComplete();
           },

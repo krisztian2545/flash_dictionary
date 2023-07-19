@@ -72,32 +72,32 @@ class _ResultViewBuilderState extends State<ResultViewBuilder> {
   //
   // }
 
-  Widget _buildDefinitions(List<DefinitionItem> definitions) {
-    if (definitions.isEmpty) {
+  Widget _buildDefinitions(List<DefinitionItem>? definitions) {
+    if (definitions?.isEmpty ?? true) {
       return const NotFoundSliverText();
     }
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-          return DefinitionItemView(definitionItem: definitions[index]);
+          return DefinitionItemView(definitionItem: definitions![index]);
         },
-        childCount: definitions.length,
+        childCount: definitions!.length,
       ),
     );
   }
 
-  Widget _buildTranslations(List<TranslationItem> translations) {
-    if (translations.isEmpty) {
+  Widget _buildTranslations(List<TranslationItem>? translations) {
+    if (translations?.isEmpty ?? true) {
       return const NotFoundSliverText();
     }
 
     return SliverList(
       delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-          return TranslationItemView(translationItem: translations[index]);
+          return TranslationItemView(translationItem: translations![index]);
         },
-        childCount: translations.length,
+        childCount: translations!.length,
       ),
     );
   }
